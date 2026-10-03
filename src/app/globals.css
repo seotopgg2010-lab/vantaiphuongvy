@@ -1,4 +1,5 @@
-@import "tailwindcss";
+/* Scan only src/: auto-detection picked up compressed build caches (.next-build) and logs. */
+@import "tailwindcss" source("../");
 
 /* ==========================================================================
    Vận tải Phương Vy — design tokens
@@ -19,7 +20,7 @@
   --accent-100: #fff4cc;
   --ink: #0f2236;
   --muted: #52687b;
-  --subtle: #8a9bab;
+  --subtle: #5e6f82; /* ≥4.5:1 on white and --surface (WCAG AA) */
   --line: #e1e9f0;
   --surface: #f6f9fc;
   --success: #138a52;

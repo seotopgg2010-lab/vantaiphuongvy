@@ -11,7 +11,7 @@ export function MobileActionBar() {
         <a href={toTelHref(SITE_CONFIG.hotline)} data-track="click_call" className="flex flex-col items-center justify-center gap-1 text-xs font-semibold text-brand-700">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 text-white"><Phone className="h-4 w-4" aria-hidden="true" /></span>Gọi ngay
         </a>
-        <a href={ZALO_URL} target="_blank" rel="noopener" data-track="click_zalo" className="flex flex-col items-center justify-center gap-1 text-xs font-semibold text-[#0068ff]">
+        <a href={ZALO_URL} target="_blank" rel="noopener" data-track="click_zalo" className="flex flex-col items-center justify-center gap-1 text-xs font-semibold text-[#0055d4]">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0068ff] text-white"><MessageCircle className="h-4 w-4" aria-hidden="true" /></span>Zalo
         </a>
         <Link href="/lien-he/#bao-gia" className="flex flex-col items-center justify-center gap-1 text-xs font-semibold text-navy-900">

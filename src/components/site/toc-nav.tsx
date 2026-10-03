@@ -26,7 +26,7 @@ export function TocNav({ entries }: { entries: TocEntry[] }) {
   return (
     <nav aria-label="Mục lục" className="text-sm">
       <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-subtle"><ListTree className="h-4 w-4" aria-hidden="true" />Nội dung chính</p>
-      <ol className="mt-3 max-h-[min(28rem,55vh)] space-y-0.5 overflow-y-auto border-l border-line pr-1">
+      <ol className="mt-3 max-h-[min(28rem,55vh)] space-y-0.5 overflow-y-auto border-l border-line pr-1 lg:max-h-[min(28rem,max(9rem,calc(100dvh_-_35rem)))]">
         {entries.map((entry, index) => {
           if (entry.level === 3) {
             let parent = -1;

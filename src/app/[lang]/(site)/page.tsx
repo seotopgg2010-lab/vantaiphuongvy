@@ -38,7 +38,7 @@ export default function HomePage() {
     <>
       {/* ---------- hero ---------- */}
       <section className="relative isolate overflow-hidden bg-navy-950 text-white">
-        <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill priority sizes="100vw" className="-z-20 object-cover object-center opacity-60" />
+        <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill preload sizes="100vw" className="-z-20 object-cover object-center opacity-60" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-950 via-navy-950/85 to-navy-950/30" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-navy-950 to-transparent" aria-hidden="true" />
         <div className="container-x grid gap-10 pb-28 pt-14 md:pt-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-14 lg:pb-36 lg:pt-24">

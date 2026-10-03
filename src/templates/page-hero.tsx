@@ -68,7 +68,7 @@ export function PageHero({
           <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
             <div className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-brand-400/30 via-transparent to-accent-500/20 blur-2xl" aria-hidden="true" />
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/15 bg-navy-800 shadow-2xl">
-              <Image src={image} alt={imageAlt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+              <Image src={image} alt={imageAlt} fill preload sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
             </div>
           </div>
         )}

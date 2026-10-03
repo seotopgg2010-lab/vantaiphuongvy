@@ -81,22 +81,22 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
               <h3 className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-subtle">
                 {group.label}<span className="h-px flex-1 bg-line" /><span className="font-medium normal-case tracking-normal">{group.items.length} tuyến</span>
               </h3>
-              <ul className={`mt-4 grid gap-3 sm:grid-cols-2 ${compact ? 'lg:grid-cols-4' : 'lg:grid-cols-3 xl:grid-cols-4'}`}>
+              <ul className={`mt-4 grid grid-cols-2 gap-2 sm:gap-3 ${compact ? 'lg:grid-cols-4' : 'lg:grid-cols-3 xl:grid-cols-4'}`}>
                 {group.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-3.5 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">
+                    <Link href={item.href} className="group flex h-full min-h-11 items-center gap-3 rounded-xl border border-line bg-white px-3 py-2.5 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)] sm:p-3.5">
+                      <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white sm:flex">
                         <MapPin className="h-4 w-4" aria-hidden="true" />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate font-semibold text-ink">{item.label}</span>
+                        <span className="block truncate text-sm font-semibold text-ink sm:text-base">{item.label}</span>
                         {(item.transit || item.priceFrom) && (
                           <span className="block truncate text-xs text-muted">
                             {[item.transit && `${item.transit}`, item.priceFrom && `từ ${item.priceFrom}`].filter(Boolean).join(' · ')}
                           </span>
                         )}
                       </span>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />
+                      <ArrowRight className="hidden h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600 sm:block" aria-hidden="true" />
                     </Link>
                   </li>
                 ))}

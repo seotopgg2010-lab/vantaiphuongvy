@@ -57,7 +57,7 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
     <header ref={headerRef} onMouseLeave={() => setOpenMenu(null)} className={`sticky top-0 z-50 border-b bg-white/95 backdrop-blur-md transition-shadow ${scrolled ? 'border-line shadow-[0_6px_24px_-12px_rgb(10_37_64/0.25)]' : 'border-transparent'}`}>
       <div className="container-x flex h-16 items-center gap-4 lg:h-[4.5rem]">
         <Link href="/" className="shrink-0" aria-label="Vận tải Phương Vy — Trang chủ">
-          <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} priority sizes="160px" className="h-9 w-auto lg:h-11" />
+          <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} loading="eager" sizes="160px" className="h-9 w-auto lg:h-11" />
         </Link>
 
         <nav aria-label="Điều hướng chính" className="ml-6 hidden h-full items-stretch lg:flex">
