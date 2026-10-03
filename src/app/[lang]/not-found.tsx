@@ -1,28 +1,34 @@
-'use client';
-
 import Link from 'next/link';
-import { Home, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { toTelHref } from '@/lib/site';
+import { ArrowRight, Home, Phone } from 'lucide-react';
+import { SiteChrome } from '@/components/site/site-chrome';
 import { SITE_CONFIG } from '@/lib/constants';
+import { toTelHref } from '@/lib/site';
 
+const LINKS = [
+  { href: '/van-chuyen-hang-hoa/', label: 'Vận chuyển hàng hóa' },
+  { href: '/thue-xe-tai/', label: 'Thuê xe tải' },
+  { href: '/blog/', label: 'Cẩm nang vận tải' },
+  { href: '/lien-he/', label: 'Liên hệ & báo giá' },
+];
+
+/** Rendered outside the (site) layout, so it brings its own chrome. */
 export default function NotFound() {
   return (
-    <div className="flex min-h-[80vh] items-center justify-center bg-bg-cream px-4 py-20">
-      <div className="w-full max-w-2xl space-y-8 text-center">
-        <div className="relative inline-block">
-          <div className="select-none text-[150px] font-black leading-none text-brand-green/10 md:text-[200px]">404</div>
-          <div className="absolute inset-0 flex items-center justify-center"><Home className="h-20 w-20 text-brand-green opacity-80" /></div>
+    <SiteChrome>
+      <section className="container-x flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
+        <p className="text-7xl font-extrabold tracking-tight text-brand-100 sm:text-8xl">404</p>
+        <h1 className="h-section mt-4">Không tìm thấy trang</h1>
+        <p className="lead mt-3 max-w-xl">Trang bạn tìm có thể đã được đổi địa chỉ. Hãy thử các mục dưới đây hoặc gọi hotline để được hỗ trợ.</p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link href="/" className="btn btn-primary"><Home className="h-4 w-4" aria-hidden="true" />Về trang chủ</Link>
+          <a href={toTelHref(SITE_CONFIG.hotline)} data-track="click_call" className="btn btn-outline"><Phone className="h-4 w-4" aria-hidden="true" />{SITE_CONFIG.hotline}</a>
         </div>
-        <div>
-          <h1 className="mb-4 text-3xl font-bold text-text md:text-4xl">Trang không tìm thấy</h1>
-          <p className="mx-auto mb-8 max-w-lg text-lg text-text/70">Đường dẫn bạn truy cập không tồn tại hoặc đã được thay đổi.</p>
-        </div>
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Link href="/"><Button variant="cta" className="flex w-full items-center gap-2 sm:w-auto"><Home className="h-4 w-4" />Về trang chủ</Button></Link>
-          <a href={toTelHref(SITE_CONFIG.hotline)}><Button variant="secondary" className="flex w-full items-center gap-2 sm:w-auto"><Phone className="h-4 w-4" />Gọi {SITE_CONFIG.hotline}</Button></a>
-        </div>
-      </div>
-    </div>
+        <ul className="mt-10 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
+          {LINKS.map((link) => (
+            <li key={link.href}><Link href={link.href} className="flex items-center justify-between rounded-xl border border-line p-4 text-left font-semibold transition hover:border-brand-500 hover:text-brand-600">{link.label}<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link></li>
+          ))}
+        </ul>
+      </section>
+    </SiteChrome>
   );
 }

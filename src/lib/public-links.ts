@@ -1,17 +1,11 @@
-import pages from '@/legacy-content/pages.json';
-import posts from '@/legacy-content/posts.json';
+import { legacyItems, normalizeLegacyPath, RETIRED_PATHS } from './legacy-content';
 
-const normalize = (path: string) => path.split('?')[0].replace(/\/+$/, '') || '/';
-const legacyPaths = new Set(
-  [...pages, ...posts]
-    .map((item) => normalize(new URL(item.link).pathname))
-    .filter((path) => path !== '/home-3'),
-);
+const legacyPaths = new Set(legacyItems.map((item) => item.path).filter((path) => !RETIRED_PATHS.has(path)));
 
 export const PUBLIC_STATIC_PATHS = new Set(['/', '/blog', '/tim-kiem', '/robots.txt', '/sitemap.xml']);
 
 export function isPublicRoute(path: string) {
-  const normalized = normalize(path);
+  const normalized = normalizeLegacyPath(path);
   return PUBLIC_STATIC_PATHS.has(normalized) || legacyPaths.has(normalized);
 }
 

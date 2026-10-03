@@ -1,0 +1,72 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { Clock3, Mail, MapPin, Phone, Warehouse } from 'lucide-react';
+import type { NavLink, SiteNavigation } from '@/lib/navigation';
+import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
+import { toTelHref } from '@/lib/site';
+
+const POPULAR = ['ha-noi', 'da-nang', 'hai-phong', 'nha-trang', 'hue', 'quang-ngai', 'vinh-nghe-an', 'thanh-hoa', 'can-tho', 'binh-duong'].map((slug) => `/van-chuyen-hang-hoa/${slug}/`);
+
+function Column({ title, links }: { title: string; links: NavLink[] }) {
+  return (
+    <div>
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-white">{title}</h2>
+      <ul className="mt-4 space-y-2.5">
+        {links.map((link) => <li key={link.href}><Link href={link.href} className="text-[0.9375rem] text-sky-100/70 transition hover:text-white">{link.label}</Link></li>)}
+      </ul>
+    </div>
+  );
+}
+
+export function SiteFooter({ nav }: { nav: SiteNavigation }) {
+  const allRoutes = nav.regions.flatMap((region) => region.items);
+  const popular = POPULAR.map((href) => allRoutes.find((item) => item.href === href)).filter((item): item is NavLink => Boolean(item));
+
+  return (
+    <footer className="bg-navy-950 text-sky-100/80" aria-labelledby="footer-heading">
+      <h2 id="footer-heading" className="sr-only">Thông tin chân trang</h2>
+      <div className="container-x grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:py-16">
+        <div>
+          <Link href="/" className="inline-flex rounded-xl bg-white px-4 py-3">
+            <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="150px" className="h-10 w-auto" />
+          </Link>
+          <p className="mt-5 max-w-sm text-[0.9375rem] leading-7">{SITE_CONFIG.companyName} — vận chuyển hàng hóa Bắc Nam, chành xe liên tỉnh và cho thuê xe tải. <span className="text-white">{SITE_CONFIG.slogan}</span></p>
+          <ul className="mt-6 space-y-3 text-[0.9375rem]">
+            <li className="flex gap-3"><MapPin className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" /><span><span className="text-white">Văn phòng:</span> {SITE_CONFIG.address}</span></li>
+            <li className="flex gap-3"><Warehouse className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" /><span><span className="text-white">Bãi xe:</span> {SITE_CONFIG.yardAddress}</span></li>
+            <li className="flex gap-3"><Clock3 className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" /><span>Tư vấn {SITE_CONFIG.businessHours}, tất cả các ngày</span></li>
+            <li className="flex gap-3"><Mail className="mt-1 h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" /><a href={`mailto:${SITE_CONFIG.email}`} className="break-all transition hover:text-white">{SITE_CONFIG.email}</a></li>
+          </ul>
+        </div>
+        <Column title="Tuyến phổ biến" links={[...popular, { label: 'Xem tất cả tuyến →', href: '/van-chuyen-hang-hoa/' }]} />
+        <div className="space-y-10">
+          <Column title="Dịch vụ" links={[...nav.cargo, nav.trucks[0]]} />
+        </div>
+        <div className="space-y-10">
+          <Column title="Phương Vy" links={nav.company} />
+          <Column title="Chính sách" links={nav.policies} />
+        </div>
+      </div>
+
+      <div className="border-y border-white/10 bg-navy-900/60">
+        <div className="container-x flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-base font-semibold text-white">Cần báo giá gửi hàng? Gọi ngay để được tư vấn trong vài phút.</p>
+          <div className="flex flex-wrap gap-2">
+            {SITE_CONFIG.hotlines.map((phone, index) => (
+              <a key={phone} href={toTelHref(phone)} data-track="click_call" className={`btn btn-sm ${index === 0 ? 'btn-accent' : 'btn-ghost-light'}`}><Phone className="h-4 w-4" aria-hidden="true" />{phone}</a>
+            ))}
+            <a href={ZALO_URL} target="_blank" rel="noopener" data-track="click_zalo" className="btn btn-sm btn-zalo">Zalo</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="container-x flex flex-col gap-3 py-6 text-sm text-sky-100/60 sm:flex-row sm:items-center sm:justify-between">
+        <p>© {new Date().getFullYear()} {SITE_CONFIG.companyName}. Mọi quyền được bảo lưu.</p>
+        <div className="flex gap-5">
+          <a href={SITE_CONFIG.facebook} target="_blank" rel="noopener" className="transition hover:text-white">Facebook</a>
+          <Link href="/sitemap.xml" prefetch={false} className="transition hover:text-white">Sitemap</Link>
+        </div>
+      </div>
+    </footer>
+  );
+}
