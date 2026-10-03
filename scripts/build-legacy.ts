@@ -30,6 +30,13 @@ const root = process.cwd();
 const read = <T,>(file: string): T => JSON.parse(readFileSync(join(root, file), 'utf8')) as T;
 const pages = read<WpItem[]>('src/legacy-content/pages.json');
 const posts = read<WpItem[]>('src/legacy-content/posts.json');
+/** Internal links that pointed at slugs which never existed (404 on the live site too). */
+const LINK_FIXES: Record<string, string> = {
+  '/van-chuyen-hang-hoa/nghe-an/': '/van-chuyen-hang-hoa/vinh-nghe-an/',
+  '/bang-gia-cuoc-van-chuyen/': '/van-chuyen-hang-hoa/',
+};
+// Filled once pathOf() is available (see below); paths without trailing slash, "/" for home.
+const KNOWN_PATHS = new Set<string>(['/', '/blog', '/tim-kiem']);
 const seoMeta = existsSync(join(root, 'src/legacy-content/seo-meta.json')) ? read<Record<string, SeoMeta>>('src/legacy-content/seo-meta.json') : {};
 const manifestFile = 'plans/261003-vantaiphuongvy-rebuild/reports/uploads-manifest.json';
 const brokenUploads = new Set(existsSync(join(root, manifestFile)) ? read<{ failed: Array<{ path: string }> }>(manifestFile).failed.map((f) => f.path) : []);
@@ -57,12 +64,22 @@ const OVERRIDES: Array<[string, string, LegacyRegion]> = [
   ['/van-chuyen-hang-hoa/vinh-phuc', 'Vĩnh Phúc', 'bac'],
 ];
 for (const [href, label, region] of OVERRIDES) { navLabel.set(href, label); navRegion.set(href, region); }
+const LABEL_OVERRIDES: Array<[string, string]> = [
+  ['/thue-xe-tai', 'Thuê xe tải'],
+  ['/van-chuyen-hang-hoa', 'Vận chuyển hàng hóa'],
+  ['/van-chuyen-hang-hoa/vinh-nghe-an', 'Vinh – Nghệ An'],
+  ['/van-chuyen-hang-hoa/tphcm', 'Nội thành TP.HCM'],
+  ['/van-chuyen-hang-hoa/duong-bien', 'Vận chuyển đường biển'],
+  ['/van-chuyen-hang-hoa/duong-hang-khong', 'Vận chuyển hàng không'],
+];
+for (const [href, label] of LABEL_OVERRIDES) navLabel.set(href, label);
 
 // ---------- helpers ----------
 function decodeEntities(value: string): string {
   return cheerio.load(`<p>${value}</p>`, null, false)('p').text();
 }
 function pathOf(link: string): string { return new URL(link).pathname.replace(/\/+$/, '') || '/'; }
+for (const item of [...pages, ...posts]) KNOWN_PATHS.add(pathOf(item.link));
 
 function templateOf(path: string, kind: 'page' | 'post'): LegacyTemplate {
   if (kind === 'post') return 'post';
@@ -161,7 +178,13 @@ function transform(html: string, title: string) {
     const internal = internalHref(href);
     const attribs = (el as Element).attribs;
     for (const attr of Object.keys(attribs)) if (attr !== 'href' && attr !== 'title') delete attribs[attr];
-    if (internal) $(el).attr('href', internal);
+    if (internal) {
+      const [pathPart, rest = ''] = internal.split(/(?=[?#])/);
+      const fixed = LINK_FIXES[pathPart] ?? pathPart;
+      const known = fixed.startsWith('/wp-content/') || fixed.startsWith('/#') || KNOWN_PATHS.has(fixed.replace(/\/$/, '') || '/');
+      if (!known || /^\/(author|category|tag)\//.test(fixed)) { $(el).replaceWith($(el).contents()); return; }
+      $(el).attr('href', `${fixed}${rest}`);
+    }
     else if (/^https?:/i.test(href)) $(el).attr({ target: '_blank', rel: 'noopener' });
   });
 
@@ -216,9 +239,21 @@ function transform(html: string, title: string) {
   // 10. empty / decorative leftovers
   $('strong, b, em, i, u').each((_, el) => { if (!textOf($, el) && !$(el).find('img').length) $(el).remove(); });
   $('p, li, figcaption, blockquote').each((_, el) => { if (!textOf($, el) && !$(el).find('img').length) $(el).remove(); });
+  $('ul, ol').filter((_, el) => $(el).children().length === 0).remove();
   // hand-typed rating lines ("Đánh giá: 4.9/5 – 17 bình chọn") are unverifiable review claims
   $('p').each((_, el) => { if (/^(Đánh giá:?\s*)?[\d.,]+\s*\/\s*5\b.*bình chọn\)?$/i.test(textOf($, el))) $(el).remove(); });
   $('hr + hr').remove();
+  // Avia slider remnants: "Previous/Next" + "1 2 3" anchor rows and image-only slide lists
+  $('p').each((_, el) => {
+    const links = $(el).find('a');
+    if (links.length && links.toArray().every((a) => /^\/?#(prev|next|\d+)$/.test($(a).attr('href') || '')) && textOf($, el) === links.toArray().map((a) => textOf($, a)).join('')) $(el).remove();
+  });
+  $('ul').each((_, el) => {
+    const items = $(el).children('li');
+    if (items.length > 1 && items.toArray().every((li) => $(li).find('img').length > 0 && !textOf($, li))) $(el).remove();
+  });
+  $.root().children('br').remove();
+  $('br + br').remove();
 
   // ---------- extraction ----------
   const toc: TocEntry[] = $('h2, h3').toArray().map((el) => ({ id: $(el).attr('id')!, text: textOf($, el), level: ((el as Element).tagName === 'h2' ? 2 : 3) as 2 | 3 })).filter((entry) => entry.text.length >= 4);
@@ -281,6 +316,8 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
 
 const entries = [...pages.map((p) => build(p, 'page')), ...posts.map((p) => build(p, 'post'))].sort((a, b) => a.path.localeCompare(b.path));
 writeFileSync(join(root, 'src/legacy-content/legacy-clean.json'), `${JSON.stringify(entries)}\n`);
+// Tiny WordPress id -> canonical path map for ?p= / ?page_id= redirects in the proxy (keeps the corpus out of the proxy bundle).
+writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path])))}\n`);
 
 const bytes = entries.reduce((sum, e) => sum + e.html.length, 0);
 const byTemplate = entries.reduce<Record<string, number>>((acc, e) => { acc[e.template] = (acc[e.template] ?? 0) + 1; return acc; }, {});
