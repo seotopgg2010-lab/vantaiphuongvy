@@ -1,0 +1,19 @@
+{
+  "header": { "searchPlaceholder": "Tìm tuyến, dịch vụ vận chuyển..." },
+  "mobilemenu": {
+    "menuTitle": "Menu",
+    "shipping": "Vận chuyển hàng hóa",
+    "about": "Giới thiệu",
+    "blog": "Cẩm nang",
+    "contact": "Liên hệ",
+    "hotlineLabel": "Hotline",
+    "sendRequest": "Gọi tư vấn"
+  },
+  "floating": {
+    "chatZalo": "Chat qua Zalo",
+    "zaloTooltip": "Zalo Phương Vy",
+    "callHotline": "Gọi hotline",
+    "hotlineTooltip": "0933 871 139",
+    "scrollTop": "Lên đầu trang"
+  }
+}

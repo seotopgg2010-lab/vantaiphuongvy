@@ -1,0 +1,36 @@
+{
+  "site": "https://vantaiphuongvy.com",
+  "generatedAt": "2026-03-10",
+  "sourceFiles": [
+    "src/legacy-content/pages.json",
+    "src/legacy-content/posts.json"
+  ],
+  "counts": { "pages": 86, "posts": 9, "publicLegacyItems": 94 },
+  "rules": {
+    "immutableSource": true,
+    "canonicalOrigin": "https://vantaiphuongvy.com",
+    "preserveImageOrigin": "https://vantaiphuongvy.com/wp-content/uploads/",
+    "excludeWidgetPath": "/home-3"
+  },
+  "requiredPathPrefixes": [
+    "/van-chuyen-hang-hoa/",
+    "/thue-xe-tai/",
+    "/blog/",
+    "/faq",
+    "/tuyen-dung",
+    "/lien-he",
+    "/gioi-thieu",
+    "/chinh-sach-bao-mat"
+  ],
+  "contactEvidence": {
+    "phones": ["0933 87 1139", "0312753990", "0933871139"],
+    "emails": ["vanchuyenphuongvy@gmail.com", "vanmai.phuongvy@gmail.com"],
+    "facebook": "https://www.facebook.com/vanchuyenphuongvy/",
+    "zalo": "https://zalo.me/0902939318"
+  },
+  "openQuestions": [
+    "Which phone is the primary hotline?",
+    "What are the canonical office/warehouse addresses and opening hours?",
+    "Should /en/* remain indexable or be noindex until translated?"
+  ]
+}

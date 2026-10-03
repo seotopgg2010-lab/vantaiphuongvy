@@ -1,0 +1,19 @@
+{
+  "header": { "searchPlaceholder": "Search transport routes and services..." },
+  "mobilemenu": {
+    "menuTitle": "Menu",
+    "shipping": "Freight transport",
+    "about": "About Phuong Vy",
+    "blog": "Guides",
+    "contact": "Contact",
+    "hotlineLabel": "Hotline",
+    "sendRequest": "Call for a quote"
+  },
+  "floating": {
+    "chatZalo": "Chat on Zalo",
+    "zaloTooltip": "Phuong Vy Zalo",
+    "callHotline": "Call hotline",
+    "hotlineTooltip": "+84 933 871 139",
+    "scrollTop": "Back to top"
+  }
+}

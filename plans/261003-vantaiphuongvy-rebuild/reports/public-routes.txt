@@ -1,0 +1,4 @@
+src/app/[lang]/blog/page.tsx
+src/app/[lang]/page.tsx
+src/app/[lang]/tim-kiem/page.tsx
+src/app/[lang]/[...legacy]/page.tsx
