@@ -17,24 +17,43 @@ const supabaseHost = getSupabaseHost();
 const supabaseMediaSource = supabaseHost ? `https://${supabaseHost}` : null;
 
 const nextConfig: NextConfig = {
+  // WordPress permalink contract: every page URL ends with "/".
   trailingSlash: true,
-  distDir: process.env.HAMBURG_BUILD_DIR || '.next',
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   async redirects() {
-    return [];
+    return [
+      // Rank Math sitemaps -> the single Next.js sitemap
+      ...['/sitemap_index.xml', '/post-sitemap.xml', '/page-sitemap.xml', '/local-sitemap.xml', '/wp-sitemap.xml'].map((source) => ({ source, destination: '/sitemap.xml', permanent: true })),
+      // Retired duplicate of the home page (its canonical already pointed to "/")
+      { source: '/home-3', destination: '/', permanent: true },
+      // WordPress feeds & archives that have no equivalent page
+      { source: '/feed', destination: '/blog/', permanent: true },
+      { source: '/comments/feed', destination: '/blog/', permanent: true },
+      { source: '/blog/:slug/feed', destination: '/blog/:slug/', permanent: true },
+      { source: '/category/:path*', destination: '/blog/', permanent: true },
+      { source: '/tag/:path*', destination: '/blog/', permanent: true },
+      { source: '/author/:path*', destination: '/blog/', permanent: true },
+      { source: '/page/:n(\\d+)', destination: '/', permanent: true },
+      { source: '/blog/page/:n(\\d+)', destination: '/blog/', permanent: true },
+    ];
   },
   images: {
     formats: ['image/avif', 'image/webp'],
     qualities: [75, 85],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2560, 3840],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2560],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Mirrored WordPress uploads keep their original paths (image SEO parity).
+    localPatterns: [{ pathname: '/wp-content/uploads/**', search: '' }],
     remotePatterns: [
       ...(supabaseHost ? [{ protocol: 'https' as const, hostname: supabaseHost, pathname: '/storage/v1/object/public/**', search: '' }] : []),
-      { protocol: 'https', hostname: 'vantaiphuongvy.com', pathname: '/wp-content/uploads/**', search: '' },
-      { protocol: 'https', hostname: 'www.vantaiphuongvy.com', pathname: '/wp-content/uploads/**', search: '' },
     ],
   },
   async headers() {
     return [
+      {
+        source: '/wp-content/uploads/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
       {
         source: '/(.*)',
         headers: [
@@ -51,11 +70,12 @@ const nextConfig: NextConfig = {
               "frame-ancestors 'self'",
               "object-src 'none'",
               `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''} https://www.googletagmanager.com https://www.google-analytics.com`,
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' data: https://fonts.gstatic.com",
+              "style-src 'self' 'unsafe-inline'",
+              "font-src 'self' data:",
               "img-src 'self' data: blob: https:",
+              "frame-src https://www.google.com https://maps.google.com",
               `media-src 'self' blob:${supabaseMediaSource ? ` ${supabaseMediaSource}` : ''}`,
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com",
             ].join('; '),
           },
         ],
@@ -65,4 +85,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-

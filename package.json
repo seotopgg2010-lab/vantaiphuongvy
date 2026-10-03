@@ -1,16 +1,19 @@
 {
-  "name": "hamburg-connect",
+  "name": "vantaiphuongvy",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "tsx scripts/build-legacy.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "content:import": "tsx scripts/import-requirements-content.ts",
-    "content:sync": "tsx scripts/sync-requirements-content.ts"
+    "content:build": "tsx scripts/build-legacy.ts",
+    "content:seo": "tsx scripts/scrape-seo-meta.ts",
+    "content:mirror": "tsx scripts/mirror-uploads.ts",
+    "crawl:check": "node scripts/crawl-check.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

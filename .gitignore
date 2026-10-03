@@ -50,3 +50,6 @@ supabase/.temp/
 .ui-dev.log
 *.log
 
+
+/.next-build/
+/.next-*/
