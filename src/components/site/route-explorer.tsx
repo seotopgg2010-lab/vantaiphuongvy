@@ -40,7 +40,7 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
               role="tab"
               aria-selected={active === tab.id}
               onClick={() => setActive(tab.id)}
-              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${active === tab.id ? 'border-navy-900 bg-navy-900 text-white' : 'border-line bg-white text-ink hover:border-brand-600 hover:text-brand-600'}`}
+              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${active === tab.id ? 'border-brand-600 bg-brand-600 text-white shadow-[0_6px_14px_-8px_rgb(18_117_188/0.9)]' : 'border-line bg-white text-ink hover:border-brand-600 hover:text-brand-600'}`}
             >
               {tab.label}
             </button>

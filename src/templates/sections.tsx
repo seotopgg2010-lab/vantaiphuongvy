@@ -12,7 +12,7 @@ import { toTelHref } from '@/lib/site';
 export function LeadSection({ title, lead, defaultTo, page }: { title: string; lead?: string; defaultTo?: string; page: string }) {
   return (
     <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 bg-surface">
-      <div className="container-x grid gap-10 py-14 md:py-20 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+      <div className="container-x grid gap-10 py-10 md:py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
         <div>
           <p className="eyebrow">Báo giá miễn phí</p>
           <h2 id="bao-gia-title" className="h-section mt-3">{title}</h2>
@@ -49,7 +49,7 @@ export function LeadSection({ title, lead, defaultTo, page }: { title: string; l
 export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khác', eyebrow = 'Tuyến liên quan' }: { items: LegacyEntry[]; title?: string; eyebrow?: string }) {
   if (!items.length) return null;
   return (
-    <section aria-labelledby="related-routes" className="container-x py-14 md:py-20">
+    <section aria-labelledby="related-routes" className="container-x py-10 md:py-14">
       <SectionHeading id="related-routes" eyebrow={eyebrow} title={title} action={{ label: 'Xem tất cả tuyến', href: '/van-chuyen-hang-hoa/' }} />
       <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => (
@@ -73,7 +73,7 @@ export function RelatedPosts({ posts, title = 'Cẩm nang vận tải' }: { post
   if (!posts.length) return null;
   return (
     <section aria-labelledby="related-posts" className="border-t border-line bg-white">
-      <div className="container-x py-14 md:py-20">
+      <div className="container-x py-10 md:py-14">
         <SectionHeading id="related-posts" eyebrow="Kiến thức" title={title} action={{ label: 'Xem tất cả bài viết', href: '/blog/' }} />
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => <PostCard key={post.path} post={post} />)}

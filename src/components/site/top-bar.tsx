@@ -5,7 +5,7 @@ import { toTelHref } from '@/lib/site';
 
 export function TopBar() {
   return (
-    <div className="hidden bg-navy-950 text-[0.8125rem] text-sky-100/80 lg:block">
+    <div className="hidden bg-brand-700 text-[0.8125rem] text-on-brand lg:block">
       <div className="container-x flex h-9 items-center justify-between">
         <div className="flex items-center gap-5">
           <span className="inline-flex items-center gap-1.5"><Clock3 className="h-3.5 w-3.5 text-accent-400" aria-hidden="true" />Tư vấn {SITE_CONFIG.businessHours} mỗi ngày</span>

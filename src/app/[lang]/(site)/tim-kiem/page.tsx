@@ -30,7 +30,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <>
-      <section className="bg-grid-navy text-white">
+      <section className="bg-brand-grid text-white">
         <div className="container-x py-10 md:py-14">
           <Breadcrumbs tone="light" items={[{ name: 'Trang chủ', href: '/' }, { name: 'Tìm kiếm' }]} />
           <h1 className="h-display mt-6 text-white">Tìm tuyến vận chuyển, dịch vụ</h1>
@@ -41,7 +41,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </form>
           <ul className="mt-5 flex flex-wrap gap-2" aria-label="Gợi ý tìm kiếm">
             {SUGGESTIONS.map((term) => (
-              <li key={term}><Link href={`/tim-kiem/?q=${encodeURIComponent(term)}`} className="inline-flex rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-sky-50 transition hover:bg-white/10">{term}</Link></li>
+              <li key={term}><Link href={`/tim-kiem/?q=${encodeURIComponent(term)}`} className="inline-flex rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-on-brand transition hover:bg-white/10">{term}</Link></li>
             ))}
           </ul>
         </div>

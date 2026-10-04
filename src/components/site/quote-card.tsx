@@ -7,10 +7,10 @@ import { toTelHref } from '@/lib/site';
 export function QuoteCard({ heading = 'Nhận báo giá trong 5 phút', context }: { heading?: string; context?: string }) {
   return (
     <aside aria-label="Yêu cầu báo giá" className="overflow-hidden rounded-2xl border border-line bg-white shadow-[var(--shadow-lift)]">
-      <div className="bg-grid-navy px-6 py-5 text-white">
+      <div className="bg-brand-grid px-6 py-5 text-white">
         <p className="eyebrow eyebrow-light">Báo giá miễn phí</p>
         <p className="mt-2 text-lg font-bold leading-snug text-white">{heading}</p>
-        {context && <p className="mt-1 text-sm text-sky-100/80">{context}</p>}
+        {context && <p className="mt-1 text-sm text-on-brand">{context}</p>}
       </div>
       <div className="space-y-4 px-6 py-5">
         <ul className="space-y-2 text-sm text-muted">

@@ -4,6 +4,17 @@
  * figures, ratings or "24/7" promises.
  */
 
+/** Most-requested destinations (shown in the hero search card and the routes mega menu). */
+export const POPULAR_ROUTES = [
+  { label: 'Hà Nội', href: '/van-chuyen-hang-hoa/ha-noi/' },
+  { label: 'Đà Nẵng', href: '/van-chuyen-hang-hoa/da-nang/' },
+  { label: 'Huế', href: '/van-chuyen-hang-hoa/hue/' },
+  { label: 'Nha Trang', href: '/van-chuyen-hang-hoa/nha-trang/' },
+  { label: 'Hải Phòng', href: '/van-chuyen-hang-hoa/hai-phong/' },
+  { label: 'Cần Thơ', href: '/van-chuyen-hang-hoa/can-tho/' },
+  { label: 'Phú Quốc', href: '/van-chuyen-hang-hoa/chanh-xe-phu-quoc/' },
+] as const;
+
 export const HERO_IMAGE = {
   src: '/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg',
   alt: 'Đội xe tải của Vận tải Phương Vy tại bãi xe TP.HCM',

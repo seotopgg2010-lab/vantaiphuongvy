@@ -37,13 +37,13 @@ export function PageHero({
   formHref?: string;
 }) {
   return (
-    <section className="bg-grid-navy text-white">
+    <section className="bg-brand-grid text-white">
       <div className={`container-x grid gap-10 py-10 md:py-14 ${image ? 'lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:gap-14' : ''}`}>
         <div className="min-w-0">
           <Breadcrumbs items={crumbs} tone="light" />
           {eyebrow && <p className="eyebrow eyebrow-light mt-6">{eyebrow}</p>}
           <h1 className="h-display mt-3 text-white">{title}</h1>
-          {summary && <p className="mt-5 max-w-2xl text-base leading-7 text-sky-100/85 sm:text-[1.0625rem] sm:leading-8">{summary}</p>}
+          {summary && <p className="mt-5 max-w-2xl text-base leading-7 text-on-brand sm:text-[1.0625rem] sm:leading-8">{summary}</p>}
           {facts.length > 0 && (
             <ul className="mt-6 flex flex-wrap gap-2">
               {facts.map((fact) => {

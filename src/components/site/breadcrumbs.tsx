@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 export type Crumb = { name: string; href?: string };
 
 export function Breadcrumbs({ items, tone = 'dark' }: { items: Crumb[]; tone?: 'dark' | 'light' }) {
-  const base = tone === 'light' ? 'text-sky-100/70' : 'text-muted';
+  const base = tone === 'light' ? 'text-on-brand' : 'text-muted';
   const strong = tone === 'light' ? 'text-white' : 'text-ink';
   return (
     <nav aria-label="Breadcrumb" className={`text-sm ${base}`}>

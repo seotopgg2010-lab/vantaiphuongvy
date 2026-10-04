@@ -24,11 +24,11 @@ export function SectionHeading({
     <div className={`flex flex-col gap-4 ${centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'}`}>
       <div className={centered ? 'max-w-2xl' : 'max-w-3xl'}>
         {eyebrow && <p className={`eyebrow ${tone === 'light' ? 'eyebrow-light' : ''}`}>{eyebrow}</p>}
-        <h2 id={id} className={`h-section mt-3 ${tone === 'light' ? 'text-white' : ''}`}>{title}</h2>
-        {lead && <p className={`lead mt-4 ${tone === 'light' ? 'text-sky-100/80' : ''}`}>{lead}</p>}
+        <h2 id={id} className={`h-section mt-2.5 ${tone === 'light' ? 'text-white' : ''}`}>{title}</h2>
+        {lead && <p className={`lead mt-3 ${tone === 'light' ? 'text-on-brand' : ''}`}>{lead}</p>}
       </div>
       {action && (
-        <Link href={action.href} className={`group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold ${tone === 'light' ? 'text-accent-400' : 'text-brand-600'} hover:underline`}>
+        <Link href={action.href} className={`group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold ${tone === 'light' ? 'text-white' : 'text-brand-600'} hover:underline`}>
           {action.label}
           <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
         </Link>

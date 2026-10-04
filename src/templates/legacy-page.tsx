@@ -54,7 +54,7 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
 function TruckLinks({ current }: { current?: string }) {
   const items = truckItems.filter((truck) => truck.path !== current);
   return (
-    <section aria-labelledby="truck-links" className="container-x py-14 md:py-20">
+    <section aria-labelledby="truck-links" className="container-x py-10 md:py-14">
       <SectionHeading id="truck-links" eyebrow="Cho thuê xe tải" title="Thuê xe tải theo khu vực" action={{ label: 'Bảng giá thuê xe', href: '/thue-xe-tai/' }} />
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((truck) => (

@@ -12,7 +12,7 @@ function Column({ title, links }: { title: string; links: NavLink[] }) {
     <div>
       <h2 className="text-sm font-semibold uppercase tracking-wider text-white">{title}</h2>
       <ul className="mt-4 space-y-2.5">
-        {links.map((link) => <li key={link.href}><Link href={link.href} className="text-[0.9375rem] text-sky-100/70 transition hover:text-white">{link.label}</Link></li>)}
+        {links.map((link) => <li key={link.href}><Link href={link.href} className="text-[0.9375rem] text-on-brand transition hover:text-white">{link.label}</Link></li>)}
       </ul>
     </div>
   );
@@ -23,9 +23,9 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
   const popular = POPULAR.map((href) => allRoutes.find((item) => item.href === href)).filter((item): item is NavLink => Boolean(item));
 
   return (
-    <footer className="bg-navy-950 text-sky-100/80" aria-labelledby="footer-heading">
+    <footer className="bg-navy-950 text-on-brand" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Thông tin chân trang</h2>
-      <div className="container-x grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:py-16">
+      <div className="container-x grid gap-8 py-10 md:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:py-12">
         <div>
           <Link href="/" className="inline-flex rounded-xl bg-white px-4 py-3">
             <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="150px" className="h-10 w-auto" />
@@ -39,17 +39,17 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
           </ul>
         </div>
         <Column title="Tuyến phổ biến" links={[...popular, { label: 'Xem tất cả tuyến →', href: '/van-chuyen-hang-hoa/' }]} />
-        <div className="space-y-10">
+        <div className="space-y-8">
           <Column title="Dịch vụ" links={[...nav.cargo, nav.trucks[0]]} />
         </div>
-        <div className="space-y-10">
+        <div className="space-y-8">
           <Column title="Phương Vy" links={nav.company} />
           <Column title="Chính sách" links={nav.policies} />
         </div>
       </div>
 
-      <div className="border-y border-white/10 bg-navy-900/60">
-        <div className="container-x flex flex-col gap-4 py-6 md:flex-row md:items-center md:justify-between">
+      <div className="border-y border-white/10 bg-white/[0.06]">
+        <div className="container-x flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
           <p className="text-base font-semibold text-white">Cần báo giá gửi hàng? Gọi ngay để được tư vấn trong vài phút.</p>
           <div className="flex flex-wrap gap-2">
             {SITE_CONFIG.hotlines.map((phone, index) => (
@@ -60,7 +60,7 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
         </div>
       </div>
 
-      <div className="container-x flex flex-col gap-3 py-6 text-sm text-sky-100/60 sm:flex-row sm:items-center sm:justify-between">
+      <div className="container-x flex flex-col gap-3 py-5 text-sm text-on-brand sm:flex-row sm:items-center sm:justify-between">
         <p>© {new Date().getFullYear()} {SITE_CONFIG.companyName}. Mọi quyền được bảo lưu.</p>
         <div className="flex gap-5">
           <a href={SITE_CONFIG.facebook} target="_blank" rel="noopener" className="transition hover:text-white">Facebook</a>
