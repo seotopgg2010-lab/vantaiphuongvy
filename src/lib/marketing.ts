@@ -15,6 +15,20 @@ export const POPULAR_ROUTES = [
   { label: 'Phú Quốc', href: '/van-chuyen-hang-hoa/chanh-xe-phu-quoc/' },
 ] as const;
 
+/** /blog index copy (page, metadata and markdown twin). */
+export const BLOG_PAGE = {
+  title: 'Cẩm nang vận tải – Tin tức & kinh nghiệm gửi hàng | Vận Tải Phương Vy',
+  heading: 'Cẩm nang vận tải',
+  description: 'Kinh nghiệm vận chuyển hàng hóa, giấy tờ cần thiết, quy định tải trọng, kích thước thùng xe và tin tức mới nhất từ Vận tải Phương Vy.',
+} as const;
+
+/** Home hero copy (rendered by the home page and its markdown twin). */
+export const HERO = {
+  title: 'Vận chuyển hàng hóa Bắc Nam & cho thuê xe tải toàn quốc',
+  lead: 'Hơn 10 năm chành xe từ TP.HCM đi các tỉnh và ngược lại. Nhận hàng tận nơi, xe chạy hàng ngày, giá cước rõ ràng — có hóa đơn và bảo hiểm hàng hóa.',
+  points: ['Miễn phí bốc dỡ & lưu kho', 'Giao hàng tận nơi', 'Xe tải 0,5 – 30 tấn', 'Làm việc cả ngày lễ'],
+} as const;
+
 export const HERO_IMAGE = {
   src: '/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg',
   alt: 'Đội xe tải của Vận tải Phương Vy tại bãi xe TP.HCM',

@@ -14,6 +14,9 @@ export const legacyPosts = legacyItems
   .filter((item) => item.kind === 'post')
   .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
+/** Last change to any post: the honest `lastmod` for the /blog index. */
+export const latestPostDate = legacyPosts.map((post) => post.modified || post.date || '').sort().at(-1) || undefined;
+
 /** Paths that exist in the corpus but must never render (they 301 elsewhere). */
 export const RETIRED_PATHS = new Set(['/home-3']);
 
@@ -29,6 +32,9 @@ export function getLegacyByPath(path: string): LegacyEntry | undefined {
 
 /** Entries rendered by the catch-all route (everything except home & retired). */
 export const routableItems = legacyItems.filter((item) => item.path !== '/' && !RETIRED_PATHS.has(item.path));
+
+/** Every indexable page path ("/" for home, no trailing slash): the sitemap set, each with a markdown twin and a social card. */
+export const indexablePaths = ['/', '/blog', ...routableItems.map((item) => item.path)];
 
 export const REGION_LABELS: Record<LegacyRegion, string> = {
   bac: 'Miền Bắc',

@@ -4,13 +4,13 @@ import { CtaBand } from '@/components/site/cta-band';
 import { JsonLd } from '@/components/site/json-ld';
 import { PostCard } from '@/components/site/post-card';
 import { legacyPosts } from '@/lib/legacy-content';
+import { BLOG_PAGE } from '@/lib/marketing';
 import { withSlash } from '@/lib/navigation';
 import { canonicalUrl, generateBreadcrumbJsonLd, pageMetadata, WEBSITE_ID } from '@/lib/seo';
 
-const TITLE = 'Cẩm nang vận tải – Tin tức & kinh nghiệm gửi hàng | Vận Tải Phương Vy';
-const DESCRIPTION = 'Kinh nghiệm vận chuyển hàng hóa, giấy tờ cần thiết, quy định tải trọng, kích thước thùng xe và tin tức mới nhất từ Vận tải Phương Vy.';
+const { title: TITLE, heading: HEADING, description: DESCRIPTION } = BLOG_PAGE;
 
-export const metadata: Metadata = pageMetadata({ title: TITLE, description: DESCRIPTION, path: '/blog' });
+export const metadata: Metadata = pageMetadata({ title: TITLE, description: DESCRIPTION, path: '/blog', image: legacyPosts[0]?.image });
 
 export default function BlogIndex() {
   const [featured, ...rest] = legacyPosts;
@@ -19,7 +19,7 @@ export default function BlogIndex() {
     <>
       <JsonLd
         data={[
-          generateBreadcrumbJsonLd([{ name: 'Trang chủ', url: canonicalUrl('/') }, { name: 'Cẩm nang vận tải', url }]),
+          generateBreadcrumbJsonLd([{ name: 'Trang chủ', url: canonicalUrl('/') }, { name: HEADING, url }]),
           {
             '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: TITLE, description: DESCRIPTION, inLanguage: 'vi-VN', isPartOf: { '@id': WEBSITE_ID },
             mainEntity: { '@type': 'ItemList', itemListElement: legacyPosts.map((post, index) => ({ '@type': 'ListItem', position: index + 1, url: canonicalUrl(post.path), name: post.title })) },
@@ -28,9 +28,9 @@ export default function BlogIndex() {
       />
       <header className="border-b border-line bg-surface">
         <div className="container-x py-10 md:py-14">
-          <Breadcrumbs items={[{ name: 'Trang chủ', href: '/' }, { name: 'Cẩm nang vận tải' }]} />
+          <Breadcrumbs items={[{ name: 'Trang chủ', href: '/' }, { name: HEADING }]} />
           <p className="eyebrow mt-6">Kiến thức vận tải</p>
-          <h1 className="h-display mt-3">Cẩm nang vận tải</h1>
+          <h1 className="h-display mt-3">{HEADING}</h1>
           <p className="lead mt-4 max-w-2xl">{DESCRIPTION}</p>
         </div>
       </header>

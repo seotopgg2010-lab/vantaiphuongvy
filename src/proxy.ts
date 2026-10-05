@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 import { resolveLocaleRoute } from '@/lib/locale-routing';
 import { resolveLegacyRequest } from '@/lib/legacy-redirects';
+import { markdownRewriteTarget } from '@/lib/markdown-paths';
 
 const isAdminPath = (pathname: string) => /^\/(?:vi\/)?admin(?:\/|$)/.test(pathname);
 
@@ -16,6 +17,10 @@ export async function proxy(request: NextRequest) {
   if (legacy?.kind === 'redirect') {
     return NextResponse.redirect(new URL(legacy.location, request.url), 301);
   }
+
+  // Markdown twins: "/x/y.md" (home "/index.md") is rendered by the static /md route.
+  const twin = markdownRewriteTarget(pathname);
+  if (twin) return NextResponse.rewrite(new URL(twin, request.url));
 
   if (pathname.startsWith('/api') || pathname.startsWith('/_next') || pathname.includes('.')) {
     return NextResponse.next();

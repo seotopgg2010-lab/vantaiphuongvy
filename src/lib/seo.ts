@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { SITE_CONFIG } from './constants';
 import { getSiteUrl } from './site';
 import type { LegacyEntry } from './legacy-types';
+import { markdownPathFor } from './markdown-paths';
+import { SOCIAL_CARD_SIZE, socialCardFor, socialCardPath } from './social-card';
 
 export const ORGANIZATION_ID = `${getSiteUrl()}/#organization`;
 export const WEBSITE_ID = `${getSiteUrl()}/#website`;
@@ -22,38 +24,58 @@ export function telE164(phone: string) {
   return `+84-${national.length === 9 ? national.replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3') : national}`;
 }
 
+/**
+ * Share images for a page: the branded 1200×630 card first (what Facebook,
+ * Zalo and X pick), then the page's own photo.
+ */
+function socialImages(path: string, photo: string, photoAlt?: string) {
+  const card = socialCardFor(path);
+  const cardAlt = card ? `${card.title} — ${SITE_CONFIG.name}` : SITE_CONFIG.name;
+  return [
+    ...(card ? [{ url: socialCardPath(path), ...SOCIAL_CARD_SIZE, alt: cardAlt, type: 'image/png' }] : []),
+    { url: photo, alt: photoAlt || cardAlt },
+  ];
+}
+
+/** Canonical plus the markdown twin advertised as rel="alternate" type="text/markdown". */
+function pageAlternates(path: string): Metadata['alternates'] {
+  return { canonical: canonicalUrl(path), types: { 'text/markdown': markdownPathFor(path) } };
+}
+
 /** Metadata for a legacy entry: preserves the live Rank Math title/description. */
 export function legacyMetadata(item: LegacyEntry): Metadata {
   const canonical = canonicalUrl(item.path);
   const title = item.seo.title || `${item.title} | Vận Tải Phương Vy`;
   const description = item.seo.description || item.summary;
-  const image = item.image || DEFAULT_SOCIAL_IMAGE;
+  // The home entry's WordPress alt is just "TRANG CHỦ"; fall back to the card text there.
+  const photoAlt = item.imageAlt && item.imageAlt !== item.label ? item.imageAlt : undefined;
+  const images = socialImages(item.path, item.image || DEFAULT_SOCIAL_IMAGE, photoAlt);
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical },
+    alternates: pageAlternates(item.path),
     robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
     openGraph: {
       type: item.kind === 'post' ? 'article' : 'website',
       locale: 'vi_VN',
       siteName: SITE_CONFIG.name,
       title, description, url: canonical,
-      images: [{ url: image, alt: item.imageAlt || item.title }],
+      images,
       ...(item.kind === 'post' ? { publishedTime: item.date, modifiedTime: item.modified } : {}),
     },
-    twitter: { card: 'summary_large_image', title, description, images: [image] },
+    twitter: { card: 'summary_large_image', title, description, images: [images[0]] },
   };
 }
 
 export function pageMetadata({ title, description, path, image }: { title: string; description: string; path: string; image?: string }): Metadata {
   const canonical = canonicalUrl(path);
-  const img = image || DEFAULT_SOCIAL_IMAGE;
+  const images = socialImages(path, image || DEFAULT_SOCIAL_IMAGE);
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical },
-    openGraph: { type: 'website', locale: 'vi_VN', siteName: SITE_CONFIG.name, title, description, url: canonical, images: [{ url: img }] },
-    twitter: { card: 'summary_large_image', title, description, images: [img] },
+    alternates: pageAlternates(path),
+    openGraph: { type: 'website', locale: 'vi_VN', siteName: SITE_CONFIG.name, title, description, url: canonical, images },
+    twitter: { card: 'summary_large_image', title, description, images: [images[0]] },
   };
 }
 

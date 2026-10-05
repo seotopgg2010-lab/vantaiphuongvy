@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getSiteUrl } from '@/lib/site';
-import { legacyItems } from '@/lib/legacy-content';
+import { latestPostDate, legacyItems } from '@/lib/legacy-content';
 
 type ChangeFrequency = 'weekly' | 'monthly' | 'always' | 'hourly' | 'daily' | 'yearly' | 'never';
 
@@ -22,9 +22,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: item.path === '/' ? 1 : item.kind === 'post' ? 0.6 : 0.8,
     }));
 
+  // The blog index changes only when a post does; a build-time date would reset lastmod on every deploy.
   const staticRoutes: MetadataRoute.Sitemap = ['/blog'].map((route) => ({
     url: `${baseUrl}${route}/`,
-    lastModified: new Date(),
+    lastModified: latestPostDate ? new Date(latestPostDate) : undefined,
     changeFrequency: 'weekly' as ChangeFrequency,
     priority: 0.7,
   }));

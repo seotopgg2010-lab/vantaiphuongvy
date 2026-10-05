@@ -9,7 +9,7 @@ import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { getLegacyByPath, legacyPosts } from '@/lib/legacy-content';
-import { HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES } from '@/lib/marketing';
+import { HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES } from '@/lib/marketing';
 import { getExplorerRegions } from '@/lib/navigation';
 import { legacyMetadata } from '@/lib/seo';
 import { toTelHref } from '@/lib/site';
@@ -36,12 +36,10 @@ export default function HomePage() {
         <div className="container-x grid gap-8 pb-24 pt-10 md:pt-14 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-12 lg:pb-28 lg:pt-14">
           <div>
             <p className="eyebrow eyebrow-light">{SITE_CONFIG.slogan}</p>
-            <h1 className="h-display mt-3 text-white">Vận chuyển hàng hóa Bắc Nam &amp; cho thuê xe tải toàn quốc</h1>
-            <p className="mt-4 max-w-xl text-lg leading-8 text-on-brand">
-              Hơn 10 năm chành xe từ TP.HCM đi các tỉnh và ngược lại. Nhận hàng tận nơi, xe chạy hàng ngày, giá cước rõ ràng — có hóa đơn và bảo hiểm hàng hóa.
-            </p>
+            <h1 className="h-display mt-3 text-white">{HERO.title}</h1>
+            <p className="mt-4 max-w-xl text-lg leading-8 text-on-brand">{HERO.lead}</p>
             <ul className="mt-5 grid gap-2 text-[0.9375rem] font-medium text-white sm:grid-cols-2">
-              {['Miễn phí bốc dỡ & lưu kho', 'Giao hàng tận nơi', 'Xe tải 0,5 – 30 tấn', 'Làm việc cả ngày lễ'].map((point) => (
+              {HERO.points.map((point) => (
                 <li key={point} className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 shrink-0 text-accent-400" aria-hidden="true" />{point}</li>
               ))}
             </ul>

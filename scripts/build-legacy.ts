@@ -19,6 +19,7 @@ import type { AnyNode, Element } from 'domhandler';
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import type { FaqEntry, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
+import { htmlToMarkdown } from './legacy-markdown';
 
 type WpItem = {
   id: number; slug: string; link: string; date?: string; modified?: string;
@@ -318,6 +319,8 @@ const entries = [...pages.map((p) => build(p, 'page')), ...posts.map((p) => buil
 writeFileSync(join(root, 'src/legacy-content/legacy-clean.json'), `${JSON.stringify(entries)}\n`);
 // Tiny WordPress id -> canonical path map for ?p= / ?page_id= redirects in the proxy (keeps the corpus out of the proxy bundle).
 writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path])))}\n`);
+// Markdown bodies for the /<path>.md twins and llms-full.txt (kept out of the page bundles).
+writeFileSync(join(root, 'src/legacy-content/legacy-markdown.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.path, htmlToMarkdown(entry.html)])))}\n`);
 
 const bytes = entries.reduce((sum, e) => sum + e.html.length, 0);
 const byTemplate = entries.reduce<Record<string, number>>((acc, e) => { acc[e.template] = (acc[e.template] ?? 0) + 1; return acc; }, {});
