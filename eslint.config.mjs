@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     // Alternate build dirs (NEXT_DIST_DIR), git-ignored as /.next-*/.
     ".next-*/**",
+    // Agent worktrees (full checkouts with their own build output) are linted in their own session.
+    ".claude/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
