@@ -20,6 +20,7 @@ import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import type { FaqEntry, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
 import { displayTitle } from '../src/lib/legacy-render';
+import { applyArticleImages, buildArticleImages } from './legacy-images';
 import { htmlToMarkdown } from './legacy-markdown';
 
 type WpItem = {
@@ -340,14 +341,28 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
   };
 }
 
-const entries = [...pages.map((p) => build(p, 'page')), ...posts.map((p) => build(p, 'post'))].sort((a, b) => a.path.localeCompare(b.path));
-writeFileSync(join(root, 'src/legacy-content/legacy-clean.json'), `${JSON.stringify(entries)}\n`);
-// Tiny WordPress id -> canonical path map for ?p= / ?page_id= redirects in the proxy (keeps the corpus out of the proxy bundle).
-writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path])))}\n`);
-// Markdown bodies for the /<path>.md twins and llms-full.txt (kept out of the page bundles).
-writeFileSync(join(root, 'src/legacy-content/legacy-markdown.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.path, htmlToMarkdown(entry.html)])))}\n`);
+async function main() {
+  const entries = [...pages.map((p) => build(p, 'page')), ...posts.map((p) => build(p, 'post'))].sort((a, b) => a.path.localeCompare(b.path));
 
-const bytes = entries.reduce((sum, e) => sum + e.html.length, 0);
-const byTemplate = entries.reduce<Record<string, number>>((acc, e) => { acc[e.template] = (acc[e.template] ?? 0) + 1; return acc; }, {});
-console.log(`legacy-clean.json: ${entries.length} entries, ${(bytes / 1024 / 1024).toFixed(2)} MB html`, byTemplate);
-console.log(`with FAQ: ${entries.filter((e) => e.faq.length >= 2).length}, with image: ${entries.filter((e) => e.image).length}, with seo desc: ${entries.filter((e) => e.seo.description).length}`);
+  // Article images: intrinsic size + responsive WebP srcset (static files in public/_img).
+  const started = Date.now();
+  const images = await buildArticleImages(entries.flatMap((entry) => [...entry.html.matchAll(/<img [^>]*?src="([^"]+)"/g)].map((match) => match[1])), root);
+  for (const entry of entries) entry.html = applyArticleImages(entry.html, images);
+
+  writeFileSync(join(root, 'src/legacy-content/legacy-clean.json'), `${JSON.stringify(entries)}\n`);
+  // Tiny WordPress id -> canonical path map for ?p= / ?page_id= redirects in the proxy (keeps the corpus out of the proxy bundle).
+  writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path])))}\n`);
+  // Markdown bodies for the /<path>.md twins and llms-full.txt (kept out of the page bundles).
+  writeFileSync(join(root, 'src/legacy-content/legacy-markdown.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.path, htmlToMarkdown(entry.html)])))}\n`);
+
+  const bytes = entries.reduce((sum, e) => sum + e.html.length, 0);
+  const byTemplate = entries.reduce<Record<string, number>>((acc, e) => { acc[e.template] = (acc[e.template] ?? 0) + 1; return acc; }, {});
+  console.log(`legacy-clean.json: ${entries.length} entries, ${(bytes / 1024 / 1024).toFixed(2)} MB html`, byTemplate);
+  console.log(`with FAQ: ${entries.filter((e) => e.faq.length >= 2).length}, with image: ${entries.filter((e) => e.image).length}, with seo desc: ${entries.filter((e) => e.seo.description).length}`);
+  console.log(`article images: ${images.size} sized, ${[...images.values()].filter((image) => image.srcset).length} with srcset (${((Date.now() - started) / 1000).toFixed(1)}s)`);
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

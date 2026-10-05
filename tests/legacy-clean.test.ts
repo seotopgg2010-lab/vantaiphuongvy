@@ -42,6 +42,28 @@ test('every image referenced by the corpus exists in public/', () => {
   assert.deepEqual(missing, []);
 });
 
+test('article images keep their upload URL, carry their size and offer right-sized WebP variants', () => {
+  // The variants are git-ignored build output of the content pipeline (also run by predev/prebuild).
+  assert.ok(existsSync(join(process.cwd(), 'public/_img')), 'public/_img is missing: run `npm run content:build` first');
+  for (const item of legacyItems) {
+    for (const [tag] of item.html.matchAll(/<img [^>]*>/g)) {
+      const src = tag.match(/\ssrc="([^"]+)"/)?.[1] ?? '';
+      assert.ok(src.startsWith('/wp-content/uploads/'), `${item.path}: ${src}`);
+      const width = Number(tag.match(/\swidth="(\d+)"/)?.[1]);
+      assert.ok(width > 0 && Number(tag.match(/\sheight="(\d+)"/)?.[1]) > 0, `${item.path}: ${src} has no intrinsic size`);
+      const srcset = tag.match(/\ssrcset="([^"]+)"/)?.[1];
+      if (!/\.(jpe?g|png|webp)$/i.test(src) || width <= 480) continue;
+      assert.ok(srcset && /\ssizes="/.test(tag), `${item.path}: ${src} has no srcset/sizes`);
+      const candidates = srcset.split(', ').map((candidate) => candidate.split(' ')[0]);
+      assert.ok(candidates.length >= 2, `${item.path}: ${src} has one candidate`);
+      for (const candidate of candidates) {
+        assert.match(candidate, /^\/_img\/.+-\d+\.[0-9a-f]{8}\.webp$/, `${item.path}: ${candidate}`);
+        assert.ok(existsSync(join(process.cwd(), 'public', decodeURI(candidate))), `missing ${candidate}: run \`npm run content:build\``);
+      }
+    }
+  }
+});
+
 test('internal links are relative and keep the trailing-slash contract', () => {
   for (const item of legacyItems) {
     for (const [, href] of item.html.matchAll(/<a [^>]*href="([^"]+)"/g)) {

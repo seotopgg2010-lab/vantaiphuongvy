@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "tsx scripts/build-legacy.ts",
     "dev": "next dev",
     "prebuild": "tsx scripts/build-legacy.ts",
     "build": "next build",

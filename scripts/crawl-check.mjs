@@ -48,6 +48,10 @@ async function worker() {
     const targets = new Set();
     for (const [, href] of html.matchAll(/<a [^>]*href="(\/[^"#?]*)/g)) targets.add(href);
     for (const [, src] of html.matchAll(/<img [^>]*src="(\/wp-content\/[^"]+)"/g)) targets.add(src.replace(/&amp;/g, '&'));
+    // Build-time responsive variants of article images (srcset entries under /_img/).
+    for (const [, srcset] of html.matchAll(/<img [^>]*srcset="([^"]+)"/g)) {
+      for (const candidate of srcset.split(',')) if (candidate.trim().startsWith('/_img/')) targets.add(candidate.trim().split(/\s+/)[0]);
+    }
     for (const target of targets) {
       const status = await head(base + target);
       if (status !== 200) problems.push(`${path}: link ${target} -> ${status}`);

@@ -53,3 +53,6 @@ supabase/.temp/
 
 /.next-build/
 /.next-*/
+
+# build-time responsive variants of article images (scripts/legacy-images.ts)
+/public/_img/
