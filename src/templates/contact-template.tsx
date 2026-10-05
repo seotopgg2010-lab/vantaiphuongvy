@@ -27,7 +27,7 @@ export function ContactTemplate({ item }: { item: LegacyEntry }) {
         formHref="#bao-gia"
       />
       <section className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
-        <div>
+        <div className="min-w-0">
           <h2 className="text-2xl font-bold">{SITE_CONFIG.companyName}</h2>
           <ul className="mt-4 divide-y divide-line">
             <InfoRow icon={Building2} label="Trụ sở chính">{SITE_CONFIG.address}</InfoRow>
@@ -47,7 +47,7 @@ export function ContactTemplate({ item }: { item: LegacyEntry }) {
               </ul>
             </InfoRow>
             <InfoRow icon={Mail} label="Email">
-              {SITE_CONFIG.emails.map((email) => <a key={email} href={`mailto:${email}`} className="block hover:text-brand-600">{email}</a>)}
+              {SITE_CONFIG.emails.map((email) => <a key={email} href={`mailto:${email}`} className="block break-all hover:text-brand-600">{email}</a>)}
             </InfoRow>
             <InfoRow icon={Clock3} label="Giờ làm việc">{SITE_CONFIG.businessHours}, tất cả các ngày (kể cả ngày lễ)</InfoRow>
             <InfoRow icon={FileText} label="Mã số thuế">{SITE_CONFIG.taxId}</InfoRow>
@@ -57,7 +57,7 @@ export function ContactTemplate({ item }: { item: LegacyEntry }) {
             <a href={ZALO_URL} target="_blank" rel="noopener" data-track="click_zalo" className="btn btn-zalo"><MessageCircle className="h-4 w-4" aria-hidden="true" />Nhắn Zalo</a>
           </div>
         </div>
-        <div id="bao-gia" className="scroll-mt-24">
+        <div id="bao-gia" className="min-w-0 scroll-mt-24">
           <div className="card p-6 sm:p-8">
             <h2 className="text-2xl font-bold">Gửi yêu cầu báo giá</h2>
             <p className="mt-2 text-muted">Điền thông tin theo mẫu, Phương Vy sẽ liên hệ lại trong thời gian sớm nhất.</p>

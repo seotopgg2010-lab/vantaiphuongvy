@@ -13,7 +13,7 @@ export function LeadSection({ title, lead, defaultTo, page }: { title: string; l
   return (
     <section id="bao-gia" aria-labelledby="bao-gia-title" className="scroll-mt-24 bg-surface">
       <div className="container-x grid gap-10 py-10 md:py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-        <div>
+        <div className="min-w-0">
           <p className="eyebrow">Báo giá miễn phí</p>
           <h2 id="bao-gia-title" className="h-section mt-3">{title}</h2>
           <p className="lead mt-4">{lead || 'Để lại thông tin, nhân viên kinh doanh sẽ gọi lại báo giá chi tiết. Cần gấp? Gọi ngay hotline.'}</p>
@@ -30,7 +30,7 @@ export function LeadSection({ title, lead, defaultTo, page }: { title: string; l
             ))}
             <li className="flex items-start gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-[var(--shadow-card)]"><Mail className="h-5 w-5" aria-hidden="true" /></span>
-              <span><span className="block text-sm text-muted">Email</span><a href={`mailto:${SITE_CONFIG.email}`} className="font-bold text-ink hover:text-brand-600">{SITE_CONFIG.email}</a></span>
+              <span className="min-w-0"><span className="block text-sm text-muted">Email</span><a href={`mailto:${SITE_CONFIG.email}`} className="break-all font-bold text-ink hover:text-brand-600">{SITE_CONFIG.email}</a></span>
             </li>
             <li className="flex items-start gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-[var(--shadow-card)]"><Clock3 className="h-5 w-5" aria-hidden="true" /></span>
@@ -38,7 +38,7 @@ export function LeadSection({ title, lead, defaultTo, page }: { title: string; l
             </li>
           </ul>
         </div>
-        <div className="card p-6 sm:p-8">
+        <div className="card min-w-0 p-6 sm:p-8">
           <LeadForm defaultTo={defaultTo} page={page} />
         </div>
       </div>
@@ -51,7 +51,7 @@ export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khá
   return (
     <section aria-labelledby="related-routes" className="container-x py-10 md:py-14">
       <SectionHeading id="related-routes" eyebrow={eyebrow} title={title} action={{ label: 'Xem tất cả tuyến', href: '/van-chuyen-hang-hoa/' }} />
-      <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((item) => (
           <li key={item.path}>
             <Link href={withSlash(item.path)} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-4 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">

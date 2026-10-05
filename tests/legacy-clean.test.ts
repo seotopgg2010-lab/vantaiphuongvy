@@ -22,6 +22,7 @@ test('cleaned HTML carries no WordPress plugin/theme residue', () => {
     ['double-escaped entity', /&amp;amp;/],
     ['slider controls', /href="\/?#(prev|next|\d)"/],
     ['scripts', /<script/i],
+    ['Avia countdown timer', /\d+Weeks\d+Days\d+Hours/],
   ];
   for (const item of legacyItems) {
     for (const [label, pattern] of forbidden) assert.equal(pattern.test(item.html), false, `${label} in ${item.path}`);

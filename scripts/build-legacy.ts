@@ -130,7 +130,8 @@ function transform(html: string, title: string) {
   const $ = cheerio.load(html, null, false);
 
   // 1. plugin chrome & non-content
-  $('.kk-star-ratings, #ez-toc-container, .ez-toc-container, .eztoc-hide, script, style, noscript, svg, form, iframe, button, input, .avia-iconfont, .avia-font-entypo-fontello, .hr-inner, .sharedaddy, .author-box').remove();
+  // .av-countdown-timer: an expired promo countdown that would print as "0Weeks0Days0Hours…"
+  $('.kk-star-ratings, #ez-toc-container, .ez-toc-container, .eztoc-hide, script, style, noscript, svg, form, iframe, button, input, .avia-iconfont, .avia-font-entypo-fontello, .hr-inner, .sharedaddy, .author-box, .av-countdown-timer').remove();
   $('img[src*="gravatar.com"]').remove();
 
   // 2. promotional gradient boxes -> semantic callouts (styled by our CSS)
