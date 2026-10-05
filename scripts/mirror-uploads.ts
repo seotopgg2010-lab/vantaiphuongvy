@@ -5,6 +5,8 @@
  * (protects Google Images rankings, OG previews and inbound hotlinks).
  *
  * Usage: npx tsx scripts/mirror-uploads.ts [--origin https://vantaiphuongvy.com]
+ * Sources: image/link URLs in the export, Rank Math og:images, the WordPress image sitemaps and
+ * src/legacy-content/live-images.json (scripts/scrape-wp-extras.ts).
  * Output: public/wp-content/uploads/**, plans/.../reports/uploads-manifest.json
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
@@ -48,6 +50,14 @@ function collect(): string[] {
   }
   const seoFile = join(root, 'src/legacy-content/seo-meta.json');
   if (existsSync(seoFile)) for (const meta of Object.values(JSON.parse(readFileSync(seoFile, 'utf8')) as Record<string, { ogImage?: string }>)) add(meta.ogImage);
+  // Images WordPress declared to search engines (Rank Math image sitemaps) and uploads the live
+  // pages showed outside the exported content (featured images, theme, lightbox links): kept so
+  // their URLs, which Google Images may have indexed, still answer 200 after the cutover.
+  for (const file of ['page-sitemap.xml', 'post-sitemap.xml']) {
+    for (const match of readFileSync(join(root, 'src/legacy-content', file), 'utf8').matchAll(/<image:loc>([^<]+)<\/image:loc>/g)) add(match[1]);
+  }
+  const liveFile = join(root, 'src/legacy-content/live-images.json');
+  if (existsSync(liveFile)) for (const path of JSON.parse(readFileSync(liveFile, 'utf8')) as string[]) add(path);
   for (const file of walk(join(root, 'src'))) {
     for (const match of readFileSync(file, 'utf8').matchAll(/https?:\/\/(?:www\.)?vantaiphuongvy\.com\/wp-content\/uploads\/[^\s'"`)]+/g)) add(match[0]);
   }

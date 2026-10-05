@@ -1,7 +1,7 @@
 {
   "origin": "https://vantaiphuongvy.com",
-  "total": 391,
-  "ok": 384,
+  "total": 604,
+  "ok": 597,
   "failed": [
     {
       "path": "/wp-content/uploads/2018/10/chanh-xe-gui-hang-di-quang-nam-pv-footer.jpg",
@@ -32,5 +32,5 @@
       "status": 404
     }
   ],
-  "totalMb": 79.2
+  "totalMb": 123.2
 }

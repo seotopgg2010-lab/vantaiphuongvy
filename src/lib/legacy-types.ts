@@ -9,6 +9,15 @@ export type TocEntry = { id: string; text: string; level: 2 | 3 };
 export type FaqEntry = { question: string; answer: string };
 /** Post author, taken from the WordPress "Về tác giả" box. */
 export type LegacyAuthor = { name: string; bio?: string };
+/** Approved WordPress comment, as snapshotted in src/legacy-content/comments.json. */
+export type LegacyComment = { id: number; post: number; parent: number; author: string; date: string; html: string };
+/** A comment rendered as plain-text paragraphs, with its replies in thread order. */
+export type CommentThread = { id: number; author: string; date: string; paragraphs: string[]; replies: CommentThread[] };
+/**
+ * Visitor rating shown by the WordPress kk Star Ratings widget (read-only on the
+ * live site), carried over with its own name so the CreativeWorkSeries markup matches.
+ */
+export type LegacyRating = { name: string; score: number; best: number; count: number };
 
 export type LegacyEntry = {
   id: number;
@@ -36,4 +45,8 @@ export type LegacyEntry = {
   readingMinutes: number;
   seo: { title?: string; description?: string; robots?: string };
   author?: LegacyAuthor;
+  rating?: LegacyRating;
+  /** Approved WordPress comments, newest thread first (as the live site lists them). */
+  comments?: CommentThread[];
+  commentCount?: number;
 };
