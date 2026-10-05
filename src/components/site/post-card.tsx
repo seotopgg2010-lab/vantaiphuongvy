@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { CalendarDays, Clock } from 'lucide-react';
+import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG } from '@/lib/constants';
 import { withSlash } from '@/lib/navigation';
 
@@ -25,7 +25,7 @@ export function PostCard({ post, priority = false }: { post: PostSummary; priori
   return (
     <article className="card card-hover group flex h-full flex-col overflow-hidden">
       <Link href={withSlash(post.path)} className="relative block aspect-[16/9] overflow-hidden bg-surface" tabIndex={-1} aria-hidden="true">
-        <Image
+        <UploadImage
           src={post.image || SITE_CONFIG.defaultImage}
           alt=""
           fill

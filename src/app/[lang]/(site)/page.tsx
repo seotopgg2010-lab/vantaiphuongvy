@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Gift, MessageCircle, Phone, Search } from 'lucide-react';
 import { FaqList } from '@/components/site/faq-list';
@@ -7,6 +6,7 @@ import { CommitmentGrid, PressGrid, PressStrip, ProcessSteps, StatsStrip, Testim
 import { PostCard } from '@/components/site/post-card';
 import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
+import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { getLegacyByPath, legacyPosts } from '@/lib/legacy-content';
 import { HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES } from '@/lib/marketing';
@@ -30,7 +30,7 @@ export default function HomePage() {
     <>
       {/* ---------- hero ---------- */}
       <section className="relative isolate overflow-hidden bg-brand-700 text-white">
-        <Image src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill preload sizes="100vw" className="-z-20 object-cover object-center" />
+        <UploadImage src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill preload sizes="100vw" className="-z-20 object-cover object-center" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-700 via-brand-700/90 to-brand-600/40" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-brand-700/90 to-transparent" aria-hidden="true" />
         <div className="container-x grid gap-8 pb-24 pt-10 md:pt-14 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-12 lg:pb-28 lg:pt-14">
@@ -80,7 +80,7 @@ export default function HomePage() {
           {SERVICES.map((service) => (
             <Link key={service.href} href={service.href} className="card card-hover group flex flex-col overflow-hidden">
               <span className="relative block aspect-[16/7] overflow-hidden bg-surface">
-                <Image src={service.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                <UploadImage src={service.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
               </span>
               <span className="flex flex-1 flex-col p-5 sm:p-6">
                 <span className="text-xl font-bold text-ink sm:text-2xl">{service.title}</span>
@@ -107,7 +107,7 @@ export default function HomePage() {
             <SectionHeading id="why-us" eyebrow="Vì sao chọn Phương Vy" title="Đối tác vận chuyển doanh nghiệp tin dùng hơn 10 năm" />
             <p className="lead mt-4">{SITE_CONFIG.companyName} hoạt động trong lĩnh vực chành xe – vận chuyển hàng hóa hơn 10 năm, với đội ngũ nhân viên và đội xe tải hùng hậu, cam kết giao hàng đúng hẹn và tiết kiệm chi phí cho khách hàng.</p>
             <div className="relative mt-6 aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
-              <Image src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 45vw, 100vw" className="object-cover" />
+              <UploadImage src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 45vw, 100vw" className="object-cover" />
             </div>
           </div>
           <CommitmentGrid />

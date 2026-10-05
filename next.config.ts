@@ -50,9 +50,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
-    qualities: [75, 85],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2560],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Only the widths and quality the layouts request: every extra variant is another
+    // transformation against the hosting plan's monthly image-optimization quota.
+    qualities: [75],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [256, 384],
     // Mirrored WordPress uploads keep their original paths (image SEO parity).
     localPatterns: [{ pathname: '/wp-content/uploads/**', search: '' }],
     remotePatterns: [

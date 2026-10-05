@@ -2,13 +2,13 @@
 
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   ArrowRight, Bike, ChevronDown, Cog, Droplets, FileText, Globe2, HelpCircle, MapPin, Menu, MessageCircle,
   Phone, Plane, Search, ShieldCheck, Ship, Truck, Weight, X, type LucideIcon,
 } from 'lucide-react';
+import { UploadImage } from '@/components/site/upload-image';
 import type { NavLink, SiteNavigation } from '@/lib/navigation';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { POPULAR_ROUTES } from '@/lib/marketing';
@@ -91,7 +91,7 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
     <header ref={headerRef} onMouseLeave={closeSoon} onMouseEnter={keepOpen} className={`sticky top-0 z-50 border-b bg-white/95 backdrop-blur-md transition-shadow duration-300 ${scrolled || openMenu ? 'border-line shadow-[0_8px_24px_-14px_rgb(10_61_107/0.35)]' : 'border-transparent'}`}>
       <div className={`container-x flex items-center gap-4 transition-[height] duration-300 ${scrolled ? 'h-16' : 'h-16 lg:h-[4.75rem]'}`}>
         <Link href="/" className="shrink-0" aria-label="Vận tải Phương Vy — Trang chủ">
-          <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} loading="eager" sizes="170px" className={`w-auto transition-[height] duration-300 ${scrolled ? 'h-9 lg:h-10' : 'h-9 lg:h-12'}`} />
+          <UploadImage src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} loading="eager" sizes="170px" className={`w-auto transition-[height] duration-300 ${scrolled ? 'h-9 lg:h-10' : 'h-9 lg:h-12'}`} />
         </Link>
 
         <nav aria-label="Điều hướng chính" className="ml-4 hidden h-full items-stretch lg:flex xl:ml-8">
@@ -236,7 +236,7 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
           <button type="button" tabIndex={-1} className="animate-fade absolute inset-0 bg-navy-950/45 backdrop-blur-sm" aria-label="Đóng menu" onClick={() => setDrawer(false)} />
           <div className="animate-drawer absolute inset-y-0 right-0 flex w-[min(24rem,92vw)] flex-col bg-white shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-line px-5">
-              <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="130px" className="h-8 w-auto" />
+              <UploadImage src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="130px" className="h-8 w-auto" />
               <button ref={closeButtonRef} type="button" className="flex h-10 w-10 items-center justify-center rounded-full transition hover:rotate-90 hover:bg-surface" aria-label="Đóng menu" onClick={() => setDrawer(false)}><X className="h-6 w-6" aria-hidden="true" /></button>
             </div>
             <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4">

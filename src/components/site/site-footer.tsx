@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Clock3, Mail, MapPin, Phone, Warehouse } from 'lucide-react';
+import { UploadImage } from '@/components/site/upload-image';
 import type { NavLink, SiteNavigation } from '@/lib/navigation';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { toTelHref } from '@/lib/site';
@@ -28,7 +28,7 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
       <div className="container-x grid gap-8 py-10 md:grid-cols-2 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:py-12">
         <div>
           <Link href="/" className="inline-flex rounded-xl bg-white px-4 py-3">
-            <Image src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="150px" className="h-10 w-auto" />
+            <UploadImage src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} sizes="150px" className="h-10 w-auto" />
           </Link>
           <p className="mt-5 max-w-sm text-[0.9375rem] leading-7">{SITE_CONFIG.companyName} — vận chuyển hàng hóa Bắc Nam, chành xe liên tỉnh và cho thuê xe tải. <span className="text-white">{SITE_CONFIG.slogan}</span></p>
           <ul className="mt-6 space-y-3 text-[0.9375rem]">

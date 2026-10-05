@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import { ArrowRight, BadgeCheck, Clock3, ExternalLink, Gauge, Newspaper, PiggyBank, Quote, ShieldCheck, Sparkles, Target } from 'lucide-react';
+import { UploadImage } from '@/components/site/upload-image';
 import { COMMITMENTS, PRESS, PROCESS_STEPS, STATS, TESTIMONIALS } from '@/lib/marketing';
 
 const COMMITMENT_ICONS = { fast: Clock3, exact: Target, pro: BadgeCheck, safe: ShieldCheck, easy: Sparkles, save: PiggyBank } as const;
@@ -62,7 +62,7 @@ export function PressGrid({ limit }: { limit?: number }) {
         <li key={item.outlet} className={index >= PRESS_MOBILE_COUNT ? 'max-sm:hidden' : undefined}>
           <a href={item.href} target="_blank" rel="noopener" className="card card-hover group block overflow-hidden" aria-label={`Bài viết trên ${item.outlet} về Vận tải Phương Vy (mở tab mới)`}>
             <span className="relative block aspect-[23/10] bg-surface">
-              <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 200px, (min-width: 640px) 33vw, 50vw" className="object-cover object-top" />
+              <UploadImage src={item.image} alt="" fill sizes="(min-width: 1024px) 200px, (min-width: 640px) 33vw, 50vw" className="object-cover object-top" />
             </span>
             <span className="flex items-center justify-between gap-2 px-3 py-2.5 text-[0.8125rem] font-semibold text-ink">
               {item.outlet}

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarDays, Clock, Truck } from 'lucide-react';
 import { Breadcrumbs } from '@/components/site/breadcrumbs';
@@ -8,6 +7,7 @@ import { formatDateVi } from '@/components/site/post-card';
 import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
 import { StatsStrip } from '@/components/site/marketing';
+import { UploadImage } from '@/components/site/upload-image';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
 import { relatedPosts, relatedRoutes, relatedServices, truckItems } from '@/lib/legacy-content';
 import { displayTitle, heroContent } from '@/lib/legacy-render';
@@ -66,7 +66,7 @@ function TruckLinks({ current }: { current?: string }) {
           <li key={truck.path}>
             <Link href={withSlash(truck.path)} className="card card-hover group block h-full overflow-hidden">
               <span className="relative block aspect-[16/10] bg-surface">
-                {truck.image && <Image src={truck.image} alt="" fill sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
+                {truck.image && <UploadImage src={truck.image} alt="" fill sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
               </span>
               <span className="flex items-center justify-between gap-3 p-5">
                 <span><span className="block text-lg font-bold text-ink">{truck.label}</span><span className="mt-1 block text-sm text-muted">Xe tải chở hàng nội thành & đi tỉnh</span></span>
@@ -133,7 +133,7 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
       {item.image && (
         <div className="container-x pt-10">
           <div className="relative mx-auto aspect-[16/8] max-w-5xl overflow-hidden rounded-2xl bg-surface shadow-[var(--shadow-card)]">
-            <Image src={item.image} alt={item.imageAlt || item.title} fill preload sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
+            <UploadImage src={item.image} alt={item.imageAlt || item.title} fill preload sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
           </div>
         </div>
       )}
