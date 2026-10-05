@@ -49,7 +49,11 @@
 - Lead trong hero: 1–2 câu (80–280 ký tự), nói kết quả trước. Trang có đoạn mở đầu WordPress yếu, trống hoặc VIẾT HOA quảng cáo dùng `HERO_LEADS` (`src/lib/marketing.ts`): chỉ dữ kiện có trong chính trang đó, không mâu thuẫn với chip trong hero (ví dụ không ghi tải trọng khác "Xe 0,5 – 30 tấn"); đoạn gốc vẫn giữ trong thân bài.
 - Mọi trang tuyến và thuê xe tải có liên kết trong HTML server ở danh mục cuối footer (server component, đặt sau `<main>`, `prefetch={false}`). Mega menu chỉ render khi mở (desktop): render sẵn 65 KB menu ẩn ở đầu trang làm LCP của trang nhẹ chậm hơn 11–14% khi đo A/B. `RouteExplorer` render mọi tuyến, lọc bằng thuộc tính `hidden`.
 - Liên kết liên quan: `relatedRoutes` lấy các tuyến láng giềng trong cùng vùng (trang loại hàng lấy các dịch vụ loại hàng khác), `relatedPosts` chọn bài theo chủ đề (`POST_TOPICS`), bài viết có khối "Dịch vụ liên quan" (`relatedServices`). Bài viết mới cần thêm chủ đề vào `POST_TOPICS`.
-- Heading trong nội dung legacy được pipeline chuẩn hóa: không nhảy cấp, không lặp H1, không VIẾT HOA (dạng câu qua `displayTitle`, giữ `id` cũ).
+- Heading trong nội dung legacy được pipeline chuẩn hóa: không nhảy cấp, không lặp H1, không VIẾT HOA (dạng câu qua `displayTitle`, giữ `id` cũ). Đoạn chỉ có chữ đậm là câu hỏi (có câu trả lời theo sau) hoặc tiêu đề ngắn dẫn vào danh sách/bảng thành heading cấp dưới mục chứa nó; dòng "– …" ngăn bằng `<br>` thành danh sách thật; `<ol start>` giữ số thứ tự.
+- Liên kết ngữ cảnh trong thân bài: lần nhắc đầu tiên của cụm từ trong `src/content/contextual-links.ts` (dịch vụ, bài viết, "gửi hàng đi <tỉnh>") thành link — tối đa 3 mỗi trang dịch vụ, 5 mỗi bài viết; không trong heading, bảng, callout hay đoạn mở đầu; không tự liên kết; mỗi đích một lần. Không ép link khi bài không có cụm từ tự nhiên.
+- Bài viết: dưới H1 là lead (`HERO_LEADS`, 1–2 câu: người đọc nhận được gì, dữ kiện lấy từ chính bài); dòng meta ghi "Tác giả …"; cuối bài có hộp "Về tác giả" (tên + tiểu sử lấy từ hộp tác giả WordPress, không thêm liên kết mạng xã hội cá nhân). Tiêu đề VIẾT HOA hiển thị dạng câu cả trong thẻ bài viết.
+- Ảnh: ảnh thân bài có `width`/`height` thật và `srcset` WebP 480/768/1080 px sinh lúc build (`/_img/…`, cache immutable), `src` giữ URL `/wp-content/uploads/**`. Ảnh qua `next/image` dùng `UploadImage` để `src` vẫn là URL upload (crawler không tốn lượt tối ưu ảnh).
+- Chip dữ kiện viết bằng chữ: "Thời gian khoảng 36h" (không dùng "~", ở cỡ chữ chip dễ đọc thành "-36h").
 
 ## Voice & tone
 
