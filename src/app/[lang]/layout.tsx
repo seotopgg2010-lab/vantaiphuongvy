@@ -3,7 +3,7 @@ import '../globals.css';
 import { locales } from './dictionaries';
 import { generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { getSiteUrl } from '@/lib/site';
-import { SITE_CONFIG } from '@/lib/constants';
+import { SITE_CONFIG, TRACKING } from '@/lib/constants';
 import { JsonLd } from '@/components/site/json-ld';
 import { RootDocument, siteViewport } from '@/components/site/root-document';
 
@@ -23,6 +23,8 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: { card: 'summary_large_image', title, description, images: [SITE_CONFIG.defaultImage] },
     alternates: { canonical: `${baseUrl}/` },
     formatDetection: { telephone: true },
+    // Same ownership tags as the WordPress site, so Search Console and Pinterest stay verified after the move.
+    verification: { google: TRACKING.googleSiteVerification, other: { 'p:domain_verify': TRACKING.pinterestVerification } },
   };
 }
 

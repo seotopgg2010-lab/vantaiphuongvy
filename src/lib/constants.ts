@@ -32,4 +32,16 @@ export const SITE_CONFIG = {
   emails: ['vanchuyenphuongvy@gmail.com', 'vanmai.phuongvy@gmail.com'],
 } as const;
 
+/**
+ * Public site IDs carried over from the WordPress <head>. The Google Tag Manager
+ * container there has no tags and the Universal Analytics property is retired,
+ * so only GA4 and the Google Ads tag are loaded (after analytics consent).
+ */
+export const TRACKING = {
+  googleSiteVerification: '2KdV5ddnqEuRZMlkOc0GueLlaw_-F1__Kc_O3-_4Bn0',
+  pinterestVerification: 'b33cf3506370c4657a9f1134e1596db4',
+  ga4: 'G-4MSCYJN9G4',
+  googleAds: 'AW-830959523',
+} as const;
+
 export const ZALO_URL = `https://zalo.me/${SITE_CONFIG.zalo}`;
