@@ -1,0 +1,59 @@
+# Design — Vận tải Phương Vy
+
+**Brand essence:** chành xe Bắc Nam đáng tin cậy, nói giá rõ ràng và gọi là có xe — "Chất lượng, nhanh chóng, uy tín là niềm tin!"
+
+## Art direction
+
+- Hiện đại, chuyên nghiệp, đúng ngành vận tải Việt Nam: lưới gọn, nhiều khoảng trắng, một màu nhấn (vàng) cho hành động chính.
+- Đáng tin: ảnh thật của đội xe/bãi xe (`public/wp-content/uploads/**`), số liệu chỉ lấy từ nội dung đã xác minh (`src/lib/marketing.ts`), không "24/7", không rating tự gán.
+- Motif lặp lại: nền "brand grid" (gradient xanh logo + lưới 44 px, `.bg-brand-grid`) cho hero, quy trình, CTA và social card; vạch vàng trước eyebrow.
+- Kể chuyện theo chương: dịch vụ → tuyến → vì sao chọn → quy trình → ưu đãi → báo chí/khách hàng → hỏi đáp → báo giá. Bằng chứng (báo chí) được nhắc sớm ngay dưới hero.
+
+## Tokens (nguồn: `src/app/globals.css`)
+
+| Nhóm | Token | Giá trị | Dùng cho |
+|---|---|---|---|
+| Brand | `--brand-600` | `#1275bc` | Xanh logo: link, nút primary, icon |
+| | `--brand-700` | `#0b5c98` | Hover, header bảng |
+| | `--brand-400` / `--brand-50` / `--brand-100` | `#04a4e4` / `#f1f8fd` / `#dff0fb` | Điểm nhấn, nền nhạt |
+| Navy | `--navy-950` / `--navy-900` | `#0a3d6b` / `#0c4a82` | Footer, chữ trên nền vàng, `theme-color` |
+| Accent | `--accent-500` / `--accent-400` | `#f5b800` / `#ffc933` | Nút gọi hotline (CTA chính), vạch eyebrow |
+| Text | `--ink` / `--muted` / `--subtle` | `#0f2236` / `#52687b` / `#5e6f82` | Chữ chính / phụ / chú thích (≥ 4.5:1) |
+| Surface | `--surface` / `--line` | `#f5f9fd` / `#e1e9f0` | Nền section xen kẽ, viền |
+| On brand | `--on-brand` | `#e6f2fc` | Chữ thân trên nền xanh (≥ 4.5:1) |
+
+- **Type:** Be Vietnam Pro (400–800, subset `vietnamese`). `.h-display` `clamp(2.125rem, 4.6vw, 3.625rem)`/800; `.h-section` `clamp(1.75rem, 3.2vw, 2.5rem)`/750; thân 16–17 px, line-height 1.65–1.8; `.eyebrow` 13 px uppercase tracking 0.08em.
+- **Spacing:** `.container-x` max 80rem, padding 1.25 / 1.5 / 2 rem (mobile / sm / lg); section `py-12 md:py-16`.
+- **Radius:** nút và field `0.625rem`; card `1rem`; khối nổi `1.5rem`; pill `999px`.
+- **Shadow:** `--shadow-card` cho card tĩnh, `--shadow-lift` cho hover và khối nổi.
+
+## Motion
+
+- 150–300 ms, `cubic-bezier(.2,.8,.2,1)` khi vào (`pv-drop`, `pv-fade`, `pv-slide`), chỉ `transform`/`opacity`.
+- Hover card: nhấc 3 px + đổi shadow trong 200 ms. Không scroll-jacking, không nội dung ẩn chờ JS.
+- `prefers-reduced-motion: reduce` tắt animation/transition toàn cục (`globals.css`).
+
+## Breakpoints & layout
+
+- Tailwind mặc định: `sm` 640, `md` 768, `lg` 1024, `xl` 1280. Kiểm tra ở 1440×900, 768×1024, 375×812 và reflow 320 px.
+- Dưới `lg`: thanh hành động cố định (Gọi ngay · Zalo · Báo giá), body chừa `padding-bottom` + safe-area.
+- Bảng giá luôn nằm trong `.table-scroll` (cuộn ngang trong khung, không tràn trang).
+
+## Component rules
+
+- Mỗi màn một hành động chính: **Gọi hotline** (`.btn-accent`). Zalo là phụ (`.btn-ghost-light` / `.btn-zalo`), "Gửi yêu cầu" trỏ `#bao-gia`.
+- Section mở bằng `SectionHeading` (eyebrow + `h2.h-section` + lead + link "xem tất cả").
+- Ảnh legacy thường có chữ/hotline in sẵn: đặt trong khung 16/11 (`PageHero`), không dùng làm nền phủ chữ.
+- Bài viết có `PageActions` (Chia sẻ · Sao chép liên kết · Hỏi AI) — chỉ gửi URL công khai và bản `.md` công khai.
+- Social card `/og/<path>.png` (1200×630) do `src/app/og/[...slug]/route.tsx` sinh: panel brand grid + logo + tiêu đề + hotline + ảnh thật của trang.
+
+## Voice & tone
+
+- Tiếng Việt, xưng "Phương Vy" – "quý khách/bạn", câu ngắn, nói kết quả trước ("Giao trong ~36h", "Giá từ 1.500đ/kg").
+- Con số cụ thể thay cho tính từ; mọi con số phải có trong nội dung legacy hoặc `marketing.ts`.
+
+| Nên | Không nên |
+|---|---|
+| "Gọi 0933 871 139" | "Liên hệ ngay hôm nay!!!" |
+| "Xe tải 0,5 – 30 tấn" | "Đội xe hùng hậu nhất Việt Nam" |
+| "12 báo điện tử đã đưa tin" (đếm từ `PRESS`) | "Được hàng nghìn khách hàng tin tưởng" (không có nguồn) |
