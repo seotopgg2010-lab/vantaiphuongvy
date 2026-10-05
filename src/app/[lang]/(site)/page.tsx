@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Gift, MessageCircle, Phone, Search } from 'lucide-react';
 import { FaqList } from '@/components/site/faq-list';
-import { CommitmentGrid, PressGrid, ProcessSteps, StatsStrip, Testimonials } from '@/components/site/marketing';
+import { CommitmentGrid, PressGrid, PressStrip, ProcessSteps, StatsStrip, Testimonials } from '@/components/site/marketing';
 import { PostCard } from '@/components/site/post-card';
 import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
@@ -70,6 +70,7 @@ export default function HomePage() {
 
       <div className="container-x relative z-10 -mt-14 lg:-mt-16">
         <div className="rounded-2xl bg-white shadow-[var(--shadow-lift)]"><StatsStrip /></div>
+        <div className="mt-4"><PressStrip /></div>
       </div>
 
       {/* ---------- services ---------- */}
@@ -143,7 +144,8 @@ export default function HomePage() {
       </section>
 
       {/* ---------- press ---------- */}
-      <section aria-labelledby="press" className="border-y border-line bg-surface">
+      {/* scroll-mt keeps the "Xem bài báo" jump target clear of the sticky header */}
+      <section aria-labelledby="press" className="border-y border-line bg-surface [&_h2]:scroll-mt-32">
         <div className="container-x py-12 md:py-16">
           <SectionHeading id="press" eyebrow="Báo chí" title="Báo chí nói về Vận tải Phương Vy" align="center" />
           <div className="mt-8"><PressGrid /></div>

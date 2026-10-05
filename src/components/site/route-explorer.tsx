@@ -89,7 +89,8 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
                         <MapPin className="h-4 w-4" aria-hidden="true" />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-ink sm:text-base">{item.label}</span>
+                        {/* Wraps to 2 lines so long names ("Điện Biên – Lai Châu") stay readable in the 2-col mobile grid. */}
+                        <span className="line-clamp-2 text-sm font-semibold text-ink wrap-break-word sm:text-base">{item.label}</span>
                         {(item.transit || item.priceFrom) && (
                           <span className="block truncate text-xs text-muted">
                             {[item.transit && `${item.transit}`, item.priceFrom && `từ ${item.priceFrom}`].filter(Boolean).join(' · ')}

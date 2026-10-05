@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import { BadgeCheck, Clock3, ExternalLink, Gauge, PiggyBank, Quote, ShieldCheck, Sparkles, Target } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Clock3, ExternalLink, Gauge, Newspaper, PiggyBank, Quote, ShieldCheck, Sparkles, Target } from 'lucide-react';
 import { COMMITMENTS, PRESS, PROCESS_STEPS, STATS, TESTIMONIALS } from '@/lib/marketing';
 
 const COMMITMENT_ICONS = { fast: Clock3, exact: Target, pro: BadgeCheck, safe: ShieldCheck, easy: Sparkles, save: PiggyBank } as const;
+/** Press items shown on phones; the rest appear from `sm` up (keeps press blocks short on mobile). */
+const PRESS_MOBILE_COUNT = 6;
 
 export function StatsStrip({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
   const dark = tone === 'dark';
@@ -57,7 +59,7 @@ export function PressGrid({ limit }: { limit?: number }) {
   return (
     <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {items.map((item, index) => (
-        <li key={item.outlet} className={index >= 6 ? 'max-sm:hidden' : undefined}>
+        <li key={item.outlet} className={index >= PRESS_MOBILE_COUNT ? 'max-sm:hidden' : undefined}>
           <a href={item.href} target="_blank" rel="noopener" className="card card-hover group block overflow-hidden" aria-label={`Bài viết trên ${item.outlet} về Vận tải Phương Vy (mở tab mới)`}>
             <span className="relative block aspect-[23/10] bg-surface">
               <Image src={item.image} alt="" fill sizes="(min-width: 1024px) 200px, (min-width: 640px) 33vw, 50vw" className="object-cover object-top" />
@@ -70,6 +72,33 @@ export function PressGrid({ limit }: { limit?: number }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+/**
+ * Compact press social proof right under the home hero; links down to the full
+ * `#press` grid. Phones list the first outlets plus a "+N báo khác" tail so the
+ * strip stays within the second screen.
+ */
+export function PressStrip() {
+  const dot = 'inline-flex items-center gap-1.5 before:h-1 before:w-1 before:rounded-full before:bg-subtle/40';
+  return (
+    <div className="flex flex-col gap-2 rounded-2xl border border-line bg-surface px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:gap-6">
+      <p className="flex shrink-0 items-start gap-2 text-sm text-muted">
+        <Newspaper className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
+        <span><strong className="font-bold text-ink">{PRESS.length} báo điện tử</strong> đã đưa tin về Phương Vy</span>
+      </p>
+      <ul aria-label="Các báo đã đưa tin" className="flex min-w-0 flex-1 flex-wrap gap-x-3 gap-y-1 text-[0.8125rem] font-medium text-subtle">
+        {PRESS.map((item, index) => (
+          <li key={item.outlet} className={index >= PRESS_MOBILE_COUNT ? `${dot} max-sm:hidden` : dot}>{item.outlet}</li>
+        ))}
+        {PRESS.length > PRESS_MOBILE_COUNT && <li className={`${dot} sm:hidden`}>+{PRESS.length - PRESS_MOBILE_COUNT} báo khác</li>}
+      </ul>
+      {/* py-3/-my-3: 44px touch target without adding 24px of layout height */}
+      <a href="#press" className="group -my-3 inline-flex shrink-0 items-center gap-1.5 self-start py-3 text-sm font-semibold text-brand-600 hover:underline lg:self-auto">
+        Xem bài báo<ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" />
+      </a>
+    </div>
   );
 }
 
