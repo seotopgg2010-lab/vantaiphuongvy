@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { CheckCircle2, Clock3, MessageCircle, Phone, Tag } from 'lucide-react';
 import { Breadcrumbs, type Crumb } from '@/components/site/breadcrumbs';
+import { RatingSummary } from '@/components/site/rating-summary';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
+import type { LegacyRating } from '@/lib/legacy-types';
 import { toTelHref } from '@/lib/site';
 
 export type HeroFact = { icon?: 'time' | 'price' | 'check'; text: string };
@@ -20,6 +22,7 @@ export function PageHero({
   title,
   summary,
   facts = [],
+  rating,
   image,
   imageAlt = '',
   showActions = true,
@@ -30,6 +33,8 @@ export function PageHero({
   title: string;
   summary?: string;
   facts?: HeroFact[];
+  /** Visitor rating from WordPress, shown under the title where its star widget sat. */
+  rating?: LegacyRating;
   image?: string;
   imageAlt?: string;
   showActions?: boolean;
@@ -43,6 +48,7 @@ export function PageHero({
           <Breadcrumbs items={crumbs} tone="light" />
           {eyebrow && <p className="eyebrow eyebrow-light mt-6">{eyebrow}</p>}
           <h1 className="h-display mt-3 text-white">{title}</h1>
+          {rating && <div className="mt-3"><RatingSummary rating={rating} tone="light" /></div>}
           {summary && <p className="mt-5 max-w-2xl text-base leading-7 text-on-brand sm:text-[1.0625rem] sm:leading-8">{summary}</p>}
           {facts.length > 0 && (
             <ul className="mt-6 flex flex-wrap gap-2">

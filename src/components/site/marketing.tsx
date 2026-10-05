@@ -22,7 +22,7 @@ export function StatsStrip({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
 
 export function CommitmentGrid() {
   return (
-    <ul className="grid content-start gap-3 sm:grid-cols-2 sm:gap-4">
+    <ul className="grid content-start gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
       {COMMITMENTS.map((item) => {
         const Icon = COMMITMENT_ICONS[item.key];
         return (

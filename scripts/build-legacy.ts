@@ -4,7 +4,9 @@
  * Reads the immutable WordPress export (pages.json / posts.json — never edited)
  * plus the scraped Rank Math metadata, and emits a clean, template-ready corpus
  * at src/legacy-content/legacy-clean.json:
- *   - strips plugin chrome (kk-star-ratings, Easy TOC, Avia builder wrappers, inline styles)
+ *   - strips plugin chrome (kk-star-ratings, Easy TOC, Avia builder wrappers, inline styles);
+ *     the star-rating payload is kept as `rating`
+ *   - attaches the snapshotted WordPress comments (comments.json) as plain-text threads
  *   - keeps the original heading anchors (#Bang_Gia_...) so old deep links still work
  *   - rewrites images to the locally mirrored /wp-content/uploads/** paths (same URLs)
  *   - rewrites absolute internal links to relative ones
@@ -19,7 +21,7 @@ import { Element as DomElement, Text as DomText, type AnyNode, type Element, typ
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import { CONTEXTUAL_LINKS, CONTEXTUAL_LINK_LIMITS, ROUTE_PHRASE_DIRECTIONS, ROUTE_PHRASE_VERBS } from '../src/content/contextual-links';
-import type { FaqEntry, LegacyAuthor, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
+import type { CommentThread, FaqEntry, LegacyAuthor, LegacyComment, LegacyEntry, LegacyRating, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
 import { displayTitle } from '../src/lib/legacy-render';
 import { applyArticleImages, buildArticleImages } from './legacy-images';
 import { htmlToMarkdown } from './legacy-markdown';
@@ -83,6 +85,14 @@ function decodeEntities(value: string): string {
   return cheerio.load(`<p>${value}</p>`, null, false)('p').text();
 }
 function pathOf(link: string): string { return new URL(link).pathname.replace(/\/+$/, '') || '/'; }
+/**
+ * WordPress REST dates are site-local times without an offset (site timezone Asia/Ho_Chi_Minh,
+ * UTC+7, no DST). Written with the offset so a build on a UTC host shows the same day.
+ */
+function wpDate(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  return /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? value : `${value}+07:00`;
+}
 for (const item of [...pages, ...posts]) KNOWN_PATHS.add(pathOf(item.link));
 
 function templateOf(path: string, kind: 'page' | 'post'): LegacyTemplate {
@@ -192,6 +202,9 @@ function transform(html: string, title: string, path: string, linkLimit: number)
   const authorBio = authorBox.find('.read-des').text().replace(/\s+/g, ' ').trim();
   const author: LegacyAuthor | undefined = authorName ? { name: authorName, ...(authorBio ? { bio: authorBio } : {}) } : undefined;
   $('.about-author').remove();
+
+  // The kk Star Ratings widget (read-only on the live site) becomes data; its markup goes with the plugin chrome below.
+  const rating = parseRating($('.kk-star-ratings').first().attr('data-payload'));
 
   // 1. plugin chrome & non-content
   // .av-countdown-timer: an expired promo countdown that would print as "0Weeks0Days0Hours…"
@@ -416,6 +429,15 @@ function transform(html: string, title: string, path: string, linkLimit: number)
     const answer = parts.join(' ').replace(/\s+/g, ' ').trim();
     if (answer.length >= 20) faq.push({ question, answer: answer.length > 700 ? `${answer.slice(0, 697).replace(/\s+\S*$/, '')}…` : answer });
   });
+  // "Hỏi: …? => …" or "Hỏi: …?" followed by "Đáp: …" paragraphs, which WordPress also published as FAQPage.
+  $('p').each((_, el) => {
+    const ask = textOf($, el).match(/^Hỏi\s*:\s*(.+?\?)\s*(?:=>\s*)?(.*)$/i);
+    if (!ask) return;
+    const question = ask[1].replace(/\s+\?$/, '?');
+    const reply = textOf($, $(el).next().get(0) ?? el).match(/^Đáp\s*:\s*(.+)$/i);
+    const answer = (ask[2] || (reply ? reply[1] : '')).trim();
+    if (answer.length >= 20 && !faq.some((entry) => entry.question === question)) faq.push({ question, answer: answer.length > 700 ? `${answer.slice(0, 697).replace(/\s+\S*$/, '')}…` : answer });
+  });
 
   const paragraphs = $('p').toArray().map((el) => textOf($, el)).filter((text) => text.length >= 60 && !/bình chọn|Mục Lục/i.test(text));
   const firstImage = $('img').first();
@@ -429,7 +451,52 @@ function transform(html: string, title: string, path: string, linkLimit: number)
     allowProtocolRelative: false,
   }).replace(/\n{2,}/g, '\n').replace(/<p>\s*(<br\s*\/?>\s*)+/g, '<p>').replace(/(<br\s*\/?>\s*)+<\/p>/g, '</p>');
 
-  return { html: clean, toc, faq, paragraphs, firstImage: firstImage.attr('src'), firstImageAlt: firstImage.attr('alt'), words, author };
+  return { html: clean, toc, faq, paragraphs, firstImage: firstImage.attr('src'), firstImageAlt: firstImage.attr('alt'), words, author, rating };
+}
+
+/** Visitor votes from a kk Star Ratings payload; pages nobody voted on carry no rating. */
+function parseRating(payload: string | undefined): LegacyRating | undefined {
+  if (!payload) return undefined;
+  try {
+    const data = JSON.parse(payload) as { title?: string; score?: string; best?: string; count?: string };
+    const score = Number(data.score); const best = Number(data.best) || 5; const count = Number(data.count);
+    if (!data.title || !(count > 0) || !(score > 0) || score > best) return undefined;
+    return { name: decodeEntities(data.title).trim(), score, best, count };
+  } catch { return undefined; }
+}
+
+/** Rating markup of live pages whose exported content has no widget (scripts/scrape-wp-extras.ts). */
+const liveRatingsFile = 'src/legacy-content/live-ratings.json';
+const liveRatings = existsSync(join(root, liveRatingsFile)) ? read<Record<string, LegacyRating>>(liveRatingsFile) : {};
+
+// ---------- comments ----------
+const commentsFile = 'src/legacy-content/comments.json';
+const wpComments = existsSync(join(root, commentsFile)) ? read<LegacyComment[]>(commentsFile) : [];
+
+/** Comment body as plain-text paragraphs (line breaks kept); links and markup are dropped. */
+function commentParagraphs(html: string): string[] {
+  const $ = cheerio.load(html, null, false);
+  $('br').replaceWith('\n');
+  const blocks = $('p').length ? $('p').toArray().map((p) => $(p).text()) : [$.root().text()];
+  return blocks
+    .map((block) => block.split('\n').map((line) => line.replace(/\s+/g, ' ').trim()).filter(Boolean).join('\n'))
+    .filter(Boolean);
+}
+
+/** A post's comments as threads: newest thread first, replies oldest first (the live WordPress order). */
+function commentThreads(postId: number): { threads: CommentThread[]; count: number } {
+  const own = wpComments.filter((comment) => comment.post === postId);
+  const ids = new Set(own.map((comment) => comment.id));
+  const byDate = (a: LegacyComment, b: LegacyComment) => a.date.localeCompare(b.date) || a.id - b.id;
+  const thread = (comment: LegacyComment): CommentThread => ({
+    id: comment.id,
+    author: decodeEntities(comment.author).trim() || 'Khách',
+    date: wpDate(comment.date)!,
+    paragraphs: commentParagraphs(comment.html),
+    replies: own.filter((reply) => reply.parent === comment.id).sort(byDate).map(thread),
+  });
+  const threads = own.filter((comment) => !ids.has(comment.parent)).sort((a, b) => byDate(b, a)).map(thread);
+  return { threads, count: own.length };
 }
 
 function extractFacts(texts: string[]) {
@@ -449,7 +516,8 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
   const path = pathOf(item.link);
   const title = decodeEntities(item.title.rendered).replace(/\s+/g, ' ').trim();
   const template = templateOf(path, kind);
-  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words, author } = transform(item.content.rendered, title, path, contextualLinkLimit(path, template));
+  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words, author, rating } = transform(item.content.rendered, title, path, contextualLinkLimit(path, template));
+  const comments = commentThreads(item.id);
   const seo = seoMeta[path] ?? {};
   const seoDescription = seo.description ? decodeEntities(seo.description) : undefined;
   const summarySource = paragraphs[0] ?? title;
@@ -462,10 +530,12 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
     html, toc, faq, summary,
     image, imageAlt: image === firstImage ? firstImageAlt || title : title,
     facts: extractFacts([seoDescription ?? '']),
-    date: item.date, modified: item.modified,
+    date: wpDate(item.date), modified: wpDate(item.modified),
     readingMinutes: Math.max(1, Math.round(words / 220)),
     seo: { title: seo.title ? decodeEntities(seo.title) : undefined, description: seoDescription, robots: seo.robots },
     ...(author ? { author } : {}),
+    ...(rating ?? liveRatings[path] ? { rating: rating ?? liveRatings[path] } : {}),
+    ...(comments.count ? { comments: comments.threads, commentCount: comments.count } : {}),
   };
 }
 
@@ -478,8 +548,13 @@ async function main() {
   for (const entry of entries) entry.html = applyArticleImages(entry.html, images);
 
   writeFileSync(join(root, 'src/legacy-content/legacy-clean.json'), `${JSON.stringify(entries)}\n`);
-  // Tiny WordPress id -> canonical path map for ?p= / ?page_id= redirects in the proxy (keeps the corpus out of the proxy bundle).
-  writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path])))}\n`);
+  // Tiny WordPress id -> canonical path map for ?p= / ?page_id= / ?attachment_id= redirects in the proxy (keeps the corpus
+  // out of the proxy bundle). Attachments go to their parent page, as Rank Math redirected them; orphans to the home page.
+  const idMap: Record<string, string> = Object.fromEntries(entries.map((entry) => [entry.id, entry.path === '/home-3' ? '/' : entry.path]));
+  const attachmentsFile = 'src/legacy-content/attachments.json';
+  const attachments = existsSync(join(root, attachmentsFile)) ? read<Record<string, number>>(attachmentsFile) : {};
+  for (const [id, parent] of Object.entries(attachments)) idMap[id] ??= idMap[parent] ?? '/';
+  writeFileSync(join(root, 'src/legacy-content/id-map.json'), `${JSON.stringify(idMap)}\n`);
   // Markdown bodies for the /<path>.md twins and llms-full.txt (kept out of the page bundles).
   writeFileSync(join(root, 'src/legacy-content/legacy-markdown.json'), `${JSON.stringify(Object.fromEntries(entries.map((entry) => [entry.path, htmlToMarkdown(entry.html)])))}\n`);
 

@@ -43,6 +43,10 @@ test('WordPress leftovers return 410 and short links 301', () => {
   }
   assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('p=1337')), { kind: 'redirect', location: '/van-chuyen-hang-hoa/ha-noi/' });
   assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('p=999999')), { kind: 'redirect', location: '/' });
+  // Attachments go to the page they belong to, as Rank Math redirected them (also when linked as ?p=).
+  assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('attachment_id=3000')), { kind: 'redirect', location: '/blog/can-tim-doi-tac-van-chuyen-hang-hoa/' });
+  assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('p=3000')), { kind: 'redirect', location: '/blog/can-tim-doi-tac-van-chuyen-hang-hoa/' });
+  assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('attachment_id=999999')), { kind: 'redirect', location: '/' });
   assert.deepEqual(resolveLegacyRequest('/', new URLSearchParams('s=đà nẵng')), { kind: 'redirect', location: `/tim-kiem/?q=${encodeURIComponent('đà nẵng')}` });
   for (const path of ['/', '/van-chuyen-hang-hoa/', '/wp-content/uploads/2018/08/x.jpg', '/sitemap.xml']) {
     assert.equal(resolveLegacyRequest(path, none), null, path);

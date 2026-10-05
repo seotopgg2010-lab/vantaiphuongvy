@@ -32,6 +32,8 @@ const nextConfig: NextConfig = {
       ...['/sitemap_index.xml', '/post-sitemap.xml', '/page-sitemap.xml', '/local-sitemap.xml', '/wp-sitemap.xml'].map((source) => ({ source, destination: '/sitemap.xml', permanent: true })),
       // Retired duplicate of the home page (its canonical already pointed to "/")
       { source: '/home-3', destination: '/', permanent: true },
+      // WordPress front controller, which 301'd to the home page
+      { source: '/index.php', destination: '/', permanent: true },
       // WordPress feeds & archives that have no equivalent page
       { source: '/feed', destination: '/blog/', permanent: true },
       { source: '/comments/feed', destination: '/blog/', permanent: true },

@@ -1,9 +1,10 @@
 import bodies from '@/legacy-content/legacy-markdown.json';
 import { SITE_CONFIG, ZALO_URL } from './constants';
+import { WAREHOUSES, type Warehouse, warehouseArea, warehousesFor } from './warehouses';
 import { cargoItems, getLegacyByPath, indexablePaths, latestPostDate, legacyPosts, routesByRegion, truckItems } from './legacy-content';
-import { displayTitle } from './legacy-render';
-import type { LegacyEntry } from './legacy-types';
-import { BLOG_PAGE, COMMITMENTS, HERO, HERO_LEADS, OFFER, PRESS, PROCESS_STEPS, SERVICES, STATS, TESTIMONIALS } from './marketing';
+import { displayTitle, ratingScore } from './legacy-render';
+import type { LegacyEntry, LegacyRating } from './legacy-types';
+import { ABOUT, BLOG_PAGE, COMMITMENTS, HERO, HERO_LEADS, OFFER, PRESS, PROCESS_STEPS, SERVICES, SERVICES_LEAD, STATS, TESTIMONIALS } from './marketing';
 import { markdownPathFor } from './markdown-paths';
 import { canonicalUrl } from './seo';
 import { getSiteUrl } from './site';
@@ -32,7 +33,7 @@ export function markdownResponse(body: string, contentType = 'text/markdown; cha
 /** Page paths (no trailing slash, "/" for home) that have a markdown twin — the same set as the sitemap. */
 export const TWIN_PATHS = indexablePaths;
 
-function header({ title, description, path, updated, published, author }: { title: string; description?: string; path: string; updated?: string; published?: string; author?: string }) {
+function header({ title, description, path, updated, published, author, rating }: { title: string; description?: string; path: string; updated?: string; published?: string; author?: string; rating?: LegacyRating }) {
   return [
     `# ${title}`,
     description && `> ${oneLine(description)}`,
@@ -41,6 +42,7 @@ function header({ title, description, path, updated, published, author }: { titl
       author && `- Tác giả: ${author}`,
       published && `- Ngày đăng: ${day(published)}`,
       updated && `- Cập nhật: ${day(updated)}`,
+      rating && `- Đánh giá: ${ratingScore(rating)} (${rating.count} bình chọn)`,
       `- Đơn vị: ${SITE_CONFIG.companyName} — hotline ${SITE_CONFIG.hotline}`,
     ].filter(Boolean).join('\n'),
   ].filter(Boolean).join('\n\n');
@@ -64,6 +66,8 @@ function contactSection(heading = '## Liên hệ Vận tải Phương Vy') {
   ].join('\n\n');
 }
 
+const warehouseLines = (items: readonly Warehouse[]) => items.map((warehouse) => `- **${warehouse.label}:** ${warehouse.address}`).join('\n');
+
 const pageLink = (item: LegacyEntry, label = item.label) => `[${label}](${canonicalUrl(item.path)})`;
 
 function homeMarkdown() {
@@ -77,10 +81,13 @@ function homeMarkdown() {
     '## Số liệu nổi bật',
     STATS.map((stat) => `- **${stat.value}** ${stat.label}`).join('\n'),
     '## Dịch vụ',
+    SERVICES_LEAD,
     SERVICES.map((service) => `- [${service.title}](${canonicalUrl(service.href)}): ${service.text}`).join('\n'),
     '## Tuyến vận chuyển từ TP.HCM',
     ...routesByRegion().map((group) => `### ${group.label}\n\n${group.items.map((item) => `- ${pageLink(item)}`).join('\n')}`),
-    '## Vì sao chọn Phương Vy',
+    `## ${SITE_CONFIG.companyName}`,
+    ...ABOUT,
+    '## Tại sao nên chọn dịch vụ của Vận tải Phương Vy?',
     COMMITMENTS.map((item) => `- **${item.title}:** ${item.text}`).join('\n'),
     '## Quy trình gửi hàng',
     PROCESS_STEPS.map((step, index) => `${index + 1}. **${step.title}:** ${step.text}`).join('\n'),
@@ -108,17 +115,23 @@ function blogMarkdown() {
 function entryMarkdown(item: LegacyEntry) {
   const isPost = item.kind === 'post';
   // /lien-he renders SITE_CONFIG (not its legacy body), so its twin does too.
-  const body = item.path === '/lien-he' ? contactSection('## Thông tin liên hệ') : absolutize(MARKDOWN_BODIES[item.path] || '').trim();
+  const body = item.path === '/lien-he'
+    ? `${contactSection('## Thông tin liên hệ')}\n\n## Danh sách kho hàng\n\n${warehouseLines(WAREHOUSES)}`
+    : absolutize(MARKDOWN_BODIES[item.path] || '').trim();
+  // Same warehouses as the band under the route page's hero (src/components/site/warehouse-list.tsx).
+  const warehouses = warehousesFor(item.path);
   return [
     header({
       title: displayTitle(item.title),
       description: item.seo.description || item.summary,
       path: item.path,
       author: item.author?.name,
+      rating: item.rating,
       published: isPost ? item.date : undefined,
       updated: item.modified,
     }),
     HERO_LEADS[item.path],
+    warehouses.length > 0 && `## Kho hàng Phương Vy tại ${warehouseArea(warehouses[0])}\n\n${warehouseLines(warehouses)}`,
     body,
     item.author?.bio && `## Về tác giả\n\n**${item.author.name}** — ${item.author.bio}`,
     item.path === '/lien-he' ? '' : `---\n\n${contactSection()}`,

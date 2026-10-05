@@ -41,13 +41,29 @@ export const STATS = [
   { value: '7 ngày', label: 'làm việc mỗi tuần, cả ngày lễ' },
 ] as const;
 
+/**
+ * Home page copy restored from the WordPress home page so the page keeps the text it has ranked
+ * with: wording kept, spelling and capitalisation fixed, and superlative claims about Phương Vy
+ * ("tốt nhất", "thấp nhất", "an toàn nhất", "64 tỉnh thành") dropped because nothing backs them.
+ */
+export const ABOUT = [
+  'Nếu bạn đang cần tìm dịch vụ vận chuyển hàng hóa trong nước? Đối tác vận chuyển hàng hóa có thể cam kết, bảo đảm thời gian giao nhận hàng? Bạn muốn một bảng báo giá cước vận chuyển hàng hóa tốt để bảo đảm lợi nhuận cho doanh nghiệp?',
+  'Vận tải Phương Vy sẽ đáp ứng những mong muốn trên của bạn.',
+  'Công ty TNHH Dịch vụ Vận tải Phương Vy với kinh nghiệm hoạt động trong lĩnh vực vận chuyển hàng hóa (chành xe) hơn 10 năm, cùng với đội ngũ nhân viên, xe tải hùng hậu cam kết bảo đảm thời gian giao hàng đúng thời hạn, đem lại cho quý khách sự hài lòng, kèm theo đó là việc tiết kiệm chi phí cho doanh nghiệp, cơ sở của mình.',
+  'Vận tải Phương Vy đang dần cố gắng hoàn thiện mình qua thời gian hoạt động. Chúng tôi mong muốn đem lại sự hài lòng cho khách hàng từ tất cả dịch vụ vận chuyển hàng hóa của chúng tôi. Cảm ơn quý khách hàng đã tin tưởng sử dụng dịch vụ của Phương Vy trong thời gian qua.',
+] as const;
+
+/** Lead of the home "Dịch vụ" section: the WordPress home page's services paragraph. */
+export const SERVICES_LEAD = 'Phương Vy là công ty vận chuyển hàng hóa Bắc Nam nhận gửi hàng đi toàn quốc tất cả các loại hàng hóa mà pháp luật Việt Nam cho phép, hoàn toàn không giới hạn về số lượng, kích thước, trọng lượng. Vận tải Phương Vy bảo đảm hoàn thành thời gian giao hàng đúng hẹn, nhanh chóng với giá thành phải chăng, phù hợp túi tiền của đa số doanh nghiệp hiện nay. Đặc biệt, Phương Vy có cung cấp dịch vụ cho thuê xe tải chở hàng đi tỉnh.';
+
+/** "Tại sao nên chọn dịch vụ của Vận tải Phương Vy?" — the six reasons from the WordPress home page. */
 export const COMMITMENTS = [
-  { key: 'fast', title: 'Nhanh chóng', text: 'Giao hàng đúng hẹn, đúng thời gian cam kết — thời gian của khách hàng là uy tín của Phương Vy.' },
-  { key: 'exact', title: 'Chính xác', text: 'Giao đúng hạn, đúng địa điểm; quy trình quản lý nghiêm ngặt để không nhầm lẫn, thất lạc hàng hóa.' },
-  { key: 'pro', title: 'Chuyên nghiệp', text: 'Hơn 10 năm chành xe, đội ngũ và xe tải phủ khắp các tỉnh thành, xử lý đơn hàng nhanh nhất.' },
-  { key: 'safe', title: 'An toàn', text: 'Đóng gói, chằng buộc, phân loại hàng theo quy trình chuẩn; phương tiện được bảo dưỡng định kỳ.' },
-  { key: 'easy', title: 'Tiện lợi', text: 'Thủ tục gửi hàng, thuê xe đơn giản — gọi điện hoặc nhắn Zalo là có xe đến nhận tận nơi.' },
-  { key: 'save', title: 'Tiết kiệm', text: 'Giá cước cạnh tranh, chiết khấu cho khách quen; hỗ trợ đóng gói, bốc dỡ tại kho.' },
+  { key: 'fast', title: 'Nhanh chóng', text: 'Giao hàng đúng hẹn, đúng thời gian cam kết chính là uy tín của Vận tải Phương Vy với khách hàng. Đây cũng chính là một trong những yếu tố quan trọng nhất để Phương Vy có thể tồn tại và đứng vững được trong lĩnh vực vận chuyển hàng hóa đến ngày hôm nay. Chúng tôi hiểu được thời gian là vàng bạc, tiền của và uy tín.' },
+  { key: 'exact', title: 'Chính xác', text: 'Vận tải Phương Vy bảo đảm giao hàng đúng hạn, đúng địa điểm giao nhận. Cam kết sẽ không có một sự nhầm lẫn, thất lạc, nhầm địa chỉ hay bất kỳ tổn thất nào về hàng hóa xảy ra trong quá trình giao nhận, vận chuyển hàng hóa. Với chính sách và quản lý nghiêm ngặt, chúng tôi đem lại sự bảo đảm cho hàng hóa của khách hàng.' },
+  { key: 'pro', title: 'Chuyên nghiệp', text: 'Với hơn 10 năm kinh nghiệm trong lĩnh vực chành xe và vận chuyển hàng hóa, đội ngũ nhân viên và lượng xe tải của Phương Vy phủ khắp các tỉnh thành. Chúng tôi cam kết xử lý mọi đơn hàng nhanh chóng, chính xác, không để mất một giây phút quý báu nào của khách hàng. Sự tín nhiệm và độ hài lòng của khách hàng luôn là ưu tiên hàng đầu của chúng tôi.' },
+  { key: 'safe', title: 'An toàn', text: 'Công ty TNHH DV Vận tải Phương Vy trang bị những vật dụng, phương tiện vận tải tiên tiến, hiện đại cho quá trình vận chuyển, giao hàng. Quý khách sẽ hoàn toàn yên tâm khi chứng kiến đội ngũ nhân viên của Phương Vy đóng gói, bao bọc, vận chuyển, phân loại hàng hóa theo một quy trình an toàn.' },
+  { key: 'easy', title: 'Tiện lợi', text: 'Quy trình giao nhận hàng hóa, thủ tục thuê xe tải đi tỉnh của Phương Vy rất đơn giản, không rườm rà gây khó chịu và mất thời gian của khách hàng. Hệ thống và quy trình chuẩn hóa giúp tiết kiệm thời gian quý báu cho khách hàng. Đây cũng là một trong những điểm cộng mà khách hàng hài lòng về Phương Vy.' },
+  { key: 'save', title: 'Tiết kiệm', text: 'Vận tải Phương Vy luôn có những chính sách chiết khấu và giảm chi phí vận chuyển hàng cho khách hàng thân thiết và khách hàng mới, giữ mức giá cước cạnh tranh so với các đơn vị khác trên thị trường. Ngoài ra Phương Vy còn hỗ trợ đóng gói, bốc dỡ hàng tại kho để tiết kiệm tối đa chi phí cho khách hàng.' },
 ] as const;
 
 export const PROCESS_STEPS = [

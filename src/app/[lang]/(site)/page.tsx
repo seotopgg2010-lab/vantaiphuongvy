@@ -9,7 +9,7 @@ import { SectionHeading } from '@/components/site/section-heading';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { getLegacyByPath, legacyPosts } from '@/lib/legacy-content';
-import { HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES } from '@/lib/marketing';
+import { ABOUT, HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES, SERVICES_LEAD } from '@/lib/marketing';
 import { getExplorerRegions } from '@/lib/navigation';
 import { legacyMetadata } from '@/lib/seo';
 import { toTelHref } from '@/lib/site';
@@ -75,7 +75,7 @@ export default function HomePage() {
 
       {/* ---------- services ---------- */}
       <section aria-labelledby="services" className="container-x py-12 md:py-16">
-        <SectionHeading id="services" eyebrow="Dịch vụ" title="Dịch vụ Vận tải Phương Vy đang cung cấp" lead="Nhận gửi hàng đi toàn quốc mọi loại hàng hóa pháp luật cho phép — không giới hạn số lượng, kích thước, trọng lượng." />
+        <SectionHeading id="services" eyebrow="Dịch vụ" title="Dịch vụ Vận tải Phương Vy đang cung cấp" lead={SERVICES_LEAD} />
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {SERVICES.map((service) => (
             <Link key={service.href} href={service.href} className="card card-hover group flex flex-col overflow-hidden">
@@ -100,17 +100,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---------- why us ---------- */}
-      <section aria-labelledby="why-us" className="container-x py-12 md:py-16">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-12">
+      {/* ---------- about & why us (copy restored from the WordPress home page) ---------- */}
+      <section aria-labelledby="about" className="container-x py-12 md:py-16">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-12">
           <div>
-            <SectionHeading id="why-us" eyebrow="Vì sao chọn Phương Vy" title="Đối tác vận chuyển doanh nghiệp tin dùng hơn 10 năm" />
-            <p className="lead mt-4">{SITE_CONFIG.companyName} hoạt động trong lĩnh vực chành xe – vận chuyển hàng hóa hơn 10 năm, với đội ngũ nhân viên và đội xe tải hùng hậu, cam kết giao hàng đúng hẹn và tiết kiệm chi phí cho khách hàng.</p>
-            <div className="relative mt-6 aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
-              <UploadImage src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 45vw, 100vw" className="object-cover" />
+            <p className="eyebrow">Về Phương Vy</p>
+            <h2 id="about" className="h-section mt-2.5">{SITE_CONFIG.companyName}</h2>
+            <div className="mt-4 space-y-4 text-[1.0625rem] leading-8 text-muted">
+              {ABOUT.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
           </div>
-          <CommitmentGrid />
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+            <UploadImage src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 40vw, 100vw" className="object-cover" />
+          </div>
+        </div>
+        <div className="mt-12 md:mt-16">
+          <SectionHeading id="why-us" eyebrow="Vì sao chọn Phương Vy" title="Tại sao nên chọn dịch vụ của Vận tải Phương Vy?" />
+          <div className="mt-8"><CommitmentGrid /></div>
         </div>
       </section>
 

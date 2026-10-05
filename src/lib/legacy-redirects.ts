@@ -28,9 +28,9 @@ const withSlash = (path: string) => (path === '/' ? '/' : `${path}/`);
 export function resolveLegacyRequest(pathname: string, searchParams: URLSearchParams): LegacyRequestDecision {
   if (GONE_PATTERNS.some((pattern) => pattern.test(pathname))) return { kind: 'gone' };
 
-  // Old WordPress short links: /?p=123, /?page_id=45 → canonical permalink.
+  // Old WordPress short links: /?p=123, /?page_id=45 → canonical permalink; /?attachment_id=67 → the page it belongs to.
   if (pathname === '/') {
-    const id = searchParams.get('p') || searchParams.get('page_id');
+    const id = searchParams.get('p') || searchParams.get('page_id') || searchParams.get('attachment_id');
     if (id && /^\d+$/.test(id)) {
       const target = IDS[id];
       return { kind: 'redirect', location: target ? withSlash(target) : '/' };

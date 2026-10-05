@@ -11,10 +11,19 @@ const LINKS = [
   { href: '/lien-he/', label: 'Liên hệ & báo giá' },
 ];
 
+/**
+ * WordPress answered "/VAN-CHUYEN-HANG-HOA/da-nang/" with the page (canonical lowercase); here such a
+ * link 404s, so the browser retries the lowercase URL. A server redirect would need a proxy matcher on
+ * every path (a billed function per page view) for links Google never indexed.
+ */
+// Leading slashes collapse to one and the origin is explicit, so "//EXAMPLE.com/" can never leave the site.
+const LOWERCASE_RETRY = 'try{var p=decodeURI(location.pathname),l=p.toLowerCase().replace(/^\\/+/,"/");if(p!==l)location.replace(location.origin+encodeURI(l)+location.search+location.hash)}catch(e){}';
+
 /** Rendered outside the (site) layout (and by app/global-not-found.tsx), so it brings its own chrome. */
 export default function NotFound() {
   return (
     <SiteChrome>
+      <script dangerouslySetInnerHTML={{ __html: LOWERCASE_RETRY }} />
       <section className="container-x flex min-h-[60vh] flex-col items-center justify-center py-20 text-center">
         <p className="text-7xl font-extrabold tracking-tight text-brand-100 sm:text-8xl">404</p>
         <h1 className="h-section mt-4">Không tìm thấy trang</h1>

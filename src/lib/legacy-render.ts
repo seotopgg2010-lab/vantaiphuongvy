@@ -1,4 +1,4 @@
-import type { LegacyEntry } from './legacy-types';
+import type { LegacyEntry, LegacyRating } from './legacy-types';
 import { HERO_LEADS } from './marketing';
 
 const decode = (value: string) =>
@@ -59,4 +59,9 @@ export function displayTitle(title: string): string {
   result = result.charAt(0).toLocaleUpperCase('vi') + result.slice(1);
   for (const noun of PROPER_NOUNS) result = result.replace(new RegExp(noun.replace('.', '\\.'), 'giu'), noun);
   return result;
+}
+
+/** "4,9/5": a visitor rating as the page hero and the markdown twin both print it. */
+export function ratingScore(rating: LegacyRating): string {
+  return `${rating.score.toLocaleString('vi-VN', { maximumFractionDigits: 1 })}/${rating.best}`;
 }

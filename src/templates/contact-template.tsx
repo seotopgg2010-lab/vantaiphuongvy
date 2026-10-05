@@ -1,5 +1,7 @@
 import { Building2, Clock3, FileText, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { LeadForm } from '@/components/site/lead-form';
+import { WarehouseList } from '@/components/site/warehouse-list';
+import { WAREHOUSES } from '@/lib/warehouses';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
 import type { LegacyEntry } from '@/lib/legacy-types';
@@ -24,6 +26,7 @@ export function ContactTemplate({ item }: { item: LegacyEntry }) {
         eyebrow="Liên hệ & báo giá"
         title="Liên hệ Vận tải Phương Vy"
         summary={`Gọi hotline, nhắn Zalo hoặc gửi yêu cầu bên dưới — nhân viên kinh doanh phản hồi trong giờ làm việc ${SITE_CONFIG.businessHours}, tất cả các ngày trong tuần.`}
+        rating={item.rating}
         formHref="#bao-gia"
       />
       <section className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
@@ -65,7 +68,14 @@ export function ContactTemplate({ item }: { item: LegacyEntry }) {
           </div>
         </div>
       </section>
-      <section aria-label="Bản đồ trụ sở" className="container-x pb-16">
+      <section aria-labelledby="warehouses" className="border-y border-line bg-surface">
+        <div className="container-x py-12 md:py-14">
+          <h2 id="warehouses" className="text-2xl font-bold">Danh sách kho hàng</h2>
+          <p className="mt-2 text-muted">Địa chỉ {WAREHOUSES.length} kho hàng của Vận tải Phương Vy.</p>
+          <WarehouseList items={WAREHOUSES} className="mt-6 grid gap-x-10 gap-y-3 text-[0.9375rem] text-muted sm:grid-cols-2 lg:grid-cols-3" />
+        </div>
+      </section>
+      <section aria-label="Bản đồ trụ sở" className="container-x py-12 md:py-16">
         <div className="overflow-hidden rounded-2xl border border-line shadow-[var(--shadow-card)]">
           <iframe src={SITE_CONFIG.mapEmbed} title={`Bản đồ: ${SITE_CONFIG.address}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="block h-[360px] w-full md:h-[440px]" />
         </div>

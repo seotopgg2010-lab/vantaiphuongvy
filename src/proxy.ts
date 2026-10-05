@@ -70,9 +70,10 @@ export const config = {
     '/wp-content/cache/:path*',
     '/sitemap:n(\\d+)\\.xml',
     '/locations\\.kml',
-    // Old WordPress short links and search: /?p=123, /?page_id=45, /?s=term.
+    // Old WordPress short links and search: /?p=123, /?page_id=45, /?attachment_id=67, /?s=term.
     { source: '/', has: [{ type: 'query', key: 'p' }] },
     { source: '/', has: [{ type: 'query', key: 'page_id' }] },
+    { source: '/', has: [{ type: 'query', key: 'attachment_id' }] },
     { source: '/', has: [{ type: 'query', key: 's' }] },
     // Agents asking for markdown (q-values are checked in the proxy).
     { source: '/:path*', has: [{ type: 'header', key: 'accept', value: '.*text/markdown.*' }] },

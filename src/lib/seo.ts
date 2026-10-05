@@ -37,6 +37,9 @@ function socialImages(path: string, photo: string, photoAlt?: string) {
   ];
 }
 
+/** The robots directives the WordPress (Rank Math) pages sent, for every indexable page. */
+const INDEXABLE_ROBOTS: Metadata['robots'] = { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 };
+
 /** Canonical plus the markdown twin advertised as rel="alternate" type="text/markdown". */
 function pageAlternates(path: string): Metadata['alternates'] {
   return { canonical: canonicalUrl(path), types: { 'text/markdown': markdownPathFor(path) } };
@@ -54,7 +57,7 @@ export function legacyMetadata(item: LegacyEntry): Metadata {
     title: { absolute: title },
     description,
     alternates: pageAlternates(item.path),
-    robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    robots: INDEXABLE_ROBOTS,
     openGraph: {
       type: item.kind === 'post' ? 'article' : 'website',
       locale: 'vi_VN',
@@ -74,6 +77,7 @@ export function pageMetadata({ title, description, path, image }: { title: strin
     title: { absolute: title },
     description,
     alternates: pageAlternates(path),
+    robots: INDEXABLE_ROBOTS,
     openGraph: { type: 'website', locale: 'vi_VN', siteName: SITE_CONFIG.name, title, description, url: canonical, images },
     twitter: { card: 'summary_large_image', title, description, images: [images[0]] },
   };
@@ -170,5 +174,12 @@ export function generateLegacyJsonLd(item: LegacyEntry, breadcrumbs: Array<{ nam
     });
   }
   if (item.faq.length >= 2) blocks.push(generateFaqJsonLd(item.faq));
+  // The visitor rating the WordPress page published (kk Star Ratings): same type, name and numbers, shown in the hero.
+  if (item.rating) {
+    blocks.push({
+      '@context': 'https://schema.org', '@type': 'CreativeWorkSeries', name: item.rating.name,
+      aggregateRating: { '@type': 'AggregateRating', ratingValue: item.rating.score, bestRating: item.rating.best, ratingCount: item.rating.count },
+    });
+  }
   return blocks;
 }

@@ -76,7 +76,7 @@ test('the proxy matcher is an allowlist that ordinary page views never hit', () 
   for (const entry of conditional) {
     const has = entry.has ?? [];
     assert.ok(has.length > 0, entry.source);
-    if (entry.source === '/') assert.ok(has.every((item) => item.type === 'query' && ['p', 'page_id', 's'].includes(item.key)), entry.source);
+    if (entry.source === '/') assert.ok(has.every((item) => item.type === 'query' && ['p', 'page_id', 'attachment_id', 's'].includes(item.key)), entry.source);
     else assert.deepEqual(has, [{ type: 'header', key: 'accept', value: '.*text/markdown.*' }]);
   }
 });

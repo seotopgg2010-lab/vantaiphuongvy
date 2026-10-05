@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Clock3, Mail, MapPin, Phone, Warehouse } from 'lucide-react';
 import { UploadImage } from '@/components/site/upload-image';
+import { WarehouseList } from '@/components/site/warehouse-list';
+import { WAREHOUSES } from '@/lib/warehouses';
 import type { NavLink, SiteNavigation } from '@/lib/navigation';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { toTelHref } from '@/lib/site';
@@ -47,6 +49,13 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
           <Column title="Chính sách" links={nav.policies} />
         </div>
       </div>
+
+      <section aria-labelledby="footer-warehouses" className="border-t border-white/10">
+        <div className="container-x py-8">
+          <h2 id="footer-warehouses" className="text-sm font-semibold uppercase tracking-wider text-white">Danh sách kho hàng</h2>
+          <WarehouseList items={WAREHOUSES} tone="light" icons={false} className="mt-4 grid gap-x-8 gap-y-1.5 text-[0.8125rem] leading-6 sm:grid-cols-2 lg:grid-cols-4" />
+        </div>
+      </section>
 
       {/* Crawlable directory of every route and rental page. It sits after <main>, is server-only
           (no hydration) and skips prefetch, so it costs neither LCP nor bandwidth. */}
