@@ -15,7 +15,8 @@ Site mới chạy trên production `vantaiphuongvy.com`, mọi URL SEO cũ trả
 ## Context
 
 - Repository mã nguồn: [seotopgg2010-lab/vantaiphuongvy](https://github.com/seotopgg2010-lab/vantaiphuongvy), nhánh `main`. Push lên GitHub là bước lưu mã nguồn; hosting và DNS production thực hiện theo các bước bên dưới.
-- Deploy target theo infra hiện có (kiểm tra `vercel.json`, `Dockerfile`, CI config trong repo; nếu chưa có thì Vercel là đường ít ma sát nhất cho Next.js 16).
+- Đường deploy hiện có: GitHub `main` kích hoạt Vercel Production; bản public ở `https://vantaiphuongvy.vercel.app/`. Tra trạng thái và URL bản deploy qua GitHub Deployments của repository, rồi chạy [crawl-check](../../scripts/crawl-check.mjs) trên URL public để xác minh. Push source và đổi DNS là hai thao tác riêng; chưa chuyển DNS thì `vantaiphuongvy.com` vẫn chạy WordPress.
+- Khi redeploy trên Vercel, giữ **Framework Preset = Next.js**, **Build Command = npm run build**, **Output Directory Override** tắt. Cấu hình `Other` trước đây chỉ phục vụ ảnh trong `public` và trả `404 NOT_FOUND` cho ứng dụng. Nếu bản mới lỗi, dùng bản Production thành công trước đó trong Vercel Deployments để rollback; chỉ thực hiện cutover DNS khi có yêu cầu riêng.
 - Env cần: `NEXT_PUBLIC_SITE_URL=https://vantaiphuongvy.com`, Supabase env riêng (Phase 04), `NEXT_PUBLIC_GA_MEASUREMENT_ID` nếu dùng GA.
 - WP cũ đang giữ ảnh tại cùng domain — **xung đột quan trọng**: khi domain trỏ sang Next.js, URL `/wp-content/uploads/...` sẽ do Next.js phục vụ. Phải có chiến lược ảnh:
   - **Option A**: giữ WP cũ trên subdomain `media.vantaiphuongvy.com` + rewrite trong `next.config.ts` `/wp-content/uploads/*` → `https://media.vantaiphuongvy.com/wp-content/uploads/*` (proxy hoặc redirect 301 — proxy tốt hơn cho SEO ảnh vì URL không đổi).
