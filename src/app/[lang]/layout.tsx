@@ -46,6 +46,13 @@ export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
+/**
+ * Only known locales render. Single-segment paths with a dot (/favicon.ico,
+ * /ads.txt, /foo.php) skip the proxy rewrite and land here as `lang`; without
+ * this they served the home page with 200 (soft 404 + duplicate of "/").
+ */
+export const dynamicParams = false;
+
 export default function LangLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="vi" className={`${beVietnam.variable} h-full antialiased`} data-scroll-behavior="smooth" suppressHydrationWarning>
