@@ -60,6 +60,8 @@ const contract = [
   ['/wp-login.php', 410], ['/xmlrpc.php', 410], ['/sitemap980.xml', 410],
   ['/home-3/', 308], ['/sitemap_index.xml', 308], ['/feed/', 308], ['/?p=1337', 301],
   ['/en/', 404], ['/khong-ton-tai/', 404], ['/robots.txt', 200], ['/sitemap.xml', 200],
+  // the internal locale prefix and the internal twin route are never public URLs
+  ['/vi/faq/', 308], ['/md/blog/', 404],
   // dotted single-segment paths must not fall through to the home page (soft 404)
   ['/favicon.ico', 404], ['/ads.txt', 404], ['/foo.php', 404], ['/index.html', 404],
   // machine-readable surfaces
@@ -69,6 +71,14 @@ const contract = [
 for (const [path, expected] of contract) {
   const status = await head(base + path);
   if (status !== expected) problems.push(`contract ${path}: expected ${expected}, got ${status}`);
+}
+
+// Agents asking for markdown get the twin from the page URL, announced with Vary: Accept; browsers get HTML.
+for (const [accept, type] of [['text/markdown', 'text/markdown'], ['text/html,application/xhtml+xml,*/*;q=0.8', 'text/html']]) {
+  const res = await fetch(`${base}/van-chuyen-hang-hoa/ha-noi/`, { headers: { accept }, redirect: 'manual' });
+  const contentType = res.headers.get('content-type') || '';
+  if (res.status !== 200 || !contentType.startsWith(type)) problems.push(`negotiation (${type}): got ${res.status} ${contentType}`);
+  if (type === 'text/markdown' && !/(^|,)\s*accept\s*(,|$)/i.test(res.headers.get('vary') || '')) problems.push('negotiation: markdown response lacks Vary: Accept');
 }
 
 if (problems.length) {

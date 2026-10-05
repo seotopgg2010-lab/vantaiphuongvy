@@ -1,8 +1,8 @@
 import { markdownResponse, renderTwin, TWIN_PATHS } from '@/lib/markdown-twins';
 
 /**
- * Markdown twins. Public URLs are `/<path>.md` (home: `/index.md`); src/proxy.ts
- * rewrites them here, so `/md/*` itself is never linked.
+ * Markdown twins. Public URLs are `/<path>.md` (home: `/index.md`); a static rewrite
+ * (src/lib/public-routing.ts) maps them here, and a direct `/md/*` request 404s.
  */
 export const dynamic = 'force-static';
 export const dynamicParams = false;

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { LOCALE_REDIRECTS, PUBLIC_REWRITES } from './src/lib/public-routing';
 
 function getSupabaseHost() {
   const value = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -35,7 +36,12 @@ const nextConfig: NextConfig = {
       { source: '/author/:path*', destination: '/blog/', permanent: true },
       { source: '/page/:n(\\d+)', destination: '/', permanent: true },
       { source: '/blog/page/:n(\\d+)', destination: '/blog/', permanent: true },
+      ...LOCALE_REDIRECTS,
     ];
+  },
+  // Public pages are routed by static rules (no proxy invocation per request).
+  async rewrites() {
+    return PUBLIC_REWRITES;
   },
   images: {
     formats: ['image/avif', 'image/webp'],

@@ -47,9 +47,9 @@ export async function generateStaticParams() {
 }
 
 /**
- * Only known locales render. Single-segment paths with a dot (/favicon.ico,
- * /ads.txt, /foo.php) skip the proxy rewrite and land here as `lang`; without
- * this they served the home page with 200 (soft 404 + duplicate of "/").
+ * Only known locales render. Paths the static locale rewrite leaves alone
+ * (src/lib/public-routing.ts: /og, /api, …) land here as `lang`; without this
+ * they would render the home page with 200 (soft 404 + duplicate of "/").
  */
 export const dynamicParams = false;
 

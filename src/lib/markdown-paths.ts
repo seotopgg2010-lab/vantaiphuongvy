@@ -4,7 +4,7 @@
  * bundle stays small.
  */
 
-/** Internal route that renders the twins (reachable only through the proxy rewrite). */
+/** Internal route that renders the twins (reachable only through the static rewrite in src/lib/public-routing.ts). */
 export const MARKDOWN_ROUTE = '/md';
 
 /** Public markdown URL path for a page path ("/", "/blog", "/x/y/"). */
