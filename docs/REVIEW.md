@@ -21,6 +21,10 @@ Dùng trước khi merge thay đổi giao diện, nội dung hoặc route. Ảnh
 - [ ] Discovery scan (`ak:enhance-ux-ax` → `check-discovery-surfaces.mjs <base> --site-origin https://vantaiphuongvy.com`) exit 0.
 - [ ] Mỗi trang có `<link rel="alternate" type="text/markdown">` trỏ tới `/<path>.md` trả 200 `text/markdown` + `X-Robots-Tag: noindex`; `.md` không nằm trong sitemap.
 - [ ] `/llms.txt`, `/llms-full.txt` trả 200, link tuyệt đối tới twin còn sống.
+- [ ] `curl -H "Accept: text/markdown" <base>/<trang>/` trả twin `text/markdown` với `Vary: Accept` và `Cache-Control: private`; Accept của trình duyệt vẫn nhận HTML.
+- [ ] `sitemap.xml` có `<image:image>` (URL tuyệt đối `/wp-content/uploads/**`) cho ảnh của từng trang.
+- [ ] Liên kết nội bộ (đếm trong `<main>` của trang khác): mỗi trang tuyến, loại hàng, xe tải ≥ 5; mỗi bài viết ≥ 3. Danh mục cuối footer (HTML server) liên kết mọi trang tuyến và thuê xe tải.
+- [ ] Không trang nào nhảy cấp heading hoặc có heading VIẾT HOA (`tests/legacy-clean.test.ts`).
 - [ ] `og:image` đầu tiên là `/og/<path>.png` 1200×630 có `og:image:alt`; xem thử card của trang chủ và một trang nội dung.
 - [ ] Không đổi slug, canonical, title/description Rank Math hay URL ảnh `/wp-content/uploads/**` (nguồn SEO bất biến).
 - [ ] Chính sách AI crawler trong `src/app/robots.ts` là quyết định của chủ site — không tự đổi.

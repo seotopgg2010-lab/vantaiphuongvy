@@ -46,6 +46,10 @@
 - Ảnh legacy thường có chữ/hotline in sẵn: đặt trong khung 16/11 (`PageHero`), không dùng làm nền phủ chữ.
 - Bài viết có `PageActions` (Chia sẻ · Sao chép liên kết · Hỏi AI) — chỉ gửi URL công khai và bản `.md` công khai.
 - Social card `/og/<path>.png` (1200×630) do `src/app/og/[...slug]/route.tsx` sinh: panel brand grid + logo + tiêu đề + hotline + ảnh thật của trang.
+- Lead trong hero: 1–2 câu (80–280 ký tự), nói kết quả trước. Trang có đoạn mở đầu WordPress yếu, trống hoặc VIẾT HOA quảng cáo dùng `HERO_LEADS` (`src/lib/marketing.ts`): chỉ dữ kiện có trong chính trang đó, không mâu thuẫn với chip trong hero (ví dụ không ghi tải trọng khác "Xe 0,5 – 30 tấn"); đoạn gốc vẫn giữ trong thân bài.
+- Mọi trang tuyến và thuê xe tải có liên kết trong HTML server ở danh mục cuối footer (server component, đặt sau `<main>`, `prefetch={false}`). Mega menu chỉ render khi mở (desktop): render sẵn 65 KB menu ẩn ở đầu trang làm LCP của trang nhẹ chậm hơn 11–14% khi đo A/B. `RouteExplorer` render mọi tuyến, lọc bằng thuộc tính `hidden`.
+- Liên kết liên quan: `relatedRoutes` lấy các tuyến láng giềng trong cùng vùng (trang loại hàng lấy các dịch vụ loại hàng khác), `relatedPosts` chọn bài theo chủ đề (`POST_TOPICS`), bài viết có khối "Dịch vụ liên quan" (`relatedServices`). Bài viết mới cần thêm chủ đề vào `POST_TOPICS`.
+- Heading trong nội dung legacy được pipeline chuẩn hóa: không nhảy cấp, không lặp H1, không VIẾT HOA (dạng câu qua `displayTitle`, giữ `id` cũ).
 
 ## Voice & tone
 
