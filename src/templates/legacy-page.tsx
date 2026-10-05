@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, CalendarDays, Clock, Truck } from 'lucide-react';
 import { Breadcrumbs } from '@/components/site/breadcrumbs';
 import { CtaBand } from '@/components/site/cta-band';
+import { PageActions } from '@/components/site/page-actions';
 import { formatDateVi } from '@/components/site/post-card';
 import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
@@ -11,7 +12,9 @@ import { legacyCrumbs } from '@/lib/breadcrumbs';
 import { relatedPosts, relatedRoutes, truckItems } from '@/lib/legacy-content';
 import { displayTitle, splitLead } from '@/lib/legacy-render';
 import type { LegacyEntry } from '@/lib/legacy-types';
+import { markdownPathFor } from '@/lib/markdown-paths';
 import { getExplorerRegions, withSlash } from '@/lib/navigation';
+import { absoluteUrl, canonicalUrl } from '@/lib/seo';
 import { ArticleBody } from './article-body';
 import { ContactTemplate } from './contact-template';
 import { PageHero, type HeroFact } from './page-hero';
@@ -122,6 +125,7 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
             {item.modified && item.modified.slice(0, 10) !== item.date?.slice(0, 10) && <span>Cập nhật <time dateTime={item.modified}>{formatDateVi(item.modified)}</time></span>}
             <span className="inline-flex items-center gap-2"><Clock className="h-4 w-4" aria-hidden="true" />{item.readingMinutes} phút đọc</span>
           </div>
+          <div className="mt-6"><PageActions url={canonicalUrl(item.path)} markdownUrl={absoluteUrl(markdownPathFor(item.path))} title={displayTitle(item.title)} /></div>
         </div>
       </header>
       {item.image && (
