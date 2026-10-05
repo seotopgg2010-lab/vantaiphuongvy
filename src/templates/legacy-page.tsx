@@ -9,8 +9,8 @@ import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
 import { StatsStrip } from '@/components/site/marketing';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
-import { relatedPosts, relatedRoutes, truckItems } from '@/lib/legacy-content';
-import { displayTitle, splitLead } from '@/lib/legacy-render';
+import { relatedPosts, relatedRoutes, relatedServices, truckItems } from '@/lib/legacy-content';
+import { displayTitle, heroContent } from '@/lib/legacy-render';
 import type { LegacyEntry } from '@/lib/legacy-types';
 import { markdownPathFor } from '@/lib/markdown-paths';
 import { getExplorerRegions, withSlash } from '@/lib/navigation';
@@ -29,7 +29,7 @@ function routeFacts(item: LegacyEntry): HeroFact[] {
 }
 
 function ServiceTemplate({ item }: { item: LegacyEntry }) {
-  const { lead, body } = splitLead(item);
+  const { lead, body } = heroContent(item);
   const isRoute = item.template === 'route';
   const isTruck = item.template === 'truck';
   const eyebrow = isRoute ? `Chành xe · ${item.region === 'quoc-te' ? 'Quốc tế' : 'Tuyến TP.HCM ⇄ ' + item.label}` : isTruck ? 'Cho thuê xe tải' : 'Dịch vụ vận chuyển';
@@ -47,7 +47,9 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
       />
       <ArticleBody html={body} toc={item.toc} quoteHeading={isTruck ? `Báo giá ${item.label.toLowerCase()}` : `Báo giá tuyến ${item.label}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
       <LeadSection title={isTruck ? `Nhận báo giá ${item.label.toLowerCase()}` : `Nhận báo giá vận chuyển đi ${item.label}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
-      {isTruck ? <TruckLinks current={item.path} /> : <RelatedRoutes items={relatedRoutes(item)} />}
+      {isTruck ? <TruckLinks current={item.path} /> : item.region === 'loai-hang'
+        ? <RelatedRoutes items={relatedRoutes(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ vận chuyển khác" />
+        : <RelatedRoutes items={relatedRoutes(item)} />}
       <RelatedPosts posts={relatedPosts(item)} />
       <CtaBand />
     </>
@@ -79,7 +81,7 @@ function TruckLinks({ current }: { current?: string }) {
 }
 
 function RouteHubTemplate({ item }: { item: LegacyEntry }) {
-  const { lead, body } = splitLead(item);
+  const { lead, body } = heroContent(item);
   return (
     <>
       <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={lead || item.seo.description} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
@@ -97,7 +99,7 @@ function RouteHubTemplate({ item }: { item: LegacyEntry }) {
 }
 
 function TruckHubTemplate({ item }: { item: LegacyEntry }) {
-  const { lead, body } = splitLead(item);
+  const { lead, body } = heroContent(item);
   return (
     <>
       <PageHero crumbs={legacyCrumbs(item)} eyebrow="Cho thuê xe tải chở hàng" title={displayTitle(item.title)} summary={lead || item.seo.description} facts={[{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Thùng kín, thùng bạt' }, { text: 'Nội thành & đi tỉnh' }]} image="/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg" imageAlt="Đội xe tải cho thuê của Vận tải Phương Vy" formHref="#bao-gia" />
@@ -136,6 +138,7 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
         </div>
       )}
       <ArticleBody html={item.html} toc={item.toc} quoteHeading="Cần vận chuyển hàng hóa?" />
+      <RelatedRoutes items={relatedServices(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ Phương Vy cho nhu cầu này" action={null} />
       <RelatedPosts posts={relatedPosts(item)} title="Bài viết khác" />
       <CtaBand />
     </>
@@ -143,7 +146,7 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
 }
 
 function InfoTemplate({ item }: { item: LegacyEntry }) {
-  const { lead, body } = splitLead(item);
+  const { lead, body } = heroContent(item);
   const isAbout = item.path === '/gioi-thieu' || item.path === '/thu-ngo';
   return (
     <>

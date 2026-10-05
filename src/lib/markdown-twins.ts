@@ -3,7 +3,7 @@ import { SITE_CONFIG, ZALO_URL } from './constants';
 import { cargoItems, getLegacyByPath, indexablePaths, latestPostDate, legacyPosts, routesByRegion, truckItems } from './legacy-content';
 import { displayTitle } from './legacy-render';
 import type { LegacyEntry } from './legacy-types';
-import { BLOG_PAGE, COMMITMENTS, HERO, OFFER, PRESS, PROCESS_STEPS, SERVICES, STATS, TESTIMONIALS } from './marketing';
+import { BLOG_PAGE, COMMITMENTS, HERO, HERO_LEADS, OFFER, PRESS, PROCESS_STEPS, SERVICES, STATS, TESTIMONIALS } from './marketing';
 import { markdownPathFor } from './markdown-paths';
 import { canonicalUrl } from './seo';
 import { getSiteUrl } from './site';
@@ -116,6 +116,7 @@ function entryMarkdown(item: LegacyEntry) {
       published: isPost ? item.date : undefined,
       updated: item.modified,
     }),
+    HERO_LEADS[item.path],
     body,
     item.path === '/lien-he' ? '' : `---\n\n${contactSection()}`,
   ].filter(Boolean).join('\n\n');

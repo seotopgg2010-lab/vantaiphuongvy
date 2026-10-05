@@ -101,3 +101,26 @@ export const TESTIMONIALS = [
   { name: 'Anh Tâm', role: 'Vật liệu xây dựng', quote: 'Dịch vụ chở hàng chuyên nghiệp, vận chuyển nhanh chóng đúng hẹn. Công ty chiết khấu tốt và hỗ trợ bốc dỡ hàng cho chúng tôi.' },
   { name: 'Chị Mai', role: 'Bán hàng online', quote: 'Chành xe Phương Vy linh động giao hàng tận nơi, tăng chuyến cả ngày lễ tết nên hàng của tôi luôn đến tay khách đúng hẹn.' },
 ] as const;
+
+/**
+ * Hero intros for pages whose WordPress opening is missing, a generic story
+ * opener or an ALL-CAPS ad line. Outcome first, one or two sentences, and every
+ * fact is taken from that page's own content or Rank Math description. The
+ * original opening paragraph stays in the article body.
+ */
+export const HERO_LEADS: Record<string, string> = {
+  '/van-chuyen-hang-hoa': 'Chành xe từ TP.HCM đi các tỉnh và chiều ngược lại bằng xe tải, container. Hàng nặng tính cước theo kg, hàng nhẹ theo khối; mỗi tuyến có bảng giá, thời gian và lịch xe riêng.',
+  '/van-chuyen-hang-hoa/dau-nhot': 'Vận chuyển dầu nhớt, dầu nhờn và mỡ bôi trơn tuyến Bắc – Nam bằng xe tải từ 5 đến trên 20 tấn, đầu kéo, container. Giao tận nơi, miễn phí bốc xếp, xe chạy 5 chuyến mỗi ngày hai chiều.',
+  '/van-chuyen-hang-hoa/duong-bien': 'Gửi hàng nội địa và đi nước ngoài bằng đường biển: nhận hàng lẻ từ 1 khối (CBM) hoặc nguyên container, tàu chạy nhiều chuyến mỗi tuần, giao nhận tận nơi (door to door).',
+  '/van-chuyen-hang-hoa/duong-hang-khong': 'Gửi hàng bằng máy bay khi cần nhanh: thường nhận hàng sau 24 – 48 giờ; chuyển phát quốc tế 1 – 3 ngày đi châu Á, 3 – 4 ngày đi châu Âu, 4 – 5 ngày đi châu Mỹ. Lấy hàng và giao tận nơi.',
+  '/van-chuyen-hang-hoa/may-moc-thiet-bi': 'Vận chuyển máy móc, thiết bị từ TP.HCM, Hà Nội đi toàn quốc bằng xe tải 1 – 35 tấn, đầu kéo container, xe cẩu và rơ moóc lùn, rơ moóc sàn cho hàng quá khổ.',
+  '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': 'Vận chuyển hàng siêu trường, siêu trọng, quá khổ quá tải và máy công trình trên tuyến Bắc – Nam, có hỗ trợ cẩu xếp hàng. Giao nhận tận nơi, hồ sơ, hợp đồng và hóa đơn rõ ràng.',
+  '/van-chuyen-hang-hoa/xe-may': 'Gửi xe máy Bắc – Nam bằng xe tải, xe khách: xe xuất bến từ 15h đến 20h mỗi ngày, nhận xe chỉ từ 48 giờ, có lấy và giao xe tận nơi. Không tăng giá ngày lễ, Tết.',
+  '/thue-xe-tai': 'Cho thuê xe tải thùng kín, mui bạt và container 20′ – 50′ chở hàng nội thành và đi tỉnh, có cẩu xếp hàng quá khổ. Miễn phí xuất hóa đơn, hàng giá trị lớn được mua bảo hiểm.',
+  '/thue-xe-tai/da-nang': 'Thuê xe tải thùng dài đến 12 m chở hàng tại Đà Nẵng và đi các tỉnh. Miễn phí lưu kho, bốc dỡ, xe nâng và cẩu trục cho hàng quá khổ, quá tải.',
+  '/thue-xe-tai/ha-noi': 'Thuê xe tải và container chở hàng tại Hà Nội, chạy chuyến trong ngày, giao tại kho hoặc tận nơi. Có cẩu nâng, nhân công bốc xếp và đầy đủ hồ sơ, hóa đơn.',
+  '/thue-xe-tai/hcm': 'Thuê xe tải và container chở hàng nội thành TP.HCM và đi các tỉnh, kể cả thứ Bảy, Chủ nhật và ngày lễ. Có hợp đồng, hóa đơn GTGT và biên bản giao nhận.',
+  '/gioi-thieu': 'Hơn 10 năm chành xe Bắc – Nam: từ dàn xe tải 10 – 15 tấn chạy TP.HCM, Hà Nội đi các tỉnh trước năm 2015 đến đội xe tải, xe cẩu, đầu kéo container và bãi xe ở TP.HCM, Đà Nẵng, Hà Nội.',
+  '/faq': 'Giải nghĩa nhanh các khái niệm vận tải hay gặp — hình thức kinh doanh vận tải, rơ moóc và sơ mi rơ moóc, TEU, ETA — để bạn gửi hàng, thuê xe dễ hơn.',
+  '/tuyen-dung': 'Phương Vy tuyển nhân viên kinh doanh, kế toán, SEO và tài xế xe tải tại TP.HCM và Hà Nội. Mô tả công việc, yêu cầu kinh nghiệm và giờ làm việc của từng vị trí ở bên dưới.',
+};

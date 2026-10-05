@@ -34,7 +34,8 @@ export default function BlogIndex() {
           <p className="lead mt-4 max-w-2xl">{DESCRIPTION}</p>
         </div>
       </header>
-      <section className="container-x py-12 md:py-16" aria-label="Danh sách bài viết">
+      <section className="container-x py-12 md:py-16" aria-labelledby="blog-list">
+        <h2 id="blog-list" className="sr-only">Tất cả bài viết</h2>
         {featured && (
           <div className="mb-10 grid gap-6 lg:grid-cols-2">
             <PostCard post={featured} priority />

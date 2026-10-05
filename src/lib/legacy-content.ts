@@ -1,5 +1,6 @@
 import corpus from '@/legacy-content/legacy-clean.json';
 import type { LegacyEntry, LegacyRegion } from './legacy-types';
+import { POPULAR_ROUTES } from './marketing';
 
 export type { LegacyEntry, LegacyRegion } from './legacy-types';
 
@@ -62,13 +63,92 @@ export function routesByRegion(): Array<{ region: LegacyRegion; label: string; i
   })).filter((group) => group.items.length > 0);
 }
 
-/** Same-region routes first, then other popular routes — strong internal linking. */
+const byPaths = (paths: string[]) => paths.map((path) => byPath.get(path)).filter((entry): entry is LegacyEntry => Boolean(entry));
+const popularRoutes = byPaths(POPULAR_ROUTES.map((route) => normalizeLegacyPath(route.href)));
+
+/** Stable small hash so "rotate the equally good candidates" is deterministic per page (static HTML must not change between builds). */
+function seedOf(path: string): number {
+  let hash = 0;
+  for (const char of path) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  return hash;
+}
+const rotate = <T,>(list: T[], seed: number) => (list.length ? [...list.slice(seed % list.length), ...list.slice(0, seed % list.length)] : list);
+
+/**
+ * Links to other routes for a route or cargo page. Routes link their alphabetical
+ * neighbours on both sides (wrapping within the region), so every route is linked
+ * from about `limit` siblings instead of only the first eight of each region;
+ * cargo pages link the other cargo services. Popular routes fill the remainder.
+ */
 export function relatedRoutes(item: LegacyEntry, limit = 8): LegacyEntry[] {
-  const sameRegion = routeItems.filter((candidate) => candidate.path !== item.path && candidate.region === item.region);
-  const others = routeItems.filter((candidate) => candidate.path !== item.path && candidate.region !== item.region);
-  return [...sameRegion, ...others].slice(0, limit);
+  const picked: LegacyEntry[] = [];
+  const add = (candidate?: LegacyEntry) => {
+    if (candidate && candidate.path !== item.path && !picked.includes(candidate) && picked.length < limit) picked.push(candidate);
+  };
+  if (item.region === 'loai-hang') {
+    cargoItems.forEach((candidate) => add(candidate));
+  } else {
+    const peers = routeItems.filter((candidate) => candidate.region === item.region);
+    const index = peers.indexOf(item);
+    for (let step = 1; index >= 0 && step < peers.length; step++) {
+      add(peers[(index + step) % peers.length]);
+      add(peers[(index - step + peers.length) % peers.length]);
+    }
+  }
+  popularRoutes.forEach((candidate) => add(candidate));
+  return picked;
 }
 
+/** What each guide is about; pages and guides sharing a topic link to each other. */
+type Topic = 'truck' | 'cargo' | 'dangerous' | 'route' | 'business' | 'company';
+const POST_TOPICS: Record<string, Topic[]> = {
+  '/blog/bien-bao-cam-xe-tai-va-muc-phat': ['truck', 'route'],
+  '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': ['business', 'route'],
+  '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': ['truck'],
+  '/blog/giay-to-van-chuyen-hang-hoa': ['business', 'cargo', 'route'],
+  '/blog/hang-hoa-thuong-gap-trong-nganh-van-tai': ['cargo', 'route'],
+  '/blog/kich-thuoc-thung-xe-tai-trong-van-tai-hang-hoa': ['truck', 'cargo'],
+  '/blog/quy-dinh-van-chuyen-hang-hoa-nguy-hiem': ['dangerous', 'cargo'],
+  '/blog/van-chuyen-hang-hoa-nguy-hiem': ['dangerous', 'cargo'],
+  '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh': ['company', 'route'],
+};
+
+function topicsOf(item: LegacyEntry): Topic[] {
+  if (item.kind === 'post') return POST_TOPICS[item.path] ?? [];
+  if (item.template === 'truck' || item.template === 'truck-hub') return ['truck'];
+  if (item.path === '/van-chuyen-hang-hoa/dau-nhot') return ['dangerous', 'cargo'];
+  if (item.template === 'cargo') return ['cargo'];
+  if (item.template === 'route' || item.template === 'route-hub') return ['route'];
+  if (['/gioi-thieu', '/thu-ngo', '/tuyen-dung'].includes(item.path)) return ['company', 'business'];
+  return ['business', 'route'];
+}
+
+/**
+ * Guides that share the most topics with the page, newest first within a tier.
+ * Equally relevant guides are rotated per page so the links spread across all of
+ * them instead of every page pointing at the same three posts.
+ */
 export function relatedPosts(item: LegacyEntry, limit = 3): LegacyEntry[] {
-  return legacyPosts.filter((post) => post.path !== item.path).slice(0, limit);
+  const topics = new Set(topicsOf(item));
+  const scored = legacyPosts
+    .filter((post) => post.path !== item.path)
+    .map((post) => ({ post, score: topicsOf(post).filter((topic) => topics.has(topic)).length }));
+  const tiers = [...new Set(scored.map((entry) => entry.score))].sort((a, b) => b - a);
+  const seed = seedOf(item.path);
+  return tiers.flatMap((score) => rotate(scored.filter((entry) => entry.score === score).map((entry) => entry.post), seed)).slice(0, limit);
+}
+
+/** Service pages a guide's readers are most likely to need next (guide → money page links). */
+const TOPIC_SERVICES: Record<Topic, string[]> = {
+  truck: ['/thue-xe-tai', '/thue-xe-tai/hcm', '/thue-xe-tai/ha-noi', '/thue-xe-tai/da-nang'],
+  dangerous: ['/van-chuyen-hang-hoa/dau-nhot', '/van-chuyen-hang-hoa/sieu-truong-sieu-trong'],
+  cargo: ['/van-chuyen-hang-hoa/may-moc-thiet-bi', '/van-chuyen-hang-hoa/xe-may', '/van-chuyen-hang-hoa/sieu-truong-sieu-trong'],
+  route: ['/van-chuyen-hang-hoa', '/van-chuyen-hang-hoa/ha-noi', '/van-chuyen-hang-hoa/da-nang'],
+  business: ['/van-chuyen-hang-hoa', '/thue-xe-tai'],
+  company: ['/gioi-thieu', '/van-chuyen-hang-hoa'],
+};
+
+export function relatedServices(item: LegacyEntry, limit = 4): LegacyEntry[] {
+  const paths = [...new Set(topicsOf(item).flatMap((topic) => TOPIC_SERVICES[topic]))];
+  return byPaths(paths.length ? paths : TOPIC_SERVICES.route).slice(0, limit);
 }

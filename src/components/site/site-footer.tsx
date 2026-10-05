@@ -48,6 +48,26 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
         </div>
       </div>
 
+      {/* Crawlable directory of every route and rental page. It sits after <main>, is server-only
+          (no hydration) and skips prefetch, so it costs neither LCP nor bandwidth. */}
+      <nav aria-labelledby="footer-directory" className="border-t border-white/10">
+        <div className="container-x py-8">
+          <h2 id="footer-directory" className="text-sm font-semibold uppercase tracking-wider text-white">Tuyến vận chuyển &amp; thuê xe tải</h2>
+          <dl className="mt-4 grid gap-x-10 gap-y-4 text-[0.8125rem] leading-6 lg:grid-cols-2">
+            {[...nav.regions, { id: 'thue-xe-tai', label: 'Thuê xe tải', items: nav.trucks }].map((group) => (
+              <div key={group.id}>
+                <dt className="font-semibold text-white">{group.label}</dt>
+                <dd>
+                  <ul className="flex flex-wrap gap-x-3 [&_a]:inline-block [&_a]:text-on-brand [&_a]:transition [&_a:hover]:text-white">
+                    {group.items.map((link) => <li key={link.href}><Link href={link.href} prefetch={false}>{link.label}</Link></li>)}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </nav>
+
       <div className="border-y border-white/10 bg-white/[0.06]">
         <div className="container-x flex flex-col gap-4 py-5 md:flex-row md:items-center md:justify-between">
           <p className="text-base font-semibold text-white">Cần báo giá gửi hàng? Gọi ngay để được tư vấn trong vài phút.</p>

@@ -1,4 +1,5 @@
 import type { LegacyEntry } from './legacy-types';
+import { HERO_LEADS } from './marketing';
 
 const decode = (value: string) =>
   value
@@ -38,14 +39,24 @@ export function splitLead(item: LegacyEntry): { lead?: string; body: string } {
   return { lead, body };
 }
 
-const PROPER_NOUNS = ['Phương Vy', 'Việt Nam', 'Bắc Nam', 'Sài Gòn', 'Hà Nội', 'Đà Nẵng', 'TP.HCM', 'TPHCM', 'HCM'];
+/** Hero intro plus the remaining body: a curated lead (HERO_LEADS) leaves the original opening in the body. */
+export function heroContent(item: LegacyEntry): { lead?: string; body: string } {
+  const curated = HERO_LEADS[item.path];
+  return curated ? { lead: curated, body: item.html } : splitLead(item);
+}
 
-/** Sentence-case titles that were typed in ALL CAPS in WordPress (display only; SEO title is unchanged). */
+// Restored case-insensitively, longest first so a full name keeps its own capitalisation.
+const PROPER_NOUNS = [
+  'Công ty TNHH Dịch vụ Vận tải Phương Vy', 'Sài Gòn Thương Tín', 'Phương Vy', 'Việt Nam', 'Bắc Nam', 'Sài Gòn', 'Hà Nội', 'Đà Nẵng',
+  'Đắk Nông', 'Đồng Nai', 'Á Châu', 'Sacombank', 'ACB', 'TNHH', 'TP.HCM', 'TPHCM', 'HCM',
+];
+
+/** Sentence-case titles and headings that were typed in ALL CAPS in WordPress (display only; SEO title is unchanged). */
 export function displayTitle(title: string): string {
   const letters = title.replace(/[^\p{L}]/gu, '');
   if (letters.length < 6 || letters !== letters.toLocaleUpperCase('vi')) return title;
   let result = title.toLocaleLowerCase('vi');
   result = result.charAt(0).toLocaleUpperCase('vi') + result.slice(1);
-  for (const noun of PROPER_NOUNS) result = result.replace(new RegExp(noun.toLocaleLowerCase('vi').replace('.', '\\.'), 'g'), noun);
+  for (const noun of PROPER_NOUNS) result = result.replace(new RegExp(noun.replace('.', '\\.'), 'giu'), noun);
   return result;
 }

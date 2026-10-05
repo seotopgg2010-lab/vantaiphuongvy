@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Clock3, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, Clock3, Mail, MapPin, Phone, Truck } from 'lucide-react';
 import { LeadForm } from '@/components/site/lead-form';
 import { PostCard } from '@/components/site/post-card';
 import { SectionHeading } from '@/components/site/section-heading';
@@ -46,24 +46,30 @@ export function LeadSection({ title, lead, defaultTo, page }: { title: string; l
   );
 }
 
-export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khác', eyebrow = 'Tuyến liên quan' }: { items: LegacyEntry[]; title?: string; eyebrow?: string }) {
+const ALL_ROUTES = { label: 'Xem tất cả tuyến', href: '/van-chuyen-hang-hoa/' };
+
+export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khác', eyebrow = 'Tuyến liên quan', action = ALL_ROUTES }: { items: LegacyEntry[]; title?: string; eyebrow?: string; action?: { label: string; href: string } | null }) {
   if (!items.length) return null;
   return (
     <section aria-labelledby="related-routes" className="container-x py-10 md:py-14">
-      <SectionHeading id="related-routes" eyebrow={eyebrow} title={title} action={{ label: 'Xem tất cả tuyến', href: '/van-chuyen-hang-hoa/' }} />
+      <SectionHeading id="related-routes" eyebrow={eyebrow} title={title} action={action ?? undefined} />
       <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {items.map((item) => (
-          <li key={item.path}>
-            <Link href={withSlash(item.path)} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-4 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white"><MapPin className="h-5 w-5" aria-hidden="true" /></span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-xs text-muted">{item.template === 'route' ? 'Tuyến' : 'Dịch vụ'}</span>
-                <span className="block truncate font-semibold text-ink">{item.label}</span>
-              </span>
-              <ArrowRight className="h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />
-            </Link>
-          </li>
-        ))}
+        {items.map((item) => {
+          const isRoute = item.template === 'route';
+          const Icon = isRoute ? MapPin : Truck;
+          return (
+            <li key={item.path}>
+              <Link href={withSlash(item.path)} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-4 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white"><Icon className="h-5 w-5" aria-hidden="true" /></span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs text-muted">{isRoute ? 'Tuyến' : item.template === 'truck' ? 'Thuê xe tải' : 'Dịch vụ'}</span>
+                  <span className="line-clamp-2 font-semibold text-ink">{item.label}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

@@ -21,7 +21,8 @@ export function ArticleBody({
   children?: React.ReactNode;
 }) {
   const h2Toc = toc.filter((entry) => entry.level === 2);
-  const showToc = h2Toc.length >= 3;
+  // Past ~30 entries (the 84-question FAQ) a table of contents stops helping and costs real HTML.
+  const showToc = h2Toc.length >= 3 && h2Toc.length <= 30;
   return (
     <div className="container-x grid gap-10 py-12 md:py-16 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14 xl:grid-cols-[minmax(0,1fr)_21.5rem]">
       <div className="min-w-0">

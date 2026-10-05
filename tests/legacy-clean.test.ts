@@ -75,3 +75,20 @@ test('lifting the intro into the hero never drops body content', () => {
     }
   }
 });
+
+test('article headings form a clean outline under the page H1', () => {
+  const comparable = (value: string) => value.toLocaleLowerCase('vi').replace(/[^\p{L}\p{N}]+/gu, '');
+  for (const item of publicItems) {
+    const headings = [...item.html.matchAll(/<h([2-4]) id="[^"]+">([^<]*)<\/h\1>/g)].map((match) => ({ level: Number(match[1]), text: match[2] }));
+    let previous = 1;
+    for (const heading of headings) {
+      assert.ok(heading.level <= previous + 1, `${item.path}: h${previous} → h${heading.level} "${heading.text}"`);
+      previous = heading.level;
+      const letters = heading.text.replace(/[^\p{L}]/gu, '');
+      assert.ok(letters.length < 6 || letters !== letters.toLocaleUpperCase('vi'), `${item.path}: ALL-CAPS heading "${heading.text}"`);
+    }
+    if (headings[0] && item.html.trimStart().startsWith('<h')) {
+      assert.notEqual(comparable(headings[0].text), comparable(item.title), `${item.path}: opening heading repeats the H1`);
+    }
+  }
+});

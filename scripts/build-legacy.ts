@@ -19,6 +19,7 @@ import type { AnyNode, Element } from 'domhandler';
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import type { FaqEntry, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
+import { displayTitle } from '../src/lib/legacy-render';
 import { htmlToMarkdown } from './legacy-markdown';
 
 type WpItem = {
@@ -139,7 +140,8 @@ function transform(html: string, title: string) {
     if ($(el).find('a[href^="tel:"], a[href*="zalo.me"]').length) $(el).attr('data-callout', '1');
   });
 
-  // 3. headings: keep original Easy-TOC anchors, flatten inner markup
+  // 3. headings: keep original Easy-TOC anchors, flatten inner markup. ALL-CAPS headings are
+  //    shown in sentence case; ids still derive from the original text, so old anchors keep working.
   const seen = new Set<string>();
   $('h1').each((_, el) => { (el as Element).tagName = 'h2'; });
   $('h2, h3, h4, h5, h6').each((_, el) => {
@@ -151,7 +153,7 @@ function transform(html: string, title: string) {
     let id = anchor && !seen.has(anchor) ? anchor : slugId(text, seen);
     seen.add(id);
     if (!/^[A-Za-z0-9_-]+$/.test(id)) id = slugId(text, seen);
-    $(el).empty().text(text).attr({ id });
+    $(el).empty().text(displayTitle(text)).attr({ id });
     for (const attr of Object.keys(element.attribs)) if (attr !== 'id') $(el).removeAttr(attr);
   });
 
@@ -257,11 +259,33 @@ function transform(html: string, title: string) {
   $.root().children('br').remove();
   $('br + br').remove();
 
+  // 11. outline: drop an opening heading that only repeats the page title (the template renders
+  //     the H1), then renumber headings by nesting depth so levels never skip (H1 → h3, h2 → h4).
+  //     FAQ detection below keeps reading the original level.
+  const comparable = (value: string) => value.toLocaleLowerCase('vi').replace(/[^\p{L}\p{N}]+/gu, '');
+  const opening = $.root().children().first();
+  if (opening.is('h2, h3, h4') && comparable(textOf($, opening.get(0)!)) === comparable(title)) {
+    const after = opening.next();
+    opening.remove();
+    if (after.is('hr')) after.remove();
+  }
+  const originalLevel = new Map<AnyNode, number>();
+  const open: number[] = [];
+  $('h2, h3, h4').each((_, el) => {
+    const element = el as Element;
+    const level = Number(element.tagName[1]);
+    originalLevel.set(el, level);
+    while (open.length && open[open.length - 1] >= level) open.pop();
+    element.tagName = `h${Math.min(open.length + 2, 4)}`;
+    open.push(level);
+  });
+
   // ---------- extraction ----------
   const toc: TocEntry[] = $('h2, h3').toArray().map((el) => ({ id: $(el).attr('id')!, text: textOf($, el), level: ((el as Element).tagName === 'h2' ? 2 : 3) as 2 | 3 })).filter((entry) => entry.text.length >= 4);
 
   const faq: FaqEntry[] = [];
-  $('h3, h4').each((_, el) => {
+  $('h2, h3, h4').each((_, el) => {
+    if ((originalLevel.get(el) ?? 0) < 3) return;
     const question = textOf($, el).replace(/\s+\?$/, '?');
     if (!question.endsWith('?') || question.length < 10) return;
     const parts: string[] = [];
