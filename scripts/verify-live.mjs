@@ -10,7 +10,10 @@ const paths = [
   ['/van-chuyen-hang-hoa/ha-noi/', 200], ['/thue-xe-tai/', 200],
   ['/gioi-thieu/', 200], ['/lien-he/', 200], ['/faq/', 200],
   ['/sitemap.xml', 200], ['/robots.txt', 200],
-  ['/en', 404], ['/en/foo', 404], ['/bang-hieu', 404], ['/du-an', 404],
+  // trailing slash: bare paths first 308 to the slash form (WordPress URL contract)
+  ['/en/', 404], ['/en/foo/', 404], ['/bang-hieu/', 404], ['/du-an/', 404],
+  ['/ads.txt', 404], ['/foo.php', 404], ['/index.html', 404],
+  ['/index.md', 200], ['/van-chuyen-hang-hoa/ha-noi.md', 200], ['/llms.txt', 200], ['/og/index.png', 200],
 ];
 
 let failed = false;
