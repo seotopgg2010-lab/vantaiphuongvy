@@ -61,11 +61,40 @@ test('curated hero leads are short, concrete and lead the markdown twin too', ()
     assert.ok(item, `${path} is not in the corpus`);
     assert.ok(lead.length >= 80 && lead.length <= 280, `${path}: ${lead.length} chars`);
     assert.equal(/SỐ 1|SIÊU RẺ|24\/7|24\/24/i.test(lead), false, `${path}: ad claim`);
-    // Uppercase runs are acronyms only (TP.HCM, CBM, GTGT, TEU, ETA), never shouting.
-    for (const word of lead.match(/\p{Lu}{4,}/gu) ?? []) assert.ok(['GTGT'].includes(word), `${path}: ${word}`);
+    // Uppercase runs are acronyms only (TP.HCM, CBM, GTGT, TEU, ETA, IATA), never shouting.
+    for (const word of lead.match(/\p{Lu}{4,}/gu) ?? []) assert.ok(['GTGT', 'GTVT', 'BGTVT', 'IATA'].includes(word), `${path}: ${word}`);
     const { lead: shown, body } = heroContent(item);
     assert.equal(shown, lead);
     assert.equal(body, item.html, `${path}: the original opening must stay in the body`);
     assert.ok(renderTwin(path)?.includes(lead), `${path}: twin is missing the lead`);
   }
+});
+
+const bodyLinks = (html: string) => [...html.matchAll(/<a href="(\/[^"#?]*)[^"]*">/g)].map((match) => match[1]).filter((href) => !href.startsWith('/wp-content/'));
+const knownPages = new Set(legacyItems.map((item) => (item.path === '/' ? '/' : `${item.path}/`)).concat('/blog/'));
+
+test('article links point at real pages, never at the page itself or from inside a heading', () => {
+  for (const item of publicItems) {
+    for (const href of bodyLinks(item.html)) {
+      assert.notEqual(href, `${item.path}/`, `${item.path}: links to itself`);
+      assert.ok(knownPages.has(href), `${item.path}: unknown page ${href}`);
+    }
+    assert.doesNotMatch(item.html, /<h[2-4][^>]*>[^<]*<a /, `${item.path}: link inside a heading`);
+  }
+});
+
+test('guides and service pages link to each other inside the article text', () => {
+  const services = new Set([...routeItems, ...cargoItems, ...truckItems].map((item) => `${item.path}/`).concat('/van-chuyen-hang-hoa/', '/thue-xe-tai/'));
+  // Three guides have no phrase that naturally leads to a service page (truck-ban rules,
+  // licence-plate feng shui, the 2021 green-lane notice); forcing one would read as spam.
+  const offTopic = new Set(['/blog/bien-bao-cam-xe-tai-va-muc-phat', '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc', '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh']);
+  for (const post of legacyPosts.filter((entry) => !offTopic.has(entry.path))) {
+    assert.ok(bodyLinks(post.html).some((href) => services.has(href)), `${post.path}: no link to a service page`);
+  }
+  const servicePages = [...routeItems, ...cargoItems, ...truckItems];
+  const linked = servicePages.filter((item) => bodyLinks(item.html).length > 0).length;
+  assert.ok(linked >= 50, `${linked}/${servicePages.length} service pages link from their article text`);
+  // The truck-size guide is the natural next read from pages that list truck types.
+  const guide = '/blog/kich-thuoc-thung-xe-tai-trong-van-tai-hang-hoa/';
+  assert.ok(publicItems.filter((item) => bodyLinks(item.html).includes(guide)).length >= 5, 'truck-size guide is linked from at least five articles');
 });

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarDays, Clock, Truck } from 'lucide-react';
+import { ArrowRight, CalendarDays, Clock, Truck, UserRound } from 'lucide-react';
 import { Breadcrumbs } from '@/components/site/breadcrumbs';
 import { CtaBand } from '@/components/site/cta-band';
 import { PageActions } from '@/components/site/page-actions';
@@ -11,7 +11,8 @@ import { UploadImage } from '@/components/site/upload-image';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
 import { relatedPosts, relatedRoutes, relatedServices, truckItems } from '@/lib/legacy-content';
 import { displayTitle, heroContent } from '@/lib/legacy-render';
-import type { LegacyEntry } from '@/lib/legacy-types';
+import type { LegacyAuthor, LegacyEntry } from '@/lib/legacy-types';
+import { HERO_LEADS } from '@/lib/marketing';
 import { markdownPathFor } from '@/lib/markdown-paths';
 import { getExplorerRegions, withSlash } from '@/lib/navigation';
 import { absoluteUrl, canonicalUrl } from '@/lib/seo';
@@ -22,7 +23,7 @@ import { LeadSection, RelatedPosts, RelatedRoutes } from './sections';
 
 function routeFacts(item: LegacyEntry): HeroFact[] {
   const facts: HeroFact[] = [];
-  if (item.facts.transit) facts.push({ icon: 'time', text: `Thời gian ~${item.facts.transit}` });
+  if (item.facts.transit) facts.push({ icon: 'time', text: `Thời gian khoảng ${item.facts.transit}` });
   if (item.facts.priceFrom) facts.push({ icon: 'price', text: `Giá từ ${item.facts.priceFrom}` });
   facts.push({ text: 'Nhận & giao tận nơi' }, { text: 'Có hóa đơn VAT' });
   return facts;
@@ -112,6 +113,17 @@ function TruckHubTemplate({ item }: { item: LegacyEntry }) {
   );
 }
 
+/** Who wrote the guide (from the WordPress author box), closing the article. */
+function AuthorNote({ author }: { author: LegacyAuthor }) {
+  return (
+    <aside aria-labelledby="author-name" className="mt-12 max-w-[46rem] rounded-2xl border border-line bg-surface p-6 sm:p-7">
+      <p className="eyebrow">Về tác giả</p>
+      <p id="author-name" className="mt-3 text-lg font-bold text-ink">{author.name}</p>
+      {author.bio && <p className="mt-2 text-[0.9375rem] leading-7 text-muted">{author.bio}</p>}
+    </aside>
+  );
+}
+
 function PostTemplate({ item }: { item: LegacyEntry }) {
   const crumbs = legacyCrumbs(item);
   return (
@@ -121,8 +133,11 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
           <Breadcrumbs items={crumbs.map((crumb, index) => (index === crumbs.length - 1 ? { name: displayTitle(crumb.name) } : crumb))} />
           <p className="eyebrow mt-6">Cẩm nang vận tải</p>
           <h1 className="h-display mt-3 max-w-4xl">{displayTitle(item.title)}</h1>
+          {HERO_LEADS[item.path] && <p className="lead mt-4 max-w-3xl">{HERO_LEADS[item.path]}</p>}
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
-            <span className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-brand-600" aria-hidden="true" />Vận tải Phương Vy</span>
+            {item.author
+              ? <span className="inline-flex items-center gap-2"><UserRound className="h-4 w-4 text-brand-600" aria-hidden="true" />Tác giả {item.author.name}</span>
+              : <span className="inline-flex items-center gap-2"><Truck className="h-4 w-4 text-brand-600" aria-hidden="true" />Vận tải Phương Vy</span>}
             {item.date && <span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" aria-hidden="true" /><time dateTime={item.date}>{formatDateVi(item.date)}</time></span>}
             {item.modified && item.modified.slice(0, 10) !== item.date?.slice(0, 10) && <span>Cập nhật <time dateTime={item.modified}>{formatDateVi(item.modified)}</time></span>}
             <span className="inline-flex items-center gap-2"><Clock className="h-4 w-4" aria-hidden="true" />{item.readingMinutes} phút đọc</span>
@@ -137,7 +152,9 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
           </div>
         </div>
       )}
-      <ArticleBody html={item.html} toc={item.toc} quoteHeading="Cần vận chuyển hàng hóa?" />
+      <ArticleBody html={item.html} toc={item.toc} quoteHeading="Cần vận chuyển hàng hóa?">
+        {item.author && <AuthorNote author={item.author} />}
+      </ArticleBody>
       <RelatedRoutes items={relatedServices(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ Phương Vy cho nhu cầu này" action={null} />
       <RelatedPosts posts={relatedPosts(item)} title="Bài viết khác" />
       <CtaBand />

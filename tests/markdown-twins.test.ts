@@ -28,6 +28,7 @@ test('legacy HTML converts to GitHub-flavoured Markdown', () => {
     '<h2 id="bang-gia">Bảng giá</h2>',
     '<div class="table-scroll"><table><thead><tr><th>Khối lượng</th><th>Giá</th></tr></thead><tbody><tr><td>Dưới 50 kg</td><td>40.000đ | kiện</td></tr></tbody></table></div>',
     '<ul><li>Nhận hàng tận nơi</li><li>Có hóa đơn<ul><li>VAT</li></ul></li></ul>',
+    '<ol start="3"><li>Bước ba</li><li>Bước bốn</li></ol>',
     '<figure><img src="/wp-content/uploads/a.jpg" alt="Xe tải" /><figcaption>Đội xe</figcaption></figure>',
     '<aside class="callout"><p>Gọi <a href="tel:0933871139">0933 871 139</a></p></aside>',
   ].join(''));
@@ -35,6 +36,7 @@ test('legacy HTML converts to GitHub-flavoured Markdown', () => {
   assert.match(markdown, /^## Bảng giá$/m);
   assert.match(markdown, /^\| Khối lượng \| Giá \|\n\| --- \| --- \|\n\| Dưới 50 kg \| 40\.000đ \\\| kiện \|$/m);
   assert.match(markdown, /^- Có hóa đơn\n  - VAT$/m);
+  assert.match(markdown, /^3\. Bước ba\n4\. Bước bốn$/m);
   assert.match(markdown, /^!\[Xe tải\]\(\/wp-content\/uploads\/a\.jpg\)\n\*Đội xe\*$/m);
   assert.match(markdown, /^> Gọi \[0933 871 139\]\(tel:0933871139\)$/m);
   assert.doesNotMatch(markdown, /<[a-z]/i);
@@ -58,6 +60,8 @@ test('every sitemap URL has a markdown twin with title, canonical link and no ra
 test('llms.txt follows llmstxt.org shape and links only to existing twins', () => {
   const text = renderLlmsTxt();
   assert.match(text, /^# .+\n\n> .+/);
+  // Notes are factual summaries for AI readers, not the ad copy of some Rank Math descriptions.
+  assert.doesNotMatch(text, /SỐ 1|✅|CẬP NHẬT/);
   const links = [...text.matchAll(/\]\((https?:\/\/[^)]+)\)/g)].map((match) => match[1]);
   assert.ok(links.length > 80);
   for (const link of links) {

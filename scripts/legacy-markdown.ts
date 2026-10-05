@@ -66,8 +66,9 @@ function inline(nodes: AnyNode[], ctx: Ctx): string {
 
 function list(el: Element): string {
   const ordered = el.tagName === 'ol';
+  const start = ordered ? Number(el.attribs.start) || 1 : 1;
   return tags(el, 'li').map((li, index) => {
-    const marker = ordered ? `${index + 1}.` : '-';
+    const marker = ordered ? `${start + index}.` : '-';
     const pad = ' '.repeat(marker.length + 1);
     const text: string[] = [];
     const nested: string[] = [];

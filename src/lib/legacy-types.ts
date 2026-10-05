@@ -7,6 +7,8 @@ export type LegacyRegion = 'bac' | 'trung' | 'nam' | 'tay-nguyen' | 'quoc-te' | 
 
 export type TocEntry = { id: string; text: string; level: 2 | 3 };
 export type FaqEntry = { question: string; answer: string };
+/** Post author, taken from the WordPress "Về tác giả" box. */
+export type LegacyAuthor = { name: string; bio?: string };
 
 export type LegacyEntry = {
   id: number;
@@ -33,4 +35,5 @@ export type LegacyEntry = {
   modified?: string;
   readingMinutes: number;
   seo: { title?: string; description?: string; robots?: string };
+  author?: LegacyAuthor;
 };

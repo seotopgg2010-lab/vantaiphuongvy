@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { CalendarDays, Clock } from 'lucide-react';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG } from '@/lib/constants';
+import { displayTitle } from '@/lib/legacy-render';
 import { withSlash } from '@/lib/navigation';
 
 export type PostSummary = {
@@ -40,7 +41,7 @@ export function PostCard({ post, priority = false }: { post: PostSummary; priori
           <span className="inline-flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" aria-hidden="true" />{post.readingMinutes} phút đọc</span>
         </div>
         <h3 className="mt-3 text-lg font-bold leading-snug">
-          <Link href={withSlash(post.path)} className="transition hover:text-brand-600">{post.title}</Link>
+          <Link href={withSlash(post.path)} className="transition hover:text-brand-600">{displayTitle(post.title)}</Link>
         </h3>
         <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">{post.summary}</p>
       </div>

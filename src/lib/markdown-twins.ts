@@ -32,12 +32,13 @@ export function markdownResponse(body: string, contentType = 'text/markdown; cha
 /** Page paths (no trailing slash, "/" for home) that have a markdown twin — the same set as the sitemap. */
 export const TWIN_PATHS = indexablePaths;
 
-function header({ title, description, path, updated, published }: { title: string; description?: string; path: string; updated?: string; published?: string }) {
+function header({ title, description, path, updated, published, author }: { title: string; description?: string; path: string; updated?: string; published?: string; author?: string }) {
   return [
     `# ${title}`,
     description && `> ${oneLine(description)}`,
     [
       `- Trang gốc: ${canonicalUrl(path)}`,
+      author && `- Tác giả: ${author}`,
       published && `- Ngày đăng: ${day(published)}`,
       updated && `- Cập nhật: ${day(updated)}`,
       `- Đơn vị: ${SITE_CONFIG.companyName} — hotline ${SITE_CONFIG.hotline}`,
@@ -91,7 +92,7 @@ function homeMarkdown() {
     TESTIMONIALS.map((item) => `> “${item.quote}”\n> — ${item.name}, ${item.role}`).join('\n\n'),
     ...(faq.length ? ['## Câu hỏi thường gặp', faq.map((entry) => `### ${entry.question}\n\n${entry.answer}`).join('\n\n')] : []),
     '## Cẩm nang vận tải',
-    legacyPosts.slice(0, 3).map((post) => `- ${pageLink(post, post.title)}`).join('\n'),
+    legacyPosts.slice(0, 3).map((post) => `- ${pageLink(post, displayTitle(post.title))}`).join('\n'),
     contactSection(),
   ].join('\n\n');
 }
@@ -99,7 +100,7 @@ function homeMarkdown() {
 function blogMarkdown() {
   return [
     header({ title: BLOG_PAGE.heading, description: BLOG_PAGE.description, path: '/blog', updated: latestPostDate }),
-    legacyPosts.map((post) => `- ${pageLink(post, post.title)} (${day(post.date)}): ${oneLine(post.seo.description || post.summary)}`).join('\n'),
+    legacyPosts.map((post) => `- ${pageLink(post, displayTitle(post.title))} (${day(post.date)}): ${oneLine(HERO_LEADS[post.path] || post.seo.description || post.summary)}`).join('\n'),
     contactSection(),
   ].join('\n\n');
 }
@@ -113,11 +114,13 @@ function entryMarkdown(item: LegacyEntry) {
       title: displayTitle(item.title),
       description: item.seo.description || item.summary,
       path: item.path,
+      author: item.author?.name,
       published: isPost ? item.date : undefined,
       updated: item.modified,
     }),
     HERO_LEADS[item.path],
     body,
+    item.author?.bio && `## Về tác giả\n\n**${item.author.name}** — ${item.author.bio}`,
     item.path === '/lien-he' ? '' : `---\n\n${contactSection()}`,
   ].filter(Boolean).join('\n\n');
 }
@@ -130,7 +133,9 @@ export function renderTwin(path: string): string | undefined {
 }
 
 const twinLink = (item: LegacyEntry, label = item.label, note?: string) => `- [${label}](${markdownUrl(item.path)})${note ? `: ${oneLine(note)}` : ''}`;
-const facts = (item: LegacyEntry) => [item.facts.transit && `thời gian ~${item.facts.transit}`, item.facts.priceFrom && `giá từ ${item.facts.priceFrom}`].filter(Boolean).join(', ');
+const facts = (item: LegacyEntry) => [item.facts.transit && `thời gian khoảng ${item.facts.transit}`, item.facts.priceFrom && `giá từ ${item.facts.priceFrom}`].filter(Boolean).join(', ');
+/** Curated, factual lead first; the Rank Math description (sometimes ad copy) only as a fallback. */
+const note = (item: LegacyEntry) => HERO_LEADS[item.path] ?? item.seo.description;
 const byPaths = (paths: string[]) => paths.map((path) => getLegacyByPath(path)).filter((item): item is LegacyEntry => Boolean(item));
 
 /** llmstxt.org index: name, summary, context, then sections of markdown-twin links. */
@@ -143,14 +148,14 @@ export function renderLlmsTxt(): string {
     `> ${SITE_CONFIG.companyName}: chành xe, vận chuyển hàng hóa Bắc Nam từ TP.HCM đi các tỉnh thành và cho thuê xe tải 0,5–30 tấn. Hotline ${SITE_CONFIG.hotline}.`,
     `Mỗi trang trên ${getSiteUrl()} có bản Markdown cùng địa chỉ với đuôi \`.md\` (trang chủ: \`/index.md\`). Giá cước trong các trang là bảng giá tham khảo; báo giá chính xác qua hotline ${SITE_CONFIG.hotlines.join(', ')} hoặc Zalo ${SITE_CONFIG.zalo}, ${SITE_CONFIG.businessHours} tất cả các ngày. Trụ sở: ${SITE_CONFIG.address}.`,
     '## Dịch vụ chính',
-    [`- [Trang chủ](${markdownUrl('/')}): tổng quan dịch vụ, tuyến, quy trình gửi hàng, ưu đãi`, ...hubs.map((item) => twinLink(item, item.label, item.seo.description))].join('\n'),
+    [`- [Trang chủ](${markdownUrl('/')}): tổng quan dịch vụ, tuyến, quy trình gửi hàng, ưu đãi`, ...hubs.map((item) => twinLink(item, item.label, note(item)))].join('\n'),
     ...routesByRegion().map((group) => `## Tuyến vận chuyển — ${group.label}\n\n${group.items.map((item) => twinLink(item, item.label, facts(item) || undefined)).join('\n')}`),
     '## Vận chuyển theo loại hàng',
-    cargoItems.map((item) => twinLink(item, item.label, item.seo.description)).join('\n'),
+    cargoItems.map((item) => twinLink(item, item.label, note(item))).join('\n'),
     '## Cho thuê xe tải theo khu vực',
-    truckItems.map((item) => twinLink(item, item.label, item.seo.description)).join('\n'),
+    truckItems.map((item) => twinLink(item, item.label, note(item))).join('\n'),
     '## Cẩm nang vận tải',
-    [`- [${BLOG_PAGE.heading}](${markdownUrl('/blog')}): danh sách bài viết`, ...legacyPosts.map((post) => twinLink(post, displayTitle(post.title)))].join('\n'),
+    [`- [${BLOG_PAGE.heading}](${markdownUrl('/blog')}): danh sách bài viết`, ...legacyPosts.map((post) => twinLink(post, displayTitle(post.title), HERO_LEADS[post.path]))].join('\n'),
     '## Công ty',
     company.map((item) => twinLink(item, displayTitle(item.title))).join('\n'),
     '## Optional',

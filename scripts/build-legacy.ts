@@ -15,10 +15,11 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import * as cheerio from 'cheerio';
-import type { AnyNode, Element } from 'domhandler';
+import { Element as DomElement, Text as DomText, type AnyNode, type Element, type Text } from 'domhandler';
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
-import type { FaqEntry, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
+import { CONTEXTUAL_LINKS, CONTEXTUAL_LINK_LIMITS, ROUTE_PHRASE_DIRECTIONS, ROUTE_PHRASE_VERBS } from '../src/content/contextual-links';
+import type { FaqEntry, LegacyAuthor, LegacyEntry, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
 import { displayTitle } from '../src/lib/legacy-render';
 import { applyArticleImages, buildArticleImages } from './legacy-images';
 import { htmlToMarkdown } from './legacy-markdown';
@@ -127,9 +128,70 @@ function internalHref(raw: string): string | null {
 
 const textOf = ($: cheerio.CheerioAPI, el: AnyNode) => $(el).text().replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
 
+// ---------- contextual links ----------
+type LinkTarget = { href: string; pattern: RegExp };
+const phrasePattern = (phrases: string[]) => {
+  const alternatives = phrases.map((phrase) => phrase.normalize('NFC').replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+'));
+  return new RegExp(`(?<![\\p{L}\\p{N}])(?:${alternatives.join('|')})(?![\\p{L}\\p{N}])`, 'iu');
+};
+/** Dictionary phrases first, then "gửi hàng đi <tỉnh>"-style phrases for every route page. */
+const LINK_TARGETS: LinkTarget[] = [
+  ...CONTEXTUAL_LINKS.map(({ href, phrases }) => ({ href, pattern: phrasePattern(phrases) })),
+  ...[...navLabel].filter(([href]) => href.startsWith('/van-chuyen-hang-hoa/') && !CARGO_SLUGS.has(href.split('/').pop()!) && !INTERNATIONAL.has(href)).map(([href, label]) => {
+    const places = label.split(/\s+[–-]\s+/).map((place) => place.trim()).filter(Boolean);
+    const phrases = ROUTE_PHRASE_VERBS.flatMap((verb) => ROUTE_PHRASE_DIRECTIONS.flatMap((direction) => places.map((place) => `${verb} ${direction} ${place}`)));
+    return { href: `${href}/`, pattern: phrasePattern(phrases) };
+  }),
+];
+/** Links live in paragraphs and list items (and their inline text); never in headings, tables, callouts or figures. */
+const LINKABLE_TAGS = new Set(['p', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u']);
+
+/**
+ * Links the first mention of a descriptive phrase (src/content/contextual-links.ts) to its page,
+ * in body paragraphs and list items only. Skips an opening paragraph (the hero may lift it) and
+ * text outside paragraphs, targets the page already links to, and the page itself; stops at the cap.
+ */
+function addContextualLinks($: cheerio.CheerioAPI, path: string, limit: number) {
+  const used = new Set([`${path}/`, ...$('a[href]').toArray().map((a) => ($(a).attr('href') || '').split(/[?#]/)[0])]);
+  const first = $.root().children().first();
+  const opening = first.is('p') ? first.get(0) : undefined;
+  let added = 0;
+  const linkText = (node: Text) => {
+    let best: { index: number; length: number; href: string } | undefined;
+    for (const target of LINK_TARGETS) {
+      if (used.has(target.href)) continue;
+      const match = target.pattern.exec(node.data);
+      if (match && (!best || match.index < best.index)) best = { index: match.index, length: match[0].length, href: target.href };
+    }
+    if (!best) return;
+    used.add(best.href);
+    added++;
+    const after = new DomText(node.data.slice(best.index + best.length));
+    const label = new DomText(node.data.slice(best.index, best.index + best.length));
+    const anchor = new DomElement('a', { href: best.href }, [label]);
+    label.parent = anchor;
+    $(node).replaceWith([new DomText(node.data.slice(0, best.index)), anchor, after]);
+    if (added < limit) linkText(after);
+  };
+  const visit = (node: AnyNode) => {
+    if (added >= limit) return;
+    if (node.type === 'text') linkText(node as Text);
+    else if (node.type === 'tag' && node !== opening && LINKABLE_TAGS.has((node as Element).tagName)) [...(node as Element).children].forEach(visit);
+  };
+  // Elements only: text sitting directly at the root (outside any paragraph) is never linked.
+  $.root().children().toArray().forEach(visit);
+}
+
 // ---------- HTML transform ----------
-function transform(html: string, title: string) {
+function transform(html: string, title: string, path: string, linkLimit: number) {
   const $ = cheerio.load(html, null, false);
+
+  // 0. The theme's "Về tác giả" box: the author's name and bio become data, the markup goes.
+  const authorBox = $('.about-author').first();
+  const authorName = authorBox.find('.author-name').text().replace(/\s+/g, ' ').trim();
+  const authorBio = authorBox.find('.read-des').text().replace(/\s+/g, ' ').trim();
+  const author: LegacyAuthor | undefined = authorName ? { name: authorName, ...(authorBio ? { bio: authorBio } : {}) } : undefined;
+  $('.about-author').remove();
 
   // 1. plugin chrome & non-content
   // .av-countdown-timer: an expired promo countdown that would print as "0Weeks0Days0Hours…"
@@ -219,6 +281,8 @@ function transform(html: string, title: string) {
     for (const attr of Object.keys(element.attribs)) {
       if (attr === 'data-callout' || attr === 'colspan' || attr === 'rowspan') continue;
       if (attr === 'class' && element.attribs.class === 'table-scroll') continue;
+      // A list split by a paragraph continues its numbering ("3." after the text, not "1.").
+      if (element.tagName === 'ol' && attr === 'start' && /^\d+$/.test(element.attribs.start)) continue;
       delete element.attribs[attr];
     }
   });
@@ -258,7 +322,61 @@ function transform(html: string, title: string) {
     if (items.length > 1 && items.toArray().every((li) => $(li).find('img').length > 0 && !textOf($, li))) $(el).remove();
   });
   $.root().children('br').remove();
-  $('br + br').remove();
+  // Line breaks: collapse runs of <br>, and join lines that pasted text wrapped mid-sentence (no
+  // closing punctuation before, lowercase after). Every other break is the author's own line.
+  // (The CSS "br + br" matched breaks with text between them and merged all lines after the first.)
+  const neighbour = (node: AnyNode | null, step: 'prev' | 'next') => {
+    let current = node;
+    while (current?.type === 'text' && !(current as Text).data.trim()) current = current[step];
+    return current;
+  };
+  $('br').each((_, el) => {
+    const previous = neighbour((el as Element).prev, 'prev');
+    if (previous?.type === 'tag' && (previous as Element).tagName === 'br') { $(el).remove(); return; }
+    const next = neighbour((el as Element).next, 'next');
+    const before = previous ? $(previous).text().trimEnd() : '';
+    const after = next ? $(next).text().trimStart() : '';
+    if (before && after && !/[.:;!?…)»”"]$/.test(before) && /^\p{Ll}/u.test(after)) $(el).replaceWith(' ');
+  });
+
+  // 10b. dash lists typed as text ("– item<br>– item") become real lists; an intro line before
+  //      the first dash stays a paragraph.
+  const DASH = /^[–—\-+•]\s+/;
+  $.root().children('p').each((_, el) => {
+    const lines = ($(el).html() || '').split(/<br\s*\/?>/i).map((line) => line.trim()).filter(Boolean);
+    const plain = lines.map((line) => cheerio.load(`<p>${line}</p>`, null, false)('p').text().replace(/\u00a0/g, ' ').trim());
+    const first = plain.findIndex((text) => DASH.test(text));
+    if (first < 0 || lines.length - first < 2 || !plain.slice(first).every((text) => DASH.test(text))) return;
+    const items = lines.slice(first).map((line) => line.replace(/^((?:\s*<[^>]+>)*\s*)[–—\-+•](?:\s|&nbsp;)+/, '$1'));
+    const intro = lines.slice(0, first).join('<br />');
+    $(el).replaceWith(`${intro ? `<p>${intro}</p>` : ''}<ul>${items.map((item) => `<li>${item.trim()}</li>`).join('')}</ul>`);
+  });
+
+  // 10c. a paragraph that is only bold text and works as a heading — a question answered by the
+  //      next block, or a short title introducing a list or table — becomes a heading one level
+  //      below the section it sits in, so the outline, the FAQ extraction and the twin see it.
+  let sectionLevel = 0;
+  // An article with no headings at all only has its bold lines as section titles.
+  const untitled = $.root().children('h2, h3, h4').length === 0;
+  $.root().children().each((_, el) => {
+    const element = el as Element;
+    if (/^h[2-4]$/.test(element.tagName)) { sectionLevel = Number(element.tagName[1]); return; }
+    if (element.tagName !== 'p') return;
+    const kids = element.children.filter((child) => child.type !== 'text' || (child as Text).data.trim());
+    const bold = kids.length === 1 && kids[0].type === 'tag' && ['strong', 'b'].includes((kids[0] as Element).tagName) ? $(kids[0]) : null;
+    if (!bold || bold.find('a, img, br').length) return;
+    const text = textOf($, el).replace(/\s+\?$/, '?');
+    const next = $(el).next();
+    const nextTag = next.length ? (next.get(0) as Element).tagName : '';
+    const words = text.split(/\s+/).length;
+    const question = text.endsWith('?') && text.length >= 12 && text.length <= 160 && ['p', 'ul', 'ol', 'div', 'figure'].includes(nextTag);
+    const titleLike = !/[:.!,;?…]$/.test(text) && words >= 4 && words <= 16 && text.length <= 120 && !/\d{6,}|@/.test(text.replace(/\s/g, ''));
+    const introducesBlock = nextTag === 'ul' || nextTag === 'ol' || (nextTag === 'div' && next.hasClass('table-scroll'));
+    const listTitle = titleLike && (introducesBlock || (untitled && Boolean(nextTag)));
+    if (!question && !listTitle) return;
+    const level = sectionLevel ? Math.min(sectionLevel + 1, 4) : 2;
+    $(el).replaceWith($(`<h${level}></h${level}>`).attr('id', slugId(text, seen)).text(displayTitle(text)));
+  });
 
   // 11. outline: drop an opening heading that only repeats the page title (the template renders
   //     the H1), then renumber headings by nesting depth so levels never skip (H1 → h3, h2 → h4).
@@ -281,6 +399,9 @@ function transform(html: string, title: string) {
     open.push(level);
   });
 
+  // 12. contextual links to related services, routes and guides (first mention only, capped)
+  if (linkLimit > 0) addContextualLinks($, path, linkLimit);
+
   // ---------- extraction ----------
   const toc: TocEntry[] = $('h2, h3').toArray().map((el) => ({ id: $(el).attr('id')!, text: textOf($, el), level: ((el as Element).tagName === 'h2' ? 2 : 3) as 2 | 3 })).filter((entry) => entry.text.length >= 4);
 
@@ -302,13 +423,13 @@ function transform(html: string, title: string) {
 
   const clean = sanitizeHtml($.html(), {
     allowedTags: ['h2', 'h3', 'h4', 'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'sub', 'sup', 'ul', 'ol', 'li', 'blockquote', 'a', 'img', 'figure', 'figcaption', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'hr', 'aside', 'div'],
-    allowedAttributes: { a: ['href', 'title', 'target', 'rel'], img: ['src', 'alt', 'width', 'height', 'loading', 'decoding'], th: ['colspan', 'rowspan'], td: ['colspan', 'rowspan'], h2: ['id'], h3: ['id'], h4: ['id'], aside: ['class'], div: ['class'] },
+    allowedAttributes: { a: ['href', 'title', 'target', 'rel'], img: ['src', 'alt', 'width', 'height', 'loading', 'decoding'], th: ['colspan', 'rowspan'], td: ['colspan', 'rowspan'], h2: ['id'], h3: ['id'], h4: ['id'], aside: ['class'], div: ['class'], ol: ['start'] },
     allowedClasses: { aside: ['callout'], div: ['table-scroll'] },
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     allowProtocolRelative: false,
   }).replace(/\n{2,}/g, '\n').replace(/<p>\s*(<br\s*\/?>\s*)+/g, '<p>').replace(/(<br\s*\/?>\s*)+<\/p>/g, '</p>');
 
-  return { html: clean, toc, faq, paragraphs, firstImage: firstImage.attr('src'), firstImageAlt: firstImage.attr('alt'), words };
+  return { html: clean, toc, faq, paragraphs, firstImage: firstImage.attr('src'), firstImageAlt: firstImage.attr('alt'), words, author };
 }
 
 function extractFacts(texts: string[]) {
@@ -318,15 +439,21 @@ function extractFacts(texts: string[]) {
   return { transit, priceFrom };
 }
 
+/** Pages whose legacy body is not rendered (home, contact, retired) or that should stay neutral (policies) get no contextual links. */
+function contextualLinkLimit(path: string, template: LegacyTemplate): number {
+  if (template === 'home' || template === 'policy' || path === '/lien-he' || path === '/home-3') return 0;
+  return template === 'post' ? CONTEXTUAL_LINK_LIMITS.post : CONTEXTUAL_LINK_LIMITS.page;
+}
+
 function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
   const path = pathOf(item.link);
   const title = decodeEntities(item.title.rendered).replace(/\s+/g, ' ').trim();
-  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words } = transform(item.content.rendered, title);
+  const template = templateOf(path, kind);
+  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words, author } = transform(item.content.rendered, title, path, contextualLinkLimit(path, template));
   const seo = seoMeta[path] ?? {};
   const seoDescription = seo.description ? decodeEntities(seo.description) : undefined;
   const summarySource = paragraphs[0] ?? title;
   const summary = summarySource.length > 200 ? `${summarySource.slice(0, 197).replace(/\s+\S*$/, '')}…` : summarySource;
-  const template = templateOf(path, kind);
   const label = navLabel.get(path) ?? (title.replace(/^(Vận chuyển gửi hàng hóa đi|Vận chuyển gửi hàng hóa|Vận chuyển hàng hóa đi|Vận chuyển hàng hóa|Chành xe gửi hàng đi|Chành xe|Cho thuê xe tải|Thuê xe tải)\s*/i, '').trim() || title);
   const image = localUpload(seo.ogImage) ?? firstImage ?? undefined;
   return {
@@ -338,6 +465,7 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
     date: item.date, modified: item.modified,
     readingMinutes: Math.max(1, Math.round(words / 220)),
     seo: { title: seo.title ? decodeEntities(seo.title) : undefined, description: seoDescription, robots: seo.robots },
+    ...(author ? { author } : {}),
   };
 }
 

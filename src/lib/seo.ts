@@ -146,7 +146,10 @@ export function generateLegacyJsonLd(item: LegacyEntry, breadcrumbs: Array<{ nam
       headline: item.title, description: item.seo.description || item.summary, image,
       datePublished: item.date, dateModified: item.modified || item.date,
       mainEntityOfPage: url, inLanguage: 'vi-VN',
-      author: { '@id': ORGANIZATION_ID }, publisher: { '@id': ORGANIZATION_ID },
+      author: item.author
+        ? { '@type': 'Person', name: item.author.name, ...(item.author.bio ? { description: item.author.bio } : {}), worksFor: { '@id': ORGANIZATION_ID } }
+        : { '@id': ORGANIZATION_ID },
+      publisher: { '@id': ORGANIZATION_ID },
     });
   } else {
     blocks.push({

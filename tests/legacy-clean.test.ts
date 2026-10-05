@@ -23,6 +23,7 @@ test('cleaned HTML carries no WordPress plugin/theme residue', () => {
     ['slider controls', /href="\/?#(prev|next|\d)"/],
     ['scripts', /<script/i],
     ['Avia countdown timer', /\d+Weeks\d+Days\d+Hours/],
+    ['author box residue', /Về Tác giả|Chủ đề cùng Tác giả|<p>Xem thêm<\/p>/],
   ];
   for (const item of legacyItems) {
     for (const [label, pattern] of forbidden) assert.equal(pattern.test(item.html), false, `${label} in ${item.path}`);
@@ -62,6 +63,24 @@ test('article images keep their upload URL, carry their size and offer right-siz
       }
     }
   }
+});
+
+test('line breaks keep the author\'s lines but never split a sentence', () => {
+  const hub = legacyItems.find((item) => item.path === '/van-chuyen-hang-hoa')!;
+  assert.match(hub.html, /NINH BÌNH<br \/>\s*NAM ĐỊNH/, 'price table lists one province per line');
+  for (const item of legacyItems) {
+    assert.doesNotMatch(item.html, /[\p{Ll}\p{N},]<br \/>\s*\p{Ll}/u, `${item.path}: a sentence is split by a line break`);
+  }
+});
+
+test('question paragraphs became headings and split lists keep their numbering', () => {
+  for (const item of legacyItems) {
+    assert.doesNotMatch(item.html, /<p>\s*<(strong|b)>[^<]{12,160}\?\s*<\/\1>\s*<\/p>/, `${item.path}: bold question paragraph`);
+  }
+  const papers = legacyItems.find((item) => item.path === '/blog/giay-to-van-chuyen-hang-hoa')!;
+  assert.ok((papers.html.match(/<h2 /g) ?? []).length >= 2, 'papers guide has section headings');
+  assert.ok((papers.html.match(/<ol start="\d+">/g) ?? []).length >= 3, 'papers guide keeps list numbering');
+  assert.ok(legacyItems.filter((item) => item.kind === 'post').every((post) => post.author?.name), 'every guide names its author');
 });
 
 test('internal links are relative and keep the trailing-slash contract', () => {

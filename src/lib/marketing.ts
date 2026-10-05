@@ -123,4 +123,14 @@ export const HERO_LEADS: Record<string, string> = {
   '/gioi-thieu': 'Hơn 10 năm chành xe Bắc – Nam: từ dàn xe tải 10 – 15 tấn chạy TP.HCM, Hà Nội đi các tỉnh trước năm 2015 đến đội xe tải, xe cẩu, đầu kéo container và bãi xe ở TP.HCM, Đà Nẵng, Hà Nội.',
   '/faq': 'Giải nghĩa nhanh các khái niệm vận tải hay gặp — hình thức kinh doanh vận tải, rơ moóc và sơ mi rơ moóc, TEU, ETA — để bạn gửi hàng, thuê xe dễ hơn.',
   '/tuyen-dung': 'Phương Vy tuyển nhân viên kinh doanh, kế toán, SEO và tài xế xe tải tại TP.HCM và Hà Nội. Mô tả công việc, yêu cầu kinh nghiệm và giờ làm việc của từng vị trí ở bên dưới.',
+  // Guides: what the reader gets from the article, shown under its H1.
+  '/blog/bien-bao-cam-xe-tai-va-muc-phat': 'Các biển báo cấm xe tải thường gặp, mức phạt khi đi sai giờ, khung giờ và tuyến đường cấm tải ở TP.HCM (kể cả hầm Thủ Thiêm), Hà Nội, Nha Trang, Đà Nẵng — mức phạt cập nhật ngày 09/04/2023.',
+  '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': 'Phương Vy tìm chủ xe tải, tài xế hợp tác chở hàng đi các tỉnh, cam kết có hàng cả hai chiều đi và về. Chủ hàng cần xe vận chuyển cũng liên hệ qua hotline.',
+  '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': 'Các thành phần trên biển số xe (mã vùng, ký tự loại xe, số đăng ký), cách xem ý nghĩa con số theo phong thủy và biển số hợp tuổi. Bài viết lưu ý đây là quan điểm chủ quan, không có căn cứ khoa học rõ ràng.',
+  '/blog/giay-to-van-chuyen-hang-hoa': 'Giấy tờ khi vận chuyển hàng hóa đường bộ: giấy tờ xe, chủ phương tiện và tài xế mà đơn vị vận tải phải có, cùng hóa đơn, chứng từ chứng minh nguồn gốc hàng mà chủ hàng cần cung cấp.',
+  '/blog/hang-hoa-thuong-gap-trong-nganh-van-tai': 'Thế nào là hàng siêu trường (dài trên 20 m, rộng trên 2,5 m, cao trên 4,2 m) và siêu trọng (trên 32 tấn) theo Quyết định 63/2007/QĐ-BGTVT, phương tiện chở chúng và cách gửi hàng lẻ, hàng ghép tuyến Bắc Nam.',
+  '/blog/kich-thuoc-thung-xe-tai-trong-van-tai-hang-hoa': 'Kích thước thùng xe tải từ 500 kg đến 30 tấn và đặc điểm từng loại thùng như thùng lửng, thùng kín, giúp chọn đúng xe khi thuê xe tải hoặc gửi hàng.',
+  '/blog/quy-dinh-van-chuyen-hang-hoa-nguy-hiem': 'Quy định vận chuyển hàng hóa nguy hiểm theo Nghị định 104/2009/NĐ-CP trên đường bộ, đường biển và hàng không (IATA): danh mục hàng, thủ tục cấp phép, mẫu bản khai và mã ký hiệu.',
+  '/blog/van-chuyen-hang-hoa-nguy-hiem': 'Hàng nguy hiểm được chia thành 9 loại, từ chất nổ, khí ga, chất lỏng dễ cháy đến chất phóng xạ, chất ăn mòn. Bài viết nêu điều kiện vận chuyển và cách đóng gói an toàn.',
+  '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh': 'Mùa dịch Covid-19 năm 2021, xe tải của Phương Vy được Sở GTVT TP.HCM cấp nhận diện ưu tiên lưu thông trên luồng xanh. Bài viết giải thích xe luồng xanh là gì, cách giao nhận và thanh toán khi gửi hàng mùa dịch.',
 };
