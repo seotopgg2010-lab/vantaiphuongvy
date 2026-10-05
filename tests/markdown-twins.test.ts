@@ -3,7 +3,7 @@ import test from 'node:test';
 import { htmlToMarkdown } from '../scripts/legacy-markdown';
 import sitemap from '../src/app/sitemap';
 import { indexablePaths, latestPostDate } from '../src/lib/legacy-content';
-import { markdownPathFor, markdownRewriteTarget } from '../src/lib/markdown-paths';
+import { markdownPathFor, markdownRewriteTarget, prefersMarkdown } from '../src/lib/markdown-paths';
 import { renderLlmsTxt, renderTwin } from '../src/lib/markdown-twins';
 import { legacyMetadata, pageMetadata, canonicalUrl } from '../src/lib/seo';
 import { getLegacyByPath } from '../src/lib/legacy-content';
@@ -95,4 +95,17 @@ test('the /blog lastmod follows the newest post instead of the build time', () =
   const blog = sitemap().find((entry) => entry.url === `${getSiteUrl()}/blog/`);
   assert.ok(latestPostDate);
   assert.equal(new Date(blog!.lastModified!).toISOString(), new Date(latestPostDate).toISOString());
+});
+
+test('Accept negotiation picks markdown only when agents rank it at least as high as HTML', () => {
+  for (const accept of ['text/markdown', 'text/markdown, text/plain;q=0.8', 'text/markdown, text/html;q=0.9', 'text/html;q=0.5, text/markdown', 'text/markdown, */*']) {
+    assert.equal(prefersMarkdown(accept), true, accept);
+  }
+  for (const accept of [
+    null, '', '*/*', 'text/plain',
+    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'text/html, text/markdown;q=0.9', 'text/markdown;q=0', 'text/markdown;q=abc',
+  ]) {
+    assert.equal(prefersMarkdown(accept), false, String(accept));
+  }
 });

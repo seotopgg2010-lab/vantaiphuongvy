@@ -2,9 +2,11 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 import { resolveLocaleRoute } from '@/lib/locale-routing';
 import { resolveLegacyRequest } from '@/lib/legacy-redirects';
-import { markdownRewriteTarget } from '@/lib/markdown-paths';
+import { markdownPathFor, markdownRewriteTarget, prefersMarkdown } from '@/lib/markdown-paths';
 
 const isAdminPath = (pathname: string) => /^\/(?:vi\/)?admin(?:\/|$)/.test(pathname);
+/** Page URLs that have a markdown twin: no file extension; not internal, admin, locale-prefixed or the search page. */
+const isPagePath = (pathname: string) => !pathname.includes('.') && !/^\/(?:api|_next|md|vi|en|tim-kiem)(?:\/|$)/.test(pathname) && !isAdminPath(pathname);
 
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
@@ -21,6 +23,20 @@ export async function proxy(request: NextRequest) {
   // Markdown twins: "/x/y.md" (home "/index.md") is rendered by the static /md route.
   const twin = markdownRewriteTarget(pathname);
   if (twin) return NextResponse.rewrite(new URL(twin, request.url));
+
+  // Content negotiation: a page URL requested with "Accept: text/markdown" answers with its twin.
+  // Next overwrites Vary on App Router pages, so the HTML variant cannot announce "Vary: Accept";
+  // the markdown variant is therefore kept out of shared caches (private) so a CDN that ignores
+  // Vary can never hand it to a browser. The public "/x.md" URL stays the cacheable copy.
+  if ((request.method === 'GET' || request.method === 'HEAD') && isPagePath(pathname) && prefersMarkdown(request.headers.get('accept'))) {
+    const target = markdownRewriteTarget(markdownPathFor(pathname));
+    if (target) {
+      const negotiated = NextResponse.rewrite(new URL(target, request.url));
+      negotiated.headers.set('Vary', 'Accept');
+      negotiated.headers.set('Cache-Control', 'private, max-age=0, must-revalidate');
+      return negotiated;
+    }
+  }
 
   if (pathname.startsWith('/api') || pathname.startsWith('/_next') || pathname.includes('.')) {
     return NextResponse.next();
