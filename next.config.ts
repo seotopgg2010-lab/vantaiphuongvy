@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
   // WordPress permalink contract: every page URL ends with "/".
   trailingSlash: true,
   distDir: process.env.NEXT_DIST_DIR || '.next',
+  experimental: {
+    // The root layout sits under the dynamic [lang] segment, so unmatched URLs need
+    // app/global-not-found.tsx to get the branded 404 instead of Next's built-in page.
+    globalNotFound: true,
+  },
   async redirects() {
     return [
       // Rank Math sitemaps -> the single Next.js sitemap

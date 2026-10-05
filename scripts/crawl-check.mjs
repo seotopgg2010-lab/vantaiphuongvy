@@ -73,6 +73,13 @@ for (const [path, expected] of contract) {
   if (status !== expected) problems.push(`contract ${path}: expected ${expected}, got ${status}`);
 }
 
+// Unknown URLs answer 404 with the branded Vietnamese page (app/global-not-found.tsx), never Next's built-in one.
+for (const path of ['/khong-ton-tai/', '/en/', '/ads.txt', '/md/blog/']) {
+  const res = await fetch(base + path, { redirect: 'manual' });
+  const html = await res.text();
+  if (res.status !== 404 || !html.includes('Không tìm thấy trang') || !/<html lang="vi"/.test(html)) problems.push(`404 page ${path}: status ${res.status}, branded ${html.includes('Không tìm thấy trang')}`);
+}
+
 // Agents asking for markdown get the twin from the page URL, announced with Vary: Accept; browsers get HTML.
 for (const [accept, type] of [['text/markdown', 'text/markdown'], ['text/html,application/xhtml+xml,*/*;q=0.8', 'text/html']]) {
   const res = await fetch(`${base}/van-chuyen-hang-hoa/ha-noi/`, { headers: { accept }, redirect: 'manual' });

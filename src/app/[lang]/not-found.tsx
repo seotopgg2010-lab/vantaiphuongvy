@@ -11,7 +11,7 @@ const LINKS = [
   { href: '/lien-he/', label: 'Liên hệ & báo giá' },
 ];
 
-/** Rendered outside the (site) layout, so it brings its own chrome. */
+/** Rendered outside the (site) layout (and by app/global-not-found.tsx), so it brings its own chrome. */
 export default function NotFound() {
   return (
     <SiteChrome>

@@ -1,20 +1,11 @@
-import type { Metadata, Viewport } from 'next';
-import { Be_Vietnam_Pro } from 'next/font/google';
+import type { Metadata } from 'next';
 import '../globals.css';
-import { Analytics } from '@/components/shared/Analytics';
 import { locales } from './dictionaries';
 import { generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { getSiteUrl } from '@/lib/site';
 import { SITE_CONFIG } from '@/lib/constants';
 import { JsonLd } from '@/components/site/json-ld';
-
-// Be Vietnam Pro is designed specifically for Vietnamese diacritics.
-const beVietnam = Be_Vietnam_Pro({
-  variable: '--font-be-vietnam',
-  subsets: ['latin', 'vietnamese'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-});
+import { RootDocument, siteViewport } from '@/components/site/root-document';
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getSiteUrl();
@@ -35,12 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  themeColor: '#0a3d6b',
-};
+export const viewport = siteViewport;
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -55,13 +41,9 @@ export const dynamicParams = false;
 
 export default function LangLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className={`${beVietnam.variable} h-full antialiased`} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className="flex min-h-full flex-col">
-        <a href="#main-content" className="skip-nav">Bỏ qua đến nội dung chính</a>
-        <JsonLd data={[generateWebSiteJsonLd(), generateOrganizationJsonLd()]} />
-        {children}
-        <Analytics />
-      </body>
-    </html>
+    <RootDocument>
+      <JsonLd data={[generateWebSiteJsonLd(), generateOrganizationJsonLd()]} />
+      {children}
+    </RootDocument>
   );
 }
