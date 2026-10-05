@@ -12,7 +12,7 @@ Dùng trước khi merge thay đổi giao diện, nội dung hoặc route. Ảnh
 - [ ] **Motion:** 150–300 ms, transform/opacity; kiểm tra `prefers-reduced-motion`.
 - [ ] **Responsive:** chụp 1440×900, 768×1024, 375×812 (+ reflow 320 px): không tràn ngang, không cắt chữ, không chồng lớp; target chạm ≥ 24 px (CTA ≥ 44 px).
 - [ ] **Accessibility:** WCAG 2.2 AA tương phản, focus-visible, alt ảnh, landmark, đúng 1 `h1`.
-- [ ] **Performance:** ảnh hero `preload`, ảnh dưới màn lazy; không script bên thứ ba mới; ảnh thân bài có `width`/`height` và `srcset` WebP; đo A/B lab (cùng máy, xen kẽ, trung vị ≥ 5 lượt) khi đổi font, ảnh hoặc component client.
+- [ ] **Performance:** ảnh hero `preload`, ảnh dưới màn lazy; không script bên thứ ba mới ngoài GA4 + Google Ads của site cũ (`TRACKING`, chỉ trên domain chính, đo mọi khách như WordPress theo quyết định của chủ site); ảnh thân bài có `width`/`height` và `srcset` WebP; đo A/B lab (cùng máy, xen kẽ, trung vị ≥ 5 lượt) khi đổi font, ảnh hoặc component client.
 - [ ] **Vercel Hobby:** không thêm matcher proxy cho trang công khai (`tests/public-routing.test.ts`); không mở rộng `images.qualities`/`deviceSizes`/`imageSizes` khi layout không cần; region function `sin1` (`vercel.json`). Gói Hobby chỉ cho phép dùng phi thương mại — xem báo cáo round 3.
 - [ ] **Sau mỗi lần deploy đổi routing** (trên URL Vercel): `curl -H 'RSC: 1' <base>/?_rsc=x -L` và một trang tuyến trả `200 text/x-component`; `x-vercel-id` của trang HTML không có region function (không đi qua proxy); `/tim-kiem/?q=ha` chạy ở `sin1`; gửi thử form báo giá một lần; chạy lại discovery scan.
 

@@ -5,9 +5,9 @@
 ## Art direction
 
 - Hiện đại, chuyên nghiệp, đúng ngành vận tải Việt Nam: lưới gọn, nhiều khoảng trắng, một màu nhấn (vàng) cho hành động chính.
-- Đáng tin: ảnh thật của đội xe/bãi xe (`public/wp-content/uploads/**`), số liệu chỉ lấy từ nội dung đã xác minh (`src/lib/marketing.ts`), không "24/7", không rating tự gán.
+- Đáng tin: ảnh thật của đội xe/bãi xe (`public/wp-content/uploads/**`), số liệu chỉ lấy từ nội dung đã xác minh (`src/lib/marketing.ts`), không "24/7", không rating tự gán — sao đánh giá chỉ là số bình chọn của widget kk Star Ratings trên WordPress (`rating` trong corpus).
 - Motif lặp lại: nền "brand grid" (gradient xanh logo + lưới 44 px, `.bg-brand-grid`) cho hero, quy trình, CTA và social card; vạch vàng trước eyebrow.
-- Kể chuyện theo chương: dịch vụ → tuyến → vì sao chọn → quy trình → ưu đãi → báo chí/khách hàng → hỏi đáp → báo giá. Bằng chứng (báo chí) được nhắc sớm ngay dưới hero.
+- Kể chuyện theo chương: dịch vụ → tuyến → về Phương Vy & vì sao chọn → quy trình → ưu đãi → báo chí/khách hàng → hỏi đáp → báo giá. Bằng chứng (báo chí) được nhắc sớm ngay dưới hero.
 
 ## Tokens (nguồn: `src/app/globals.css`)
 
@@ -54,6 +54,12 @@
 - Bài viết: dưới H1 là lead (`HERO_LEADS`, 1–2 câu: người đọc nhận được gì, dữ kiện lấy từ chính bài); dòng meta ghi "Tác giả …"; cuối bài có hộp "Về tác giả" (tên + tiểu sử lấy từ hộp tác giả WordPress, không thêm liên kết mạng xã hội cá nhân). Tiêu đề VIẾT HOA hiển thị dạng câu cả trong thẻ bài viết.
 - Ảnh: ảnh thân bài có `width`/`height` thật và `srcset` WebP 480/768/1080 px sinh lúc build (`/_img/…`, cache immutable), `src` giữ URL `/wp-content/uploads/**`. Ảnh qua `next/image` dùng `UploadImage` để `src` vẫn là URL upload (crawler không tốn lượt tối ưu ảnh).
 - Chip dữ kiện viết bằng chữ: "Thời gian khoảng 36h" (không dùng "~", ở cỡ chữ chip dễ đọc thành "-36h").
+- Những gì trang WordPress đang cho Google thấy được giữ lại khi chuyển sang (đối chiếu từng URL, `tests/wordpress-parity.test.ts`):
+  - **Sao đánh giá** (`RatingSummary`) nằm ngay dưới H1 (bài viết: cuối dòng meta), đúng vị trí widget cũ, kèm JSON-LD `CreativeWorkSeries` cùng tên và số. Chỉ trang có bình chọn mới hiện; không cho bình chọn mới vì widget cũ cũng chỉ đọc.
+  - **Bình luận cũ** (`LegacyComments`): chữ thuần, giữ anchor `#comment-<id>`, luồng mới nhất trước, trả lời theo thời gian; 12 luồng đầu mở, phần còn lại trong `<details>`. Không có form bình luận; câu hỏi mới đi qua hotline hoặc form báo giá. Số điện thoại và email của người đọc được ẩn ngay khi chụp dữ liệu (`src/lib/contact-mask.ts`), vì repo công khai. Bình luận là nội dung người dùng nên không đưa vào bản `.md` hay `llms-full.txt`.
+  - **Danh sách kho hàng** (`src/lib/warehouses.ts`, nguyên văn footer WordPress): đầy đủ ở footer (không icon từng dòng, cho nhẹ trang) và trang Liên hệ; trang tuyến/thuê xe của tỉnh có kho hiện dải "Kho hàng Phương Vy tại …" ngay dưới hero.
+  - **Chữ trang chủ** (`ABOUT`, `SERVICES_LEAD`, `COMMITMENTS`): giữ lời văn WordPress, chỉ sửa chính tả và bỏ các so sánh "nhất" không chứng minh được.
+- Không có banner cookie: GA4 + Google Ads (ID của site cũ, `TRACKING`) đo mọi khách trên domain chính như WordPress, theo quyết định của chủ site ngày 06/10/2026. Localhost, preview và bản vercel.app không gửi dữ liệu.
 
 ## Voice & tone
 
