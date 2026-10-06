@@ -1,6 +1,13 @@
 # Rà soát title và description: trang dịch vụ, tuyến và bài viết (2026-10-06)
 
-**Trạng thái:** Ngày 2026-10-06, chủ site duyệt áp dụng mục 1, 2 và 3 trước khi chuyển domain. Riêng title, chủ site chọn sửa ngay thay vì đợi 4–8 tuần như khuyến nghị ban đầu. Đã áp dụng 28 title và 16 description cho 40 trang qua `src/content/seo-overrides.ts`. Các việc ở mục 4 vẫn chờ chủ site.
+**Trạng thái:** Ngày 2026-10-06, chủ site duyệt áp dụng mục 1, 2 và 3 trước khi chuyển domain. Riêng title, chủ site chọn sửa ngay thay vì đợi 4–8 tuần như khuyến nghị ban đầu. Các thay đổi nằm trong `src/content/seo-overrides.ts`.
+
+Sau đó, chủ site trả lời các câu hỏi ở mục 4:
+- **Ưu đãi:** chỉ còn "giảm 7% cho khách hàng mới". 11 description có mức giảm giá nay đều ghi mức này.
+- **"#1", "số 1", "nhất":** đã bỏ khỏi mọi title, description và H1, trừ trang chủ. Riêng trang máy móc thiết bị, H1 cũng đã bỏ "#1 VIỆT NAM".
+- **Bài lệnh cấm xe tải "04/2023":** đã viết lại theo quy định hiện hành (QCVN 41:2024, Nghị định 168/2024 sửa đổi bởi Nghị định 238/2026, Nghị định 241/2026, quyết định giờ cấm của từng thành phố), đổi title, description và H1. Nội dung bài nằm trong `src/content/articles/`. Nguồn: `researcher-261006-0828-truck-ban-national-law.md` và `researcher-261006-0828-truck-ban-city-rules.md`.
+
+Đến lúc này có 58 trang dùng bản ghi đè. Việc còn chờ chủ site: các cặp trang trùng chủ đề, description tuyển dụng ghi "2026", và các khẳng định, ưu đãi cũ vẫn còn trong thân bài nhiều trang.
 
 Phạm vi: 93 URL gồm 1 hub tuyến, 65 trang tuyến, 6 trang dịch vụ theo loại hàng, 4 trang thuê xe tải, 9 bài viết, 4 trang thông tin (giới thiệu, liên hệ, FAQ, tuyển dụng) và 4 trang chính sách. Trang chủ giữ nguyên title và description Rank Math theo quyết định của chủ site. Chủ site cũng xác nhận ưu đãi "Kỷ niệm 10 năm — giảm 7% cước" vẫn còn hiệu lực.
 
