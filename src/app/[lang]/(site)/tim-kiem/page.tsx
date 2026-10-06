@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, Search } from 'lucide-react';
 import { Breadcrumbs } from '@/components/site/breadcrumbs';
-import { legacyItems, RETIRED_PATHS } from '@/lib/legacy-content';
+import { routableItems } from '@/lib/legacy-content';
 import { withSlash } from '@/lib/navigation';
 import { displayTitle } from '@/lib/legacy-render';
-import { matchesSearch } from '@/lib/search';
+import { searchPages } from '@/lib/search';
 import { canonicalUrl } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -19,14 +19,7 @@ const SUGGESTIONS = ['Hà Nội', 'Đà Nẵng', 'Xe máy', 'Thuê xe tải', 'M
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
   const search = await searchParams;
   const query = (typeof search.q === 'string' ? search.q : '').trim().slice(0, 120);
-  const candidates = legacyItems.filter((item) => item.path !== '/' && !RETIRED_PATHS.has(item.path));
-  // Rank label/title hits above body-only hits.
-  const results = query
-    ? [
-        ...candidates.filter((item) => matchesSearch(query, item.label, item.title)),
-        ...candidates.filter((item) => !matchesSearch(query, item.label, item.title) && matchesSearch(query, item.summary, item.seo.description)),
-      ].slice(0, 40)
-    : [];
+  const results = query ? searchPages(routableItems, query) : [];
 
   return (
     <>
