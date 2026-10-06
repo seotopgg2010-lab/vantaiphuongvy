@@ -11,6 +11,10 @@
 export type SeoOverride = { title?: string; description?: string; heading?: string };
 
 export const SEO_OVERRIDES: Record<string, SeoOverride> = {
+  // The home page keeps its Rank Math title; its description drops "lớn mạnh nhất" and "top đầu".
+  '/': {
+    description: 'Vận Tải Phương Vy là công ty vận tải hàng hóa tại Sài Gòn và Hà Nội, chuyên vận chuyển hàng hóa Bắc Nam, chành xe đi các tỉnh và cho thuê xe tải.',
+  },
   '/blog/bien-bao-cam-xe-tai-va-muc-phat': {
     title: 'Giờ cấm xe tải 2026, biển báo cấm tải và mức phạt | Phương Vy',
     description: 'Giờ cấm xe tải ở TP.HCM, Hà Nội, Đà Nẵng, Nha Trang; biển cấm tải theo QCVN 41:2024 và mức phạt theo Nghị định 168/2024 sửa đổi năm 2026.',
