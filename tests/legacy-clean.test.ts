@@ -126,6 +126,11 @@ test('approved title and description rewrites name real pages, change something 
     if (override.description) {
       assert.notEqual(override.description, live.description, `${path}: description is unchanged`);
       assert.ok(override.description.length <= 160, `${path}: description too long`);
+      assert.doesNotMatch(override.description, /#1|số 1|nhất/iu, path);
+    }
+    if (override.heading) {
+      assert.equal(publicItems.find((item) => item.path === path)?.title, override.heading, `${path}: heading not applied`);
+      assert.doesNotMatch(override.heading, /#1|số 1|nhất/iu, path);
     }
   }
 });

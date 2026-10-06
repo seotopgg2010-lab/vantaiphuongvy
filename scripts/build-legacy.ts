@@ -21,6 +21,7 @@ import { Element as DomElement, Text as DomText, type AnyNode, type Element, typ
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import { CONTEXTUAL_LINKS, CONTEXTUAL_LINK_LIMITS, ROUTE_PHRASE_DIRECTIONS, ROUTE_PHRASE_VERBS } from '../src/content/contextual-links';
+import { ARTICLE_UPDATES } from '../src/content/article-updates';
 import { SEO_OVERRIDES } from '../src/content/seo-overrides';
 import type { CommentThread, FaqEntry, LegacyAuthor, LegacyComment, LegacyEntry, LegacyRating, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
 import { displayTitle } from '../src/lib/legacy-render';
@@ -520,13 +521,16 @@ function contextualLinkLimit(path: string, template: LegacyTemplate): number {
 
 function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
   const path = pathOf(item.link);
-  const title = decodeEntities(item.title.rendered).replace(/\s+/g, ' ').trim();
+  const override = SEO_OVERRIDES[path] ?? {};
+  const title = override.heading ?? decodeEntities(item.title.rendered).replace(/\s+/g, ' ').trim();
   const template = templateOf(path, kind);
-  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words, author, rating } = transform(item.content.rendered, title, path, contextualLinkLimit(path, template));
+  const update = ARTICLE_UPDATES[path];
+  const original = transform(item.content.rendered, title, path, contextualLinkLimit(path, template));
+  const { html, toc, faq, paragraphs, firstImage, firstImageAlt, words } = update ? transform(readFileSync(join(root, update.file), 'utf8'), title, path, contextualLinkLimit(path, template)) : original;
+  const { author, rating } = original;
   const comments = commentThreads(item.id);
   const seo = seoMeta[path] ?? {};
   const seoDescription = seo.description ? decodeEntities(seo.description) : undefined;
-  const override = SEO_OVERRIDES[path] ?? {};
   const summarySource = paragraphs[0] ?? title;
   const summary = summarySource.length > 200 ? `${summarySource.slice(0, 197).replace(/\s+\S*$/, '')}…` : summarySource;
   const label = navLabel.get(path) ?? (title.replace(/^(Vận chuyển gửi hàng hóa đi|Vận chuyển gửi hàng hóa|Vận chuyển hàng hóa đi|Vận chuyển hàng hóa|Chành xe gửi hàng đi|Chành xe|Cho thuê xe tải|Thuê xe tải)\s*/i, '').trim() || title);
@@ -537,7 +541,7 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
     html, toc, faq, summary,
     image, imageAlt: image === firstImage ? firstImageAlt || title : title,
     facts: extractFacts([seoDescription ?? '']),
-    date: wpDate(item.date), modified: wpDate(item.modified),
+    date: wpDate(item.date), modified: wpDate(update?.modified ?? item.modified),
     readingMinutes: Math.max(1, Math.round(words / 220)),
     // Route facts keep coming from the Rank Math description; only the served title and description change.
     seo: { title: override.title ?? (seo.title ? decodeEntities(seo.title) : undefined), description: override.description ?? seoDescription, robots: seo.robots },
