@@ -156,6 +156,108 @@ const LINK_TARGETS: LinkTarget[] = [
   }),
 ];
 /** Links live in paragraphs and list items (and their inline text); never in headings, tables, callouts or figures. */
+/**
+ * Owner-approved sentence edits (src/content/claim-edits.json) that drop "nhất" / "số 1" / "hàng đầu"
+ * claims, unproven comparisons with competitors and retired discounts (the running offer is 7% off for
+ * new customers). Each edit names the sentence it belongs to and applies inside the run of text holding it.
+ */
+type ClaimEdit = { sentence: string; changes: Array<[string, string]> };
+const CLAIM_EDITS = read<ClaimEdit[]>('src/content/claim-edits.json');
+const appliedClaimEdits = new Set<ClaimEdit>();
+const TEXT_BLOCKS = new Set(['p', 'li', 'td', 'th', 'h2', 'h3', 'h4', 'figcaption', 'blockquote', 'ul', 'ol', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'div', 'figure', 'aside', 'hr', 'section']);
+const normText = (value: string) => value.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+
+function collectText(node: AnyNode, out: Text[]) {
+  if (node.type === 'text') out.push(node as Text);
+  else if ('children' in node) for (const child of (node as Element).children) collectText(child, out);
+}
+
+/** Runs of inline content (text and inline elements) between block boundaries: the unit a sentence lives in. */
+function inlineRuns($: cheerio.CheerioAPI, parent: AnyNode, runs: AnyNode[][] = []): AnyNode[][] {
+  let run: AnyNode[] = [];
+  for (const node of $(parent).contents().toArray()) {
+    if (node.type === 'tag' && TEXT_BLOCKS.has((node as Element).tagName)) {
+      if (run.length) runs.push(run);
+      run = [];
+      inlineRuns($, node, runs);
+    } else run.push(node);
+  }
+  if (run.length) runs.push(run);
+  return runs;
+}
+
+const spacedPattern = (text: string, flags = '') => new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '\\s+'), flags);
+
+/**
+ * Replaces the first match at or after `from` in the run's text. A match inside one text node keeps
+ * its markup; one that spans nodes puts the new text in the first node and cuts the rest of the match.
+ */
+function replaceInRun(texts: Text[], find: string, replace: string, from: number): boolean {
+  const pattern = spacedPattern(find, 'g');
+  pattern.lastIndex = from;
+  const match = pattern.exec(texts.map((text) => text.data).join(''));
+  if (!match) return false;
+  const start = match.index;
+  const end = start + match[0].length;
+  let offset = 0;
+  let placed = false;
+  for (const text of texts) {
+    const from = offset;
+    offset += text.data.length;
+    if (offset <= start || from >= end) continue;
+    text.data = text.data.slice(0, Math.max(start, from) - from) + (placed ? '' : replace) + text.data.slice(Math.min(end, offset) - from);
+    placed = true;
+  }
+  return true;
+}
+
+function applyClaimEdits($: cheerio.CheerioAPI) {
+  const all: Text[] = [];
+  for (const node of $.root().contents().toArray()) collectText(node, all);
+  for (const text of all) text.data = text.data.normalize('NFC');
+  const runs = inlineRuns($, $.root().get(0)!).map((run) => {
+    const texts: Text[] = [];
+    run.forEach((node) => collectText(node, texts));
+    return texts;
+  });
+  const runText = (texts: Text[]) => normText(texts.map((text) => text.data).join(''));
+  const alts = $('img[alt]').toArray().map((img) => ($(img).attr('alt') || '').normalize('NFC'));
+  const pageText = [...runs.map(runText), ...alts].join('\n');
+  // Longest sentence first: a shorter edited sentence can sit inside a longer one, whose edit already covers it.
+  const edits = CLAIM_EDITS.filter((edit) => pageText.includes(edit.sentence)).sort((a, b) => b.sentence.length - a.sentence.length);
+  if (!edits.length) return;
+  const emptied = new Set<AnyNode>();
+  for (const texts of runs) {
+    const original = runText(texts);
+    for (const edit of edits) {
+      if (!original.includes(edit.sentence)) continue;
+      appliedClaimEdits.add(edit);
+      // Edit inside this sentence only: the same phrase may also sit in another sentence of the run.
+      const at = spacedPattern(edit.sentence).exec(texts.map((text) => text.data).join(''));
+      if (!at) continue;
+      const before = texts.map((text) => text.data);
+      for (const [find, replace] of edit.changes) {
+        if (!replaceInRun(texts, find, replace, at.index)) throw new Error(`claim edit "${find}" not found in: ${edit.sentence}`);
+      }
+      texts.forEach((text, index) => { if (text.data !== before[index] && !text.data.trim() && text.parent) emptied.add(text.parent); });
+    }
+  }
+  $('img[alt]').each((_, img) => {
+    let alt = ($(img).attr('alt') || '').normalize('NFC');
+    for (const edit of edits) {
+      if (!alt.includes(edit.sentence)) continue;
+      for (const [find, replace] of edit.changes) alt = alt.replace(find, () => replace);
+      appliedClaimEdits.add(edit);
+    }
+    $(img).attr('alt', alt);
+  });
+  // A block left with no text by an edit (a stale "(MỚI NHẤT 2019)" label) goes with it.
+  for (const node of emptied) {
+    const block = $(node).closest('p, li, h2, h3, h4');
+    if (block.length && !normText(block.text()) && !block.find('img').length) block.remove();
+  }
+}
+
 const LINKABLE_TAGS = new Set(['p', 'ul', 'ol', 'li', 'strong', 'b', 'em', 'i', 'u']);
 
 /**
@@ -414,6 +516,9 @@ function transform(html: string, title: string, path: string, linkLimit: number)
     open.push(level);
   });
 
+  // 11b. owner-approved edits: no superlative claims, no unproven comparisons, one current offer
+  applyClaimEdits($);
+
   // 12. contextual links to related services, routes and guides (first mention only, capped)
   if (linkLimit > 0) addContextualLinks($, path, linkLimit);
 
@@ -553,6 +658,8 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
 
 async function main() {
   const entries = [...pages.map((p) => build(p, 'page')), ...posts.map((p) => build(p, 'post'))].sort((a, b) => a.path.localeCompare(b.path));
+  const unappliedClaimEdits = CLAIM_EDITS.filter((edit) => !appliedClaimEdits.has(edit));
+  if (unappliedClaimEdits.length) throw new Error(`claim edits matching no page text:\n${unappliedClaimEdits.map((edit) => `  ${edit.sentence}`).join('\n')}`);
 
   // Article images: intrinsic size + responsive WebP srcset (static files in public/_img).
   const started = Date.now();

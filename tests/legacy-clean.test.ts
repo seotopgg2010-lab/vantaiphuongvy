@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import CLAIM_EDITS from '../src/content/claim-edits.json';
 import { SEO_OVERRIDES } from '../src/content/seo-overrides';
 import seoMeta from '../src/legacy-content/seo-meta.json';
 import { legacyItems, RETIRED_PATHS } from '../src/lib/legacy-content';
@@ -115,7 +116,6 @@ test('approved title and description rewrites name real pages, change something 
   const shouting = /\p{Lu}{2,}\s+\p{Lu}{2,}/u;
   for (const [path, override] of Object.entries(SEO_OVERRIDES)) {
     assert.ok(paths.has(path), `${path} is not a public page`);
-    assert.notEqual(path, '/', 'the home page keeps its Rank Math title and description');
     const live = META[path] ?? {};
     if (override.title) {
       assert.notEqual(override.title, live.title, `${path}: title is unchanged`);
@@ -135,14 +135,20 @@ test('approved title and description rewrites name real pages, change something 
   }
 });
 
-test('no page but the home page claims "#1", "số 1" or "nhất" in its title, description or heading', () => {
+test('no page claims "#1", "số 1" or "nhất" in its title, description or heading', () => {
   const claim = /#1|số 1|nhất/iu;
-  const offenders = publicItems.filter((item) => item.path !== '/').flatMap((item) => {
+  const offenders = publicItems.flatMap((item) => {
     const metadata = legacyMetadata(item);
     const title = typeof metadata.title === 'object' && metadata.title && 'absolute' in metadata.title ? metadata.title.absolute : metadata.title;
     return [title, metadata.description, item.title].filter((text) => claim.test(String(text ?? ''))).map((text) => `${item.path}: ${text}`);
   });
   assert.deepEqual(offenders, []);
+});
+
+test('every approved claim edit is applied: no edited sentence is left as WordPress wrote it', () => {
+  const pageText = publicItems.map((item) => item.html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').normalize('NFC').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ')).join('\n');
+  const left = CLAIM_EDITS.filter((edit) => edit.changes.some(([find, replace]) => find !== replace && !replace.includes(find)) && pageText.includes(edit.sentence)).map((edit) => edit.sentence);
+  assert.deepEqual(left, []);
 });
 
 test('lifting the intro into the hero never drops body content', () => {
