@@ -35,7 +35,8 @@ Rà soát tìm ra 9 điểm cần sửa. Đã sửa cả 9 trên nhánh `feat/ux
 - Ảnh chụp trang chủ trước và sau khi sửa ở 1440×900, 768×1024, 375×812 (thư mục tạm của phiên).
 - Lỗi RSC chỉ tái hiện được trên Vercel; trên bản local (`next start`) trang chủ trả RSC đúng. Sau khi push cần kiểm lại trên Vercel rằng không còn request `/?_rsc=` lỗi.
 
-## Câu hỏi còn mở
+## Quyết định của chủ site (2026-10-06)
 
-- Title "Công Ty TNHH Dịch Vụ Vận Tải Phương Vy" và meta description ("lớn mạnh nhất… top đầu") của trang chủ là bản Rank Math đang xếp hạng, nên giữ nguyên khi chuyển domain. Nên cân nhắc thêm từ khóa dịch vụ vào title sau 4–8 tuần, khi thứ hạng đã ổn định.
-- Ưu đãi "Kỷ niệm 10 năm thành lập — giảm 7% cước" lấy từ WordPress. Chủ site cần xác nhận ưu đãi còn hiệu lực.
+- Giữ nguyên title "Công Ty TNHH Dịch Vụ Vận Tải Phương Vy" và meta description Rank Math của trang chủ.
+- Ưu đãi "Kỷ niệm 10 năm thành lập — giảm 7% cước" vẫn còn hiệu lực.
+- Title và description của các trang dịch vụ và bài viết được rà soát riêng trong `title-description-audit-261006-0810-services-posts.md`.
