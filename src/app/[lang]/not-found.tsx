@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Home, Phone } from 'lucide-react';
 import { SiteChrome } from '@/components/site/site-chrome';
+import { HomeLink } from '@/components/site/home-link';
 import { SITE_CONFIG } from '@/lib/constants';
 import { toTelHref } from '@/lib/site';
 
@@ -29,7 +30,7 @@ export default function NotFound() {
         <h1 className="h-section mt-4">Không tìm thấy trang</h1>
         <p className="lead mt-3 max-w-xl">Trang bạn tìm có thể đã được đổi địa chỉ. Hãy thử các mục dưới đây hoặc gọi hotline để được hỗ trợ.</p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link href="/" className="btn btn-primary"><Home className="h-4 w-4" aria-hidden="true" />Về trang chủ</Link>
+          <HomeLink className="btn btn-primary"><Home className="h-4 w-4" aria-hidden="true" />Về trang chủ</HomeLink>
           <a href={toTelHref(SITE_CONFIG.hotline)} data-track="click_call" className="btn btn-outline"><Phone className="h-4 w-4" aria-hidden="true" />{SITE_CONFIG.hotline}</a>
         </div>
         <ul className="mt-10 grid w-full max-w-2xl gap-3 sm:grid-cols-2">

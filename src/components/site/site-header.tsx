@@ -8,6 +8,7 @@ import {
   ArrowRight, Bike, ChevronDown, Cog, Droplets, FileText, Globe2, HelpCircle, MapPin, Menu, MessageCircle,
   Phone, Plane, Search, ShieldCheck, Ship, Truck, Weight, X, type LucideIcon,
 } from 'lucide-react';
+import { HomeLink } from '@/components/site/home-link';
 import { UploadImage } from '@/components/site/upload-image';
 import type { NavLink, SiteNavigation } from '@/lib/navigation';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
@@ -90,9 +91,9 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
   return (
     <header ref={headerRef} onMouseLeave={closeSoon} onMouseEnter={keepOpen} className={`sticky top-0 z-50 border-b bg-white/95 backdrop-blur-md transition-shadow duration-300 ${scrolled || openMenu ? 'border-line shadow-[0_8px_24px_-14px_rgb(10_61_107/0.35)]' : 'border-transparent'}`}>
       <div className={`container-x flex items-center gap-4 transition-[height] duration-300 ${scrolled ? 'h-16' : 'h-16 lg:h-[4.75rem]'}`}>
-        <Link href="/" className="shrink-0" aria-label="Vận tải Phương Vy — Trang chủ">
+        <HomeLink className="shrink-0" aria-label="Vận tải Phương Vy — Trang chủ">
           <UploadImage src={SITE_CONFIG.logo} alt="Vận tải Phương Vy" width={1705} height={498} loading="eager" sizes="170px" className={`w-auto transition-[height] duration-300 ${scrolled ? 'h-9 lg:h-10' : 'h-9 lg:h-12'}`} />
-        </Link>
+        </HomeLink>
 
         <nav aria-label="Điều hướng chính" className="ml-4 hidden h-full items-stretch lg:flex xl:ml-8">
           <button type="button" data-active={routesActive || openMenu === 'routes'} className={navItem} aria-expanded={openMenu === 'routes'} aria-controls={`${menuId}-routes`} onClick={() => setOpenMenu(openMenu === 'routes' ? null : 'routes')} onMouseEnter={() => openNow('routes')}>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { HomeLink } from '@/components/site/home-link';
 
 export type Crumb = { name: string; href?: string };
 
@@ -12,7 +13,7 @@ export function Breadcrumbs({ items, tone = 'dark' }: { items: Crumb[]; tone?: '
         {items.map((item, index) => (
           <li key={`${item.name}-${index}`} className="flex items-center gap-1.5">
             {index > 0 && <ChevronRight className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />}
-            {item.href ? <Link href={item.href} className="transition hover:underline">{item.name}</Link> : <span aria-current="page" className={`font-medium ${strong}`}>{item.name}</span>}
+            {item.href === '/' ? <HomeLink className="transition hover:underline">{item.name}</HomeLink> : item.href ? <Link href={item.href} className="transition hover:underline">{item.name}</Link> : <span aria-current="page" className={`font-medium ${strong}`}>{item.name}</span>}
           </li>
         ))}
       </ol>

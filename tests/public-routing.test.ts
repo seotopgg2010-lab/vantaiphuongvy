@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
 import { indexablePaths } from '../src/lib/legacy-content';
 import { markdownPathFor } from '../src/lib/markdown-paths';
@@ -79,4 +81,15 @@ test('the proxy matcher is an allowlist that ordinary page views never hit', () 
     if (entry.source === '/') assert.ok(has.every((item) => item.type === 'query' && ['p', 'page_id', 'attachment_id', 's'].includes(item.key)), entry.source);
     else assert.deepEqual(has, [{ type: 'header', key: 'accept', value: '.*text/markdown.*' }]);
   }
+});
+
+test('links to the home page are plain anchors, never next/link', () => {
+  // "/" is a static rewrite to the [lang] segment; Vercel answers its RSC prefetch and navigation
+  // requests with 404 or HTML, so next/link to "/" fires failing requests on every page view.
+  const files = (dir: string): string[] => readdirSync(dir).flatMap((name) => {
+    const full = join(dir, name);
+    return statSync(full).isDirectory() ? files(full) : /\.tsx$/.test(name) ? [full] : [];
+  });
+  const offenders = files(join(process.cwd(), 'src')).filter((file) => /<Link\s[^>]*href=(?:"\/"|\{['"]\/['"]\})/.test(readFileSync(file, 'utf8')));
+  assert.deepEqual(offenders, []);
 });
