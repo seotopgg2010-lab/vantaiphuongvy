@@ -31,6 +31,14 @@ export function getLegacyByPath(path: string): LegacyEntry | undefined {
   return byPath.get(normalizeLegacyPath(path));
 }
 
+/**
+ * Home page FAQ (page and markdown twin): the customer questions of the shipping hub (transit time,
+ * price, cargo, door-to-door). The /faq page holds encyclopedic definitions ("Vận tải là gì?").
+ */
+export function homeFaq() {
+  return getLegacyByPath('/van-chuyen-hang-hoa')?.faq ?? [];
+}
+
 /** Entries rendered by the catch-all route (everything except home & retired). */
 export const routableItems = legacyItems.filter((item) => item.path !== '/' && !RETIRED_PATHS.has(item.path));
 

@@ -65,3 +65,11 @@ export function displayTitle(title: string): string {
 export function ratingScore(rating: LegacyRating): string {
   return `${rating.score.toLocaleString('vi-VN', { maximumFractionDigits: 1 })}/${rating.best}`;
 }
+
+/**
+ * Headings never wrap inside the brand ("Vận tải Phương Vy", "Phương Vy") or the "TNHH Dịch vụ"
+ * of the company name: those spaces become non-breaking, the words stay the same.
+ */
+export function noBreakBrand(text: string): string {
+  return text.replace(/TNHH Dịch vụ|Vận tải Phương Vy|Phương Vy/g, (match) => match.replace(/ /g, ' '));
+}

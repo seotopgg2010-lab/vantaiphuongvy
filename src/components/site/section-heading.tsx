@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { noBreakBrand } from '@/lib/legacy-render';
 
 /** Consistent section header: eyebrow + title + optional lead + optional "see all" link. */
 export function SectionHeading({
@@ -24,7 +25,7 @@ export function SectionHeading({
     <div className={`flex flex-col gap-4 ${centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'}`}>
       <div className={centered ? 'max-w-2xl' : 'max-w-3xl'}>
         {eyebrow && <p className={`eyebrow ${tone === 'light' ? 'eyebrow-light' : ''}`}>{eyebrow}</p>}
-        <h2 id={id} className={`h-section mt-2.5 ${tone === 'light' ? 'text-white' : ''}`}>{title}</h2>
+        <h2 id={id} className={`h-section mt-2.5 ${tone === 'light' ? 'text-white' : ''}`}>{noBreakBrand(title)}</h2>
         {lead && <p className={`lead mt-3 ${tone === 'light' ? 'text-on-brand' : ''}`}>{lead}</p>}
       </div>
       {action && (

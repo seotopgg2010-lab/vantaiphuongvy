@@ -1,7 +1,7 @@
 import bodies from '@/legacy-content/legacy-markdown.json';
 import { SITE_CONFIG, ZALO_URL } from './constants';
 import { WAREHOUSES, type Warehouse, warehouseArea, warehousesFor } from './warehouses';
-import { cargoItems, getLegacyByPath, indexablePaths, latestPostDate, legacyPosts, routesByRegion, truckItems } from './legacy-content';
+import { cargoItems, getLegacyByPath, homeFaq, indexablePaths, latestPostDate, legacyPosts, routesByRegion, truckItems } from './legacy-content';
 import { displayTitle, ratingScore } from './legacy-render';
 import type { LegacyEntry, LegacyRating } from './legacy-types';
 import { ABOUT, BLOG_PAGE, COMMITMENTS, HERO, HERO_LEADS, OFFER, PRESS, PROCESS_STEPS, SERVICES, SERVICES_LEAD, STATS, TESTIMONIALS } from './marketing';
@@ -72,7 +72,7 @@ const pageLink = (item: LegacyEntry, label = item.label) => `[${label}](${canoni
 
 function homeMarkdown() {
   const home = getLegacyByPath('/');
-  const faq = (getLegacyByPath('/faq')?.faq || []).slice(0, 6);
+  const faq = homeFaq();
   return [
     header({ title: `${SITE_CONFIG.name} — ${HERO.title}`, description: home?.seo.description || SITE_CONFIG.description, path: '/', updated: home?.modified }),
     `*${SITE_CONFIG.slogan}*`,

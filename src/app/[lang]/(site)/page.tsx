@@ -8,7 +8,8 @@ import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
-import { getLegacyByPath, legacyPosts } from '@/lib/legacy-content';
+import { getLegacyByPath, homeFaq, legacyPosts } from '@/lib/legacy-content';
+import { noBreakBrand } from '@/lib/legacy-render';
 import { ABOUT, HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES, SERVICES_LEAD } from '@/lib/marketing';
 import { getExplorerRegions } from '@/lib/navigation';
 import { legacyMetadata } from '@/lib/seo';
@@ -21,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function HomePage() {
-  const faq = (getLegacyByPath('/faq')?.faq || []).slice(0, 6);
+  const faq = homeFaq();
   const posts = legacyPosts.slice(0, 3);
   const regions = getExplorerRegions();
   const routeCount = regions.reduce((total, region) => total + region.items.length, 0);
@@ -105,7 +106,7 @@ export default function HomePage() {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-12">
           <div>
             <p className="eyebrow">Về Phương Vy</p>
-            <h2 id="about" className="h-section mt-2.5">{SITE_CONFIG.companyName}</h2>
+            <h2 id="about" className="h-section mt-2.5">{noBreakBrand(SITE_CONFIG.companyName)}</h2>
             <div className="mt-4 space-y-4 text-[1.0625rem] leading-8 text-muted">
               {ABOUT.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>

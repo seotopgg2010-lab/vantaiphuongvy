@@ -80,9 +80,12 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
       <div hidden={resultCount === 0} className="mt-8 flex flex-col gap-10">
         {groups.map((group) => (
           <section key={group.id} aria-label={group.label} hidden={!group.shown}>
-            <h3 className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wider text-subtle">
-              {group.label}<span className="h-px flex-1 bg-line" /><span className="font-medium normal-case tracking-normal">{group.count} tuyến</span>
-            </h3>
+            {/* The heading holds only the region name; the route count sits beside it, not inside it. */}
+            <div className="flex items-center gap-3 text-sm text-subtle">
+              <h3 className="font-semibold uppercase tracking-wider">{group.label}</h3>
+              <span className="h-px flex-1 bg-line" aria-hidden="true" />
+              <span className="font-medium">{group.count} tuyến</span>
+            </div>
             <ul className={`mt-4 grid grid-cols-2 gap-2 sm:gap-3 ${compact ? 'lg:grid-cols-4' : 'lg:grid-cols-3 xl:grid-cols-4'}`}>
               {group.items.map((item) => (
                 <li key={item.href} hidden={!item.match}>
@@ -93,7 +96,8 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
                     <span className="min-w-0 flex-1">
                       {/* Wraps to 2 lines so long names ("Điện Biên – Lai Châu") stay readable in the 2-col mobile grid. */}
                       <span className="line-clamp-2 text-sm font-semibold text-ink wrap-break-word sm:text-base">{item.label}</span>
-                      {(item.transit || item.priceFrom) && (
+                      {/* Only a few routes have these facts; the compact home grid stays uniform without them. */}
+                      {!compact && (item.transit || item.priceFrom) && (
                         <span className="block truncate text-xs text-muted">
                           {[item.transit && `${item.transit}`, item.priceFrom && `từ ${item.priceFrom}`].filter(Boolean).join(' · ')}
                         </span>

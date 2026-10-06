@@ -425,7 +425,12 @@ function transform(html: string, title: string, path: string, linkLimit: number)
     if (!question.endsWith('?') || question.length < 10) return;
     const parts: string[] = [];
     let next = $(el).next();
-    while (next.length && !/^h[2-4]$/.test((next.get(0) as Element).tagName)) { parts.push(textOf($, next.get(0)!)); next = next.next(); }
+    while (next.length && !/^h[2-4]$/.test((next.get(0) as Element).tagName)) {
+      // An ALL-CAPS slogan line ("VẬN TẢI PHƯƠNG VY – TIÊN PHONG CÙNG KHÁCH HÀNG") is not part of the answer.
+      const part = textOf($, next.get(0)!);
+      if (!(/\p{Lu}{3}/u.test(part) && part === part.toLocaleUpperCase('vi'))) parts.push(part);
+      next = next.next();
+    }
     const answer = parts.join(' ').replace(/\s+/g, ' ').trim();
     if (answer.length >= 20) faq.push({ question, answer: answer.length > 700 ? `${answer.slice(0, 697).replace(/\s+\S*$/, '')}…` : answer });
   });

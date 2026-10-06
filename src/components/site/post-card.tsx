@@ -25,10 +25,11 @@ export function formatDateVi(date?: string) {
 export function PostCard({ post, priority = false }: { post: PostSummary; priority?: boolean }) {
   return (
     <article className="card card-hover group flex h-full flex-col overflow-hidden">
+      {/* Hidden from assistive tech (the title link below is the accessible one); for crawlers the image alt is this link's anchor text. */}
       <Link href={withSlash(post.path)} className="relative block aspect-[16/9] overflow-hidden bg-surface" tabIndex={-1} aria-hidden="true">
         <UploadImage
           src={post.image || SITE_CONFIG.defaultImage}
-          alt=""
+          alt={displayTitle(post.title)}
           fill
           sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
