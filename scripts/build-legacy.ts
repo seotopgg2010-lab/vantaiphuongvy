@@ -21,6 +21,7 @@ import { Element as DomElement, Text as DomText, type AnyNode, type Element, typ
 import sanitizeHtml from 'sanitize-html';
 import { BRIEF_NAVIGATION } from '../src/content/brief-navigation';
 import { CONTEXTUAL_LINKS, CONTEXTUAL_LINK_LIMITS, ROUTE_PHRASE_DIRECTIONS, ROUTE_PHRASE_VERBS } from '../src/content/contextual-links';
+import { SEO_OVERRIDES } from '../src/content/seo-overrides';
 import type { CommentThread, FaqEntry, LegacyAuthor, LegacyComment, LegacyEntry, LegacyRating, LegacyRegion, LegacyTemplate, TocEntry } from '../src/lib/legacy-types';
 import { displayTitle } from '../src/lib/legacy-render';
 import { applyArticleImages, buildArticleImages } from './legacy-images';
@@ -525,6 +526,7 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
   const comments = commentThreads(item.id);
   const seo = seoMeta[path] ?? {};
   const seoDescription = seo.description ? decodeEntities(seo.description) : undefined;
+  const override = SEO_OVERRIDES[path] ?? {};
   const summarySource = paragraphs[0] ?? title;
   const summary = summarySource.length > 200 ? `${summarySource.slice(0, 197).replace(/\s+\S*$/, '')}…` : summarySource;
   const label = navLabel.get(path) ?? (title.replace(/^(Vận chuyển gửi hàng hóa đi|Vận chuyển gửi hàng hóa|Vận chuyển hàng hóa đi|Vận chuyển hàng hóa|Chành xe gửi hàng đi|Chành xe|Cho thuê xe tải|Thuê xe tải)\s*/i, '').trim() || title);
@@ -537,7 +539,8 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
     facts: extractFacts([seoDescription ?? '']),
     date: wpDate(item.date), modified: wpDate(item.modified),
     readingMinutes: Math.max(1, Math.round(words / 220)),
-    seo: { title: seo.title ? decodeEntities(seo.title) : undefined, description: seoDescription, robots: seo.robots },
+    // Route facts keep coming from the Rank Math description; only the served title and description change.
+    seo: { title: override.title ?? (seo.title ? decodeEntities(seo.title) : undefined), description: override.description ?? seoDescription, robots: seo.robots },
     ...(author ? { author } : {}),
     ...(rating ?? liveRatings[path] ? { rating: rating ?? liveRatings[path] } : {}),
     ...(comments.count ? { comments: comments.threads, commentCount: comments.count } : {}),

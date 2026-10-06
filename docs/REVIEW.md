@@ -30,5 +30,5 @@ Dùng trước khi merge thay đổi giao diện, nội dung hoặc route. Ảnh
 - [ ] Không còn đoạn câu hỏi in đậm (đã thành heading) và tàn dư hộp tác giả trong thân bài (`tests/legacy-clean.test.ts`).
 - [ ] Không trang nào nhảy cấp heading hoặc có heading VIẾT HOA (`tests/legacy-clean.test.ts`).
 - [ ] `og:image` đầu tiên là `/og/<path>.png` 1200×630 có `og:image:alt`; xem thử card của trang chủ và một trang nội dung.
-- [ ] Không đổi slug, canonical, title/description Rank Math hay URL ảnh `/wp-content/uploads/**` (nguồn SEO bất biến).
+- [ ] Không đổi slug, canonical hay URL ảnh `/wp-content/uploads/**` (nguồn SEO bất biến). Title/description Rank Math chỉ đổi qua `src/content/seo-overrides.ts` khi chủ site đã duyệt.
 - [ ] Chính sách AI crawler trong `src/app/robots.ts` là quyết định của chủ site — không tự đổi.

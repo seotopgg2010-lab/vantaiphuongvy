@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { SEO_OVERRIDES } from '../src/content/seo-overrides';
 import seoMeta from '../src/legacy-content/seo-meta.json';
 import { legacyItems, RETIRED_PATHS } from '../src/lib/legacy-content';
 import { legacyMetadata } from '../src/lib/seo';
@@ -94,15 +95,38 @@ test('internal links are relative and keep the trailing-slash contract', () => {
   }
 });
 
-test('Rank Math titles and descriptions are preserved for every public URL', () => {
+test('Rank Math titles and descriptions are preserved for every public URL, apart from the approved rewrites', () => {
   for (const item of publicItems) {
     const live = META[item.path];
     if (!live) continue;
+    const override = SEO_OVERRIDES[item.path] ?? {};
     const metadata = legacyMetadata(item);
     const title = typeof metadata.title === 'object' && metadata.title && 'absolute' in metadata.title ? metadata.title.absolute : metadata.title;
-    if (live.title) assert.equal(title, live.title, `title ${item.path}`);
-    if (live.description) assert.equal(metadata.description, live.description, `description ${item.path}`);
+    const expectedTitle = override.title ?? live.title;
+    const expectedDescription = override.description ?? live.description;
+    if (expectedTitle) assert.equal(title, expectedTitle, `title ${item.path}`);
+    if (expectedDescription) assert.equal(metadata.description, expectedDescription, `description ${item.path}`);
     assert.ok(String(metadata.alternates?.canonical).endsWith(item.path === '/' ? '/' : `${item.path}/`), `canonical ${item.path}`);
+  }
+});
+
+test('approved title and description rewrites name real pages, change something and fit Google results', () => {
+  const paths = new Set(publicItems.map((item) => item.path));
+  const shouting = /\p{Lu}{2,}\s+\p{Lu}{2,}/u;
+  for (const [path, override] of Object.entries(SEO_OVERRIDES)) {
+    assert.ok(paths.has(path), `${path} is not a public page`);
+    assert.notEqual(path, '/', 'the home page keeps its Rank Math title and description');
+    const live = META[path] ?? {};
+    if (override.title) {
+      assert.notEqual(override.title, live.title, `${path}: title is unchanged`);
+      assert.ok(override.title.length <= 62, `${path}: title too long`);
+      assert.doesNotMatch(override.title, shouting, path);
+      assert.doesNotMatch(override.title, /#1|số 1|nhất/iu, path);
+    }
+    if (override.description) {
+      assert.notEqual(override.description, live.description, `${path}: description is unchanged`);
+      assert.ok(override.description.length <= 160, `${path}: description too long`);
+    }
   }
 });
 
