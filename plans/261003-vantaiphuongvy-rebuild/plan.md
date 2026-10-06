@@ -65,7 +65,7 @@ Website `vantaiphuongvy.com` mới trên Next.js 16 với:
 | 01 | [Kiểm toán import & quét trace Hamburg còn sót](phase-01-audit-leftover.md) | completed | 0.5d |
 | 02 | [Nâng cấp UI homepage + legacy template theo brand thật](phase-02-ui-polish.md) | completed | 2d |
 | 03 | [Hoàn thiện SEO: schema, metadata, sitemap, canonical audit](phase-03-seo-hardening.md) | completed | 1d |
-| 04 | [Form liên hệ & lead capture (Supabase riêng)](phase-04-contact-lead.md) | pending | 1d |
+| 04 | [Form liên hệ & lead capture (Supabase riêng)](phase-04-contact-lead.md) | in-progress | 1d |
 | 05 | [Dọn module chết + admin decision](phase-05-cleanup-admin.md) | completed | 1.5d |
 | 06 | [Regression tests cho URL/SEO contract](phase-06-regression-tests.md) | completed | 1d |
 | 07 | [Deploy staging → production + live verification](phase-07-deploy-verify.md) | in-progress | 0.5d |

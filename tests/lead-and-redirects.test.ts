@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
-import { looksLikeBot, normalizeVietnamesePhone, validateLead } from '../src/lib/lead-validation';
+import { LEAD_LIMITS, looksLikeBot, normalizeVietnamesePhone, validateLead } from '../src/lib/lead-validation';
 import { resolveLegacyRequest } from '../src/lib/legacy-redirects';
 
 test('Vietnamese phone numbers are normalised', () => {
@@ -26,6 +28,20 @@ test('lead validation requires name + phone and trims/limits input', () => {
     assert.equal(good.data.page, '');
   }
   assert.equal(validateLead({ name: 'Nam', phone: '0933871139', service: 'hack' }).ok, false);
+});
+
+test('stored leads use the contact_leads columns, within their length limits', () => {
+  // lead-delivery.ts is server-only, so the insert is checked against the migration as text.
+  const delivery = readFileSync(join(process.cwd(), 'src/lib/lead-delivery.ts'), 'utf8');
+  const migration = readFileSync(join(process.cwd(), 'supabase/migrations/001_contact_leads.sql'), 'utf8');
+  const inserted = [...(delivery.match(/\.insert\(\{([\s\S]*?)\}\)/)?.[1] ?? '').matchAll(/(\w+):/g)].map((match) => match[1]);
+  assert.ok(inserted.length >= 8, 'insert payload not found');
+  const lengthOf = (column: string) => Number(migration.match(new RegExp(`char_length\\(${column}\\)\\s*(?:<=|between \\d+ and)\\s*(\\d+)`))?.[1]);
+  const field: Record<string, keyof typeof LEAD_LIMITS> = { name: 'name', phone: 'phone', service: 'service', route_from: 'from', route_to: 'to', cargo: 'cargo', note: 'note', source_path: 'page' };
+  for (const column of inserted) {
+    assert.match(migration, new RegExp(`^\\s+${column}\\s`, 'm'), `${column} is not a contact_leads column`);
+    assert.equal(lengthOf(column), LEAD_LIMITS[field[column]], `${column} length limit differs from the form`);
+  }
 });
 
 test('bot heuristics: honeypot and timing', () => {

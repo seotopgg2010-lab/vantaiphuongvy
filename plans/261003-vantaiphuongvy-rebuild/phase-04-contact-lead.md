@@ -1,13 +1,30 @@
 ---
 phase: 4
 name: "Form liên hệ & lead capture (Supabase riêng)"
-status: pending
+status: in-progress
 effort: 1d
 depends: [3]
 blocked: [open-question-2]
 ---
 
 # Phase 04 — Contact form & lead capture
+
+## Trạng thái (2026-10-06)
+
+Chủ site chọn kênh nhận yêu cầu là Supabase kèm Telegram.
+
+Đã xong:
+- Form báo giá `LeadForm` gọi server action `src/actions/lead.ts`, có kiểm tra dữ liệu, honeypot và giới hạn số lần gửi.
+- `src/lib/lead-delivery.ts` lưu mỗi yêu cầu vào `contact_leads` bằng service-role key và gửi tin Telegram. Yêu cầu được nhận khi ít nhất một kênh nhận thành công.
+- Schema: `supabase/migrations/001_contact_leads.sql`. Bảng bật RLS, không có policy công khai và đã thu hồi quyền của `anon`/`authenticated`.
+- Danh sách biến môi trường: `.env.local.example`.
+
+Chủ site cần làm:
+1. Chạy file SQL trên trong Supabase SQL Editor của project Phương Vy.
+2. Thêm `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` vào Vercel (Production), rồi redeploy.
+3. Gửi thử một yêu cầu, kiểm tra có một dòng mới trong `contact_leads` và một tin trên Telegram.
+
+Bản ghi bên dưới là kế hoạch gốc.
 
 ## Mục tiêu
 

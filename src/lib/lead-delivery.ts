@@ -1,14 +1,37 @@
 import 'server-only';
 import type { LeadInput } from './lead-validation';
+import { createAdminClient } from './supabase/admin';
 
 /**
  * Pluggable lead delivery. Configure at least one channel in the environment:
+ *   NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY → row in contact_leads (supabase/migrations/001_contact_leads.sql)
  *   TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID  → message to a Telegram chat/group
  *   LEAD_WEBHOOK_URL                       → JSON POST (Zapier, Make, n8n, Google Apps Script, CRM…)
  * Returns true when at least one channel accepted the lead.
  */
+const supabaseConfigured = () => Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 export function isLeadDeliveryConfigured() {
-  return Boolean((process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) || process.env.LEAD_WEBHOOK_URL);
+  return supabaseConfigured() || Boolean((process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) || process.env.LEAD_WEBHOOK_URL);
+}
+
+/** Server-side insert with the service-role key; the table has row-level security and no public policies. */
+async function store(lead: LeadInput) {
+  const { error } = await createAdminClient()
+    .from('contact_leads')
+    .insert({
+      name: lead.name,
+      phone: lead.phone,
+      service: lead.service || null,
+      route_from: lead.from || null,
+      route_to: lead.to || null,
+      cargo: lead.cargo || null,
+      note: lead.note || null,
+      source_path: lead.page || null,
+    })
+    .abortSignal(AbortSignal.timeout(8000));
+  if (error) throw new Error(`contact_leads insert: ${error.message}`);
+  return true;
 }
 
 function formatLead(lead: LeadInput) {
@@ -41,6 +64,7 @@ export async function deliverLead(lead: LeadInput): Promise<boolean> {
   const tasks: Array<Promise<boolean>> = [];
   const { TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, LEAD_WEBHOOK_URL } = process.env;
 
+  if (supabaseConfigured()) tasks.push(store(lead));
   if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
     tasks.push(post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { chat_id: TELEGRAM_CHAT_ID, text: formatLead(lead), disable_web_page_preview: true }));
   }

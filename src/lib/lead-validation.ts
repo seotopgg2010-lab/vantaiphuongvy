@@ -16,7 +16,8 @@ export type LeadInput = {
 export type LeadField = keyof LeadInput;
 export type LeadValidation = { ok: true; data: LeadInput } | { ok: false; errors: Partial<Record<LeadField, string>> };
 
-const LIMITS: Record<LeadField, number> = { name: 80, phone: 20, service: 60, from: 120, to: 120, cargo: 200, note: 1000, page: 200 };
+/** Field lengths; supabase/migrations/001_contact_leads.sql enforces the same limits. */
+export const LEAD_LIMITS: Record<LeadField, number> = { name: 80, phone: 20, service: 60, from: 120, to: 120, cargo: 200, note: 1000, page: 200 };
 
 const clean = (value: unknown, max: number) =>
   String(value ?? '')
@@ -33,7 +34,7 @@ export function normalizeVietnamesePhone(raw: string): string | null {
 }
 
 export function validateLead(input: Record<string, unknown>): LeadValidation {
-  const data = Object.fromEntries((Object.keys(LIMITS) as LeadField[]).map((key) => [key, clean(input[key], LIMITS[key])])) as LeadInput;
+  const data = Object.fromEntries((Object.keys(LEAD_LIMITS) as LeadField[]).map((key) => [key, clean(input[key], LEAD_LIMITS[key])])) as LeadInput;
   const errors: Partial<Record<LeadField, string>> = {};
 
   if (data.name.length < 2) errors.name = 'Vui lòng nhập họ tên (ít nhất 2 ký tự).';
