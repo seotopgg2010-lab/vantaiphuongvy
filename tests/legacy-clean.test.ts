@@ -135,6 +135,16 @@ test('approved title and description rewrites name real pages, change something 
   }
 });
 
+test('no page but the home page claims "#1", "số 1" or "nhất" in its title, description or heading', () => {
+  const claim = /#1|số 1|nhất/iu;
+  const offenders = publicItems.filter((item) => item.path !== '/').flatMap((item) => {
+    const metadata = legacyMetadata(item);
+    const title = typeof metadata.title === 'object' && metadata.title && 'absolute' in metadata.title ? metadata.title.absolute : metadata.title;
+    return [title, metadata.description, item.title].filter((text) => claim.test(String(text ?? ''))).map((text) => `${item.path}: ${text}`);
+  });
+  assert.deepEqual(offenders, []);
+});
+
 test('lifting the intro into the hero never drops body content', () => {
   for (const item of publicItems) {
     const { lead, body } = splitLead(item);

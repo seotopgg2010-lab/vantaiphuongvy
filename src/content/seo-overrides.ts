@@ -11,6 +11,11 @@
 export type SeoOverride = { title?: string; description?: string; heading?: string };
 
 export const SEO_OVERRIDES: Record<string, SeoOverride> = {
+  '/blog/bien-bao-cam-xe-tai-va-muc-phat': {
+    title: 'Giờ cấm xe tải 2026, biển báo cấm tải và mức phạt | Phương Vy',
+    description: 'Giờ cấm xe tải ở TP.HCM, Hà Nội, Đà Nẵng, Nha Trang; biển cấm tải theo QCVN 41:2024 và mức phạt theo Nghị định 168/2024 sửa đổi năm 2026.',
+    heading: 'Biển báo cấm xe tải, giờ cấm tải và mức phạt năm 2026',
+  },
   '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': {
     description: 'Phương pháp dịch biển số xe dựa trên phong thủy khoa học, giúp bạn có thể tự dịch nghĩa biển số xe của mình chỉ qua một bài viết.',
   },

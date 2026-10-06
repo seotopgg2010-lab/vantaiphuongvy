@@ -140,7 +140,7 @@ export const HERO_LEADS: Record<string, string> = {
   '/faq': 'Giải nghĩa nhanh các khái niệm vận tải hay gặp — hình thức kinh doanh vận tải, rơ moóc và sơ mi rơ moóc, TEU, ETA — để bạn gửi hàng, thuê xe dễ hơn.',
   '/tuyen-dung': 'Phương Vy tuyển nhân viên kinh doanh, kế toán, SEO và tài xế xe tải tại TP.HCM và Hà Nội. Mô tả công việc, yêu cầu kinh nghiệm và giờ làm việc của từng vị trí ở bên dưới.',
   // Guides: what the reader gets from the article, shown under its H1.
-  '/blog/bien-bao-cam-xe-tai-va-muc-phat': 'Các biển báo cấm xe tải thường gặp, mức phạt khi đi sai giờ, khung giờ và tuyến đường cấm tải ở TP.HCM (kể cả hầm Thủ Thiêm), Hà Nội, Nha Trang, Đà Nẵng — mức phạt cập nhật ngày 09/04/2023.',
+  '/blog/bien-bao-cam-xe-tai-va-muc-phat': 'Biển cấm xe tải theo QCVN 41:2024, mức phạt theo Nghị định 168/2024 (sửa đổi năm 2026), quy định mới cho xe bán tải và khung giờ cấm tải ở TP.HCM, Hà Nội, Đà Nẵng, Nha Trang — cập nhật ngày 06/10/2026.',
   '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': 'Phương Vy tìm chủ xe tải, tài xế hợp tác chở hàng đi các tỉnh, cam kết có hàng cả hai chiều đi và về. Chủ hàng cần xe vận chuyển cũng liên hệ qua hotline.',
   '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': 'Các thành phần trên biển số xe (mã vùng, ký tự loại xe, số đăng ký), cách xem ý nghĩa con số theo phong thủy và biển số hợp tuổi. Bài viết lưu ý đây là quan điểm chủ quan, không có căn cứ khoa học rõ ràng.',
   '/blog/giay-to-van-chuyen-hang-hoa': 'Giấy tờ khi vận chuyển hàng hóa đường bộ: giấy tờ xe, chủ phương tiện và tài xế mà đơn vị vận tải phải có, cùng hóa đơn, chứng từ chứng minh nguồn gốc hàng mà chủ hàng cần cung cấp.',

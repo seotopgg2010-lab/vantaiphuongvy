@@ -61,8 +61,8 @@ test('curated hero leads are short, concrete and lead the markdown twin too', ()
     assert.ok(item, `${path} is not in the corpus`);
     assert.ok(lead.length >= 80 && lead.length <= 280, `${path}: ${lead.length} chars`);
     assert.equal(/SỐ 1|SIÊU RẺ|24\/7|24\/24/i.test(lead), false, `${path}: ad claim`);
-    // Uppercase runs are acronyms only (TP.HCM, CBM, GTGT, TEU, ETA, IATA), never shouting.
-    for (const word of lead.match(/\p{Lu}{4,}/gu) ?? []) assert.ok(['GTGT', 'GTVT', 'BGTVT', 'IATA'].includes(word), `${path}: ${word}`);
+    // Uppercase runs are acronyms only (TP.HCM, CBM, GTGT, TEU, ETA, IATA, QCVN), never shouting.
+    for (const word of lead.match(/\p{Lu}{4,}/gu) ?? []) assert.ok(['GTGT', 'GTVT', 'BGTVT', 'IATA', 'QCVN'].includes(word), `${path}: ${word}`);
     const { lead: shown, body } = heroContent(item);
     assert.equal(shown, lead);
     assert.equal(body, item.html, `${path}: the original opening must stay in the body`);

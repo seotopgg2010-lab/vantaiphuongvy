@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { ARTICLE_UPDATES } from '../src/content/article-updates';
 import comments from '../src/legacy-content/comments.json';
+import pages from '../src/legacy-content/pages.json';
+import posts from '../src/legacy-content/posts.json';
 import liveImages from '../src/legacy-content/live-images.json';
 import liveRatings from '../src/legacy-content/live-ratings.json';
 import { formatDateVi } from '../src/components/site/post-card';
@@ -72,6 +75,19 @@ test('WordPress comments render as plain-text threads in the live order and stay
   const machineText = [...indexablePaths.map((path) => renderTwin(path)!), renderLlmsTxt(), renderLlmsFull()].join('\n');
   const leaked = all(threads).flatMap((comment) => comment.paragraphs).filter((text) => text.length >= 20 && machineText.includes(text));
   assert.deepEqual(leaked, []);
+});
+
+test('rewritten articles keep the WordPress author and star rating and carry the rewrite date', () => {
+  const exported = [...pages, ...posts].map((item) => ({ path: new URL(item.link).pathname.replace(/\/+$/, '') || '/', content: item.content.rendered }));
+  for (const [path, update] of Object.entries(ARTICLE_UPDATES)) {
+    const item = getLegacyByPath(path);
+    assert.ok(item && existsSync(join(process.cwd(), update.file)), path);
+    assert.equal(item.modified, `${update.modified}+07:00`, path);
+    const original = exported.find((entry) => entry.path === path)!.content;
+    if (original.includes('about-author')) assert.ok(item.author?.name, `${path} lost its author`);
+    const live = (liveRatings as Record<string, LegacyRating>)[path];
+    if (live) assert.deepEqual(item.rating, live, `${path} lost its star rating`);
+  }
 });
 
 test('WordPress local times carry their +07:00 offset, so a UTC build host shows the same day', () => {
