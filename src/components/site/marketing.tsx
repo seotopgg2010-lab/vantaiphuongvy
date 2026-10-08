@@ -5,6 +5,13 @@ import { COMMITMENTS, PRESS, PROCESS_STEPS, STATS, TESTIMONIALS } from '@/lib/ma
 const COMMITMENT_ICONS = { fast: Clock3, exact: Target, pro: BadgeCheck, safe: ShieldCheck, easy: Sparkles, save: PiggyBank } as const;
 /** Press items shown on phones; the rest appear from `sm` up (keeps press blocks short on mobile). */
 const PRESS_MOBILE_COUNT = 6;
+/**
+ * Phones get a swipeable row (the next card peeks in) instead of a tall stack; every card
+ * stays in the HTML. From `sm` up the same list is a grid. The list is focusable so keyboard
+ * users can scroll it.
+ */
+const SWIPE_LIST = '-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-3 scroll-px-5 sm:mx-0 sm:grid sm:overflow-visible sm:px-0 sm:pb-0';
+const SWIPE_ITEM = 'w-[85%] shrink-0 snap-start sm:w-auto';
 
 export function StatsStrip({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
   const dark = tone === 'dark';
@@ -22,11 +29,11 @@ export function StatsStrip({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
 
 export function CommitmentGrid() {
   return (
-    <ul className="grid content-start gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+    <ul tabIndex={0} aria-label="Sáu lý do chọn Phương Vy" className={`${SWIPE_LIST} sm:grid-cols-2 sm:gap-4 lg:grid-cols-3`}>
       {COMMITMENTS.map((item) => {
         const Icon = COMMITMENT_ICONS[item.key];
         return (
-          <li key={item.key} className="card card-hover p-5">
+          <li key={item.key} className={`card card-hover p-5 ${SWIPE_ITEM}`}>
             <div className="flex items-center gap-3"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white shadow-[0_8px_16px_-8px_rgb(18_117_188/0.8)]"><Icon className="h-5 w-5" aria-hidden="true" /></span>
             <h3 className="text-lg font-bold">{item.title}</h3></div>
             <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{item.text}</p>
@@ -39,15 +46,17 @@ export function CommitmentGrid() {
 
 export function ProcessSteps() {
   return (
-    <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+    <ol className="grid gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-4 lg:gap-5">
       {PROCESS_STEPS.map((step, index) => (
-        <li key={step.title} className="relative">
-          <div className="flex items-center gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent-500 text-lg font-extrabold text-navy-950">{index + 1}</span>
+        <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 md:block">
+          <div className="flex items-center gap-4 self-start">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-500 text-base font-extrabold text-navy-950 md:h-12 md:w-12 md:text-lg">{index + 1}</span>
             {index < PROCESS_STEPS.length - 1 && <span className="hidden h-px flex-1 bg-white/20 lg:block" aria-hidden="true" />}
           </div>
-          <h3 className="mt-4 text-lg font-bold text-white">{step.title}</h3>
-          <p className="mt-2 text-[0.9375rem] leading-7 text-on-brand">{step.text}</p>
+          <div>
+            <h3 className="pt-1.5 text-lg font-bold text-white md:mt-4 md:pt-0">{step.title}</h3>
+            <p className="mt-1.5 text-[0.9375rem] leading-7 text-on-brand md:mt-2">{step.text}</p>
+          </div>
         </li>
       ))}
     </ol>
@@ -62,7 +71,7 @@ export function PressGrid({ limit }: { limit?: number }) {
         <li key={item.outlet} className={index >= PRESS_MOBILE_COUNT ? 'max-sm:hidden' : undefined}>
           <a href={item.href} target="_blank" rel="noopener" className="card card-hover group block overflow-hidden" aria-label={`Bài viết trên ${item.outlet} về Vận tải Phương Vy (mở tab mới)`}>
             <span className="relative block aspect-[23/10] bg-surface">
-              <UploadImage src={item.image} alt="" fill sizes="(min-width: 1024px) 200px, (min-width: 640px) 33vw, 50vw" className="object-cover object-top" />
+              <UploadImage src={item.image} alt={`Báo ${item.outlet} viết về Vận tải Phương Vy`} fill sizes="(min-width: 1024px) 200px, (min-width: 640px) 33vw, 50vw" className="object-cover object-top" />
             </span>
             <span className="flex items-center justify-between gap-2 px-3 py-2.5 text-[0.8125rem] font-semibold text-ink">
               {item.outlet}
@@ -104,9 +113,9 @@ export function PressStrip() {
 
 export function Testimonials() {
   return (
-    <ul className="grid gap-4 md:grid-cols-3">
+    <ul tabIndex={0} aria-label="Ý kiến khách hàng" className={`${SWIPE_LIST} sm:gap-4 md:grid-cols-3`}>
       {TESTIMONIALS.map((item) => (
-        <li key={item.name} className="card flex flex-col p-5">
+        <li key={item.name} className={`card flex flex-col p-5 ${SWIPE_ITEM}`}>
           <Quote className="h-7 w-7 text-brand-400" aria-hidden="true" />
           <blockquote className="mt-3 flex-1 text-[0.9375rem] leading-7 text-ink">“{item.quote}”</blockquote>
           <p className="mt-5 border-t border-line pt-4 text-sm"><span className="font-bold text-ink">{item.name}</span><span className="text-muted"> · {item.role}</span></p>

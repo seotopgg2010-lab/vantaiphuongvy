@@ -76,7 +76,7 @@ export default function HomePage() {
 
       {/* ---------- services ---------- */}
       <section aria-labelledby="services" className="container-x py-12 md:py-16">
-        <SectionHeading id="services" eyebrow="Dịch vụ" title="Dịch vụ Vận tải Phương Vy đang cung cấp" lead={SERVICES_LEAD} />
+        <SectionHeading id="services" layout="split" eyebrow="Dịch vụ" title="Dịch vụ Vận tải Phương Vy đang cung cấp" lead={SERVICES_LEAD} />
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           {SERVICES.map((service) => (
             <Link key={service.href} href={service.href} className="card card-hover group flex flex-col overflow-hidden">
@@ -96,29 +96,15 @@ export default function HomePage() {
       {/* ---------- routes ---------- */}
       <section aria-labelledby="routes" className="border-y border-line bg-surface">
         <div className="container-x py-12 md:py-16">
-          <SectionHeading id="routes" eyebrow="Tuyến vận chuyển" title="Gửi hàng từ TP.HCM đi các tỉnh" lead="Chọn khu vực hoặc gõ tên tỉnh để xem bảng giá, thời gian vận chuyển và lịch xe của từng tuyến." action={{ label: 'Trang tuyến vận chuyển', href: '/van-chuyen-hang-hoa/' }} />
+          <SectionHeading id="routes" layout="split" eyebrow="Tuyến vận chuyển" title="Gửi hàng từ TP.HCM đi các tỉnh" lead="Chọn khu vực hoặc gõ tên tỉnh để xem bảng giá, thời gian vận chuyển và lịch xe của từng tuyến." action={{ label: 'Trang tuyến vận chuyển', href: '/van-chuyen-hang-hoa/' }} />
           <div className="mt-8"><RouteExplorer regions={regions} compact defaultRegion="bac" /></div>
         </div>
       </section>
 
-      {/* ---------- about & why us (copy restored from the WordPress home page) ---------- */}
-      <section aria-labelledby="about" className="container-x py-12 md:py-16">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-12">
-          <div>
-            <p className="eyebrow">Về Phương Vy</p>
-            <h2 id="about" className="h-section mt-2.5">{noBreakBrand(SITE_CONFIG.companyName)}</h2>
-            <div className="mt-4 space-y-4 text-[1.0625rem] leading-8 text-muted">
-              {ABOUT.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-            </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
-            <UploadImage src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 40vw, 100vw" className="object-cover" />
-          </div>
-        </div>
-        <div className="mt-12 md:mt-16">
-          <SectionHeading id="why-us" eyebrow="Vì sao chọn Phương Vy" title="Tại sao nên chọn dịch vụ của Vận tải Phương Vy?" />
-          <div className="mt-8"><CommitmentGrid /></div>
-        </div>
+      {/* ---------- why us (the six reasons from the WordPress home page) ---------- */}
+      <section aria-labelledby="why-us" className="container-x py-12 md:py-16">
+        <SectionHeading id="why-us" align="center" eyebrow="Vì sao chọn Phương Vy" title="Tại sao nên chọn dịch vụ của Vận tải Phương Vy?" />
+        <div className="mt-8"><CommitmentGrid /></div>
       </section>
 
       {/* ---------- process ---------- */}
@@ -150,26 +136,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---------- press ---------- */}
+      {/* ---------- about, press & customers: who Phương Vy is and what others say (about copy restored from the WordPress home page) ---------- */}
       {/* scroll-mt keeps the "Xem bài báo" jump target clear of the sticky header */}
-      <section aria-labelledby="press" className="border-y border-line bg-surface [&_h2]:scroll-mt-32">
+      <section aria-labelledby="about" className="border-y border-line bg-surface [&_h2]:scroll-mt-32">
         <div className="container-x py-12 md:py-16">
-          <SectionHeading id="press" eyebrow="Báo chí" title="Báo chí nói về Vận tải Phương Vy" align="center" />
-          <div className="mt-8"><PressGrid /></div>
-        </div>
-      </section>
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
+            <div>
+              <p className="eyebrow">Về Phương Vy</p>
+              <h2 id="about" className="h-section mt-2.5">{noBreakBrand(SITE_CONFIG.companyName)}</h2>
+              <div className="mt-4 space-y-4 text-[1.0625rem] leading-8 text-muted">
+                {ABOUT.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              </div>
+            </div>
+            {/* fills the text column's height from lg up, so the photo never floats in empty space */}
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl shadow-[var(--shadow-lift)] sm:aspect-[2/1] lg:aspect-auto lg:min-h-[22rem]">
+              <UploadImage src={SITE_CONFIG.defaultImage} alt="Công ty vận tải Phương Vy" fill sizes="(min-width: 1280px) 34rem, (min-width: 1024px) 40vw, 100vw" className="object-cover" />
+            </div>
+          </div>
 
-      {/* ---------- testimonials ---------- */}
-      <section aria-labelledby="testimonials" className="container-x py-12 md:py-16">
-        <SectionHeading id="testimonials" eyebrow="Khách hàng" title="Khách hàng nói gì về Phương Vy" />
-        <div className="mt-8"><Testimonials /></div>
+          <div className="mt-12 border-t border-line pt-12 md:mt-16 md:pt-16">
+            <SectionHeading id="press" align="center" eyebrow="Báo chí" title="Báo chí nói về Vận tải Phương Vy" />
+            <div className="mt-8"><PressGrid /></div>
+          </div>
+
+          <div className="mt-12 md:mt-16">
+            <SectionHeading id="testimonials" align="center" eyebrow="Khách hàng" title="Khách hàng nói gì về Phương Vy" />
+            <div className="mt-8"><Testimonials /></div>
+          </div>
+        </div>
       </section>
 
       {/* ---------- faq ---------- */}
       {faq.length > 0 && (
-        <section aria-labelledby="home-faq" className="border-t border-line">
+        <section aria-labelledby="home-faq">
           <div className="container-x grid gap-8 py-12 md:py-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
-            <div className="lg:sticky lg:top-28 lg:self-start"><SectionHeading id="home-faq" eyebrow="Hỏi đáp" title="Câu hỏi thường gặp" lead="Những thắc mắc phổ biến khi gửi hàng và thuê xe tải tại Phương Vy." action={{ label: 'Xem tất cả câu hỏi', href: '/faq/' }} /></div>
+            <div className="lg:sticky lg:top-28 lg:self-start"><SectionHeading id="home-faq" layout="stack" eyebrow="Hỏi đáp" title="Câu hỏi thường gặp" lead="Những thắc mắc phổ biến khi gửi hàng và thuê xe tải tại Phương Vy." action={{ label: 'Xem tất cả câu hỏi', href: '/faq/' }} /></div>
             <FaqList items={faq} />
           </div>
         </section>

@@ -7,7 +7,7 @@
 - Hiện đại, chuyên nghiệp, đúng ngành vận tải Việt Nam: lưới gọn, nhiều khoảng trắng, một màu nhấn (vàng) cho hành động chính.
 - Đáng tin: ảnh thật của đội xe/bãi xe (`public/wp-content/uploads/**`), số liệu chỉ lấy từ nội dung đã xác minh (`src/lib/marketing.ts`), không "24/7", không rating tự gán — sao đánh giá chỉ là số bình chọn của widget kk Star Ratings trên WordPress (`rating` trong corpus).
 - Motif lặp lại: nền "brand grid" (gradient xanh logo + lưới 44 px, `.bg-brand-grid`) cho hero, quy trình, CTA và social card; vạch vàng trước eyebrow.
-- Kể chuyện theo chương: dịch vụ → tuyến → về Phương Vy & vì sao chọn → quy trình → ưu đãi → báo chí/khách hàng → hỏi đáp → báo giá. Bằng chứng (báo chí) được nhắc sớm ngay dưới hero.
+- Kể chuyện theo chương: dịch vụ → tuyến → vì sao chọn → quy trình → ưu đãi → về Phương Vy, báo chí & khách hàng (một chương "uy tín" chung nền) → hỏi đáp → cẩm nang → báo giá. Bằng chứng (báo chí) được nhắc sớm ngay dưới hero. Bản `.md` của trang chủ (`src/lib/markdown-twins.ts`) theo cùng thứ tự.
 
 ## Tokens (nguồn: `src/app/globals.css`)
 
@@ -42,7 +42,8 @@
 ## Component rules
 
 - Mỗi màn một hành động chính: **Gọi hotline** (`.btn-accent`). Zalo là phụ (`.btn-ghost-light` / `.btn-zalo`), "Gửi yêu cầu" trỏ `#bao-gia`.
-- Section mở bằng `SectionHeading` (eyebrow + `h2.h-section` + lead + link "xem tất cả").
+- Section mở bằng `SectionHeading` (eyebrow + `h2.h-section` + lead + link "xem tất cả") Lead dài (đoạn văn WordPress) dùng `layout="split"`: tiêu đề trái, lead + link phải từ `lg`, để không bỏ trống nửa hàng; cột hẹp (hỏi đáp) dùng `layout="stack"`; section không có lead căn giữa tiêu đề. Ảnh cạnh khối chữ dài lấp đầy chiều cao cột chữ từ `lg` (không để ảnh lơ lửng giữa khoảng trắng).
+- Trên điện thoại, danh sách thẻ chữ dài (6 lý do, ý kiến khách hàng) là hàng vuốt ngang `snap-x` với thẻ kế tiếp ló ra; mọi thẻ vẫn nằm trong HTML; từ `sm` trở lên là lưới.
 - Ảnh legacy thường có chữ/hotline in sẵn: đặt trong khung 16/11 (`PageHero`), không dùng làm nền phủ chữ.
 - Bài viết có `PageActions` (Chia sẻ · Sao chép liên kết · Hỏi AI) — chỉ gửi URL công khai và bản `.md` công khai.
 - Social card `/og/<path>.png` (1200×630) do `src/app/og/[...slug]/route.tsx` sinh: panel brand grid + logo + tiêu đề + hotline + ảnh thật của trang.
