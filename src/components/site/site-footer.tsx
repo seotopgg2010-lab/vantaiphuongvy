@@ -95,9 +95,12 @@ export function SiteFooter({ nav }: { nav: SiteNavigation }) {
         </div>
       </div>
 
-      <div className="container-x flex flex-col gap-3 py-5 text-sm text-on-brand sm:flex-row sm:items-center sm:justify-between">
+      <div className="container-x flex flex-col gap-3 py-5 text-sm text-on-brand md:flex-row md:items-center md:justify-between">
         <p>© {new Date().getFullYear()} {noBreakBrand(SITE_CONFIG.companyName)}. Mọi quyền được bảo lưu.</p>
-        <div className="flex gap-5">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+          <a href={SITE_CONFIG.moitNotice.href} target="_blank" rel="noopener nofollow" className="shrink-0">
+            <UploadImage src={SITE_CONFIG.moitNotice.badge} alt="Đã thông báo Bộ Công Thương" width={600} height={227} sizes="120px" className="h-auto w-[120px]" />
+          </a>
           <a href={SITE_CONFIG.facebook} target="_blank" rel="noopener" className="transition hover:text-white">Facebook</a>
           <Link href="/sitemap.xml" prefetch={false} className="transition hover:text-white">Sitemap</Link>
         </div>

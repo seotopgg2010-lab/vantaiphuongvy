@@ -20,6 +20,11 @@ export const SITE_CONFIG = {
   defaultImage: '/wp-content/uploads/2018/08/cong-ty-van-tai-phuong-vy.jpg',
   mapEmbed: 'https://www.google.com/maps?q=38H4+%C4%90%C6%B0%E1%BB%9Dng+DN9+T%C3%A2n+H%C6%B0ng+Thu%E1%BA%ADn+Qu%E1%BA%ADn+12&output=embed',
   taxId: '0313404000',
+  /** Ministry of Industry and Trade website notice, linked from every WordPress footer. */
+  moitNotice: {
+    href: 'http://online.gov.vn/Home/WebDetails/79057',
+    badge: '/wp-content/uploads/2021/05/bo-cong-thuong.png',
+  },
   yards: [
     { region: 'Bãi xe miền Nam', address: '58 Quốc lộ 1A, Xã Bà Điểm, Huyện Hóc Môn, TP.HCM' },
     { region: 'Bãi xe miền Trung', address: '555 Trường Chinh, Quận Thanh Khê, Đà Nẵng' },
