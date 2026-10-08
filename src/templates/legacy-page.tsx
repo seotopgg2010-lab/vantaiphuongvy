@@ -72,7 +72,7 @@ function TruckLinks({ current }: { current?: string }) {
           <li key={truck.path}>
             <Link href={withSlash(truck.path)} className="card card-hover group block h-full overflow-hidden">
               <span className="relative block aspect-[16/10] bg-surface">
-                {truck.image && <UploadImage src={truck.image} alt="" fill sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
+                {truck.image && <UploadImage src={truck.image} alt={truck.imageAlt || truck.title} fill sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
               </span>
               <span className="flex items-center justify-between gap-3 p-5">
                 <span><span className="block text-lg font-bold text-ink">{truck.label}</span><span className="mt-1 block text-sm text-muted">Xe tải chở hàng nội thành & đi tỉnh</span></span>

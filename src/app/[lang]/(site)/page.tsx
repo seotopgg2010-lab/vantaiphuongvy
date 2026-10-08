@@ -81,7 +81,7 @@ export default function HomePage() {
           {SERVICES.map((service) => (
             <Link key={service.href} href={service.href} className="card card-hover group flex flex-col overflow-hidden">
               <span className="relative block aspect-[16/7] overflow-hidden bg-surface">
-                <UploadImage src={service.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+                <UploadImage src={service.image} alt={service.imageAlt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
               </span>
               <span className="flex flex-1 flex-col p-5 sm:p-6">
                 <span className="text-xl font-bold text-ink sm:text-2xl">{service.title}</span>

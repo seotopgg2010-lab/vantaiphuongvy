@@ -17,7 +17,7 @@ export const POPULAR_ROUTES = [
 
 /** /blog index copy (page, metadata and markdown twin). */
 export const BLOG_PAGE = {
-  title: 'Cẩm nang vận tải – Tin tức & kinh nghiệm gửi hàng | Vận Tải Phương Vy',
+  title: 'Cẩm nang vận tải – Tin tức & kinh nghiệm gửi hàng | Phương Vy',
   heading: 'Cẩm nang vận tải',
   description: 'Kinh nghiệm vận chuyển hàng hóa, giấy tờ cần thiết, quy định tải trọng, kích thước thùng xe và tin tức mới nhất từ Vận tải Phương Vy.',
 } as const;
@@ -85,6 +85,7 @@ export const SERVICES = [
     text: 'Chành xe gửi hàng từ TP.HCM đi các tỉnh và ngược lại: hàng lẻ, hàng nguyên chuyến, không giới hạn số lượng.',
     href: '/van-chuyen-hang-hoa/',
     image: '/wp-content/uploads/2018/08/chanh-xe-tai-phuong-vy.jpg',
+    imageAlt: 'Xe tải thùng bạt của Phương Vy chất đầy hàng chành xe đi tỉnh',
     cta: 'Xem tuyến vận chuyển',
   },
   {
@@ -92,6 +93,7 @@ export const SERVICES = [
     text: 'Xe tải từ 500 kg đến 30 tấn, thùng kín – thùng bạt – mui bạt, chạy nội thành và đi tỉnh theo chuyến.',
     href: '/thue-xe-tai/',
     image: '/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg',
+    imageAlt: 'Đội xe tải và đầu kéo của Phương Vy tại bãi xe',
     cta: 'Xem bảng giá thuê xe',
   },
 ] as const;

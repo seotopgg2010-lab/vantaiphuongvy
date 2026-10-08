@@ -27,6 +27,9 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Vận chuyển hàng hóa cần lưu ý những loại giấy tờ gì?',
     description: 'Gửi hàng đi xa cần giấy tờ gì? Danh sách giấy tờ nhà xe phải có và giấy tờ khách hàng cần chuẩn bị khi vận chuyển hàng hóa bằng đường bộ.',
   },
+  '/blog/hang-hoa-thuong-gap-trong-nganh-van-tai': {
+    title: 'Các loại hàng hóa thường gặp trong ngành vận tải | Phương Vy',
+  },
   '/blog/quy-dinh-van-chuyen-hang-hoa-nguy-hiem': {
     description: 'Tổng hợp tất cả thông tin cần biết khi vận chuyển hàng hóa nguy hiểm trên tuyến đường bắc nam bằng đường bộ, tàu hỏa cũng như hàng không.',
   },
@@ -73,6 +76,9 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   '/van-chuyen-hang-hoa/binh-dinh': {
     description: 'Xe vận tải Phương Vy cung cấp dịch vụ chành xe vận chuyển hàng hóa từ Sài Gòn, Hà Nội đi Quy Nhơn Bình Định với giá thành rẻ. Giảm 7% cho khách hàng mới.',
   },
+  '/van-chuyen-hang-hoa/binh-duong': {
+    title: 'Chành xe vận chuyển hàng hóa đi Bình Dương | Phương Vy',
+  },
   '/van-chuyen-hang-hoa/binh-phuoc': {
     description: 'Dịch vụ chành xe vận chuyển hàng hóa đi Bình Phước từ mọi miền tổ quốc ✅ Giảm 7% cước cho khách hàng mới ✅ Giảm thêm khi vận chuyển 2 chiều. Liên Hệ Ngay !',
   },
@@ -110,6 +116,9 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa/duong-bien': {
     description: 'Vận chuyển hàng hóa nội địa và ra nước ngoài bằng đường biển cùng vận tải Phương Vy là lựa chọn tiết kiệm với giá cước siêu rẻ.',
+  },
+  '/van-chuyen-hang-hoa/duong-hang-khong': {
+    title: 'Vận chuyển hàng hóa bằng đường hàng không | Phương Vy',
   },
   '/van-chuyen-hang-hoa/ha-tinh': {
     description: 'Chành xe gửi hàng đi Hà Tĩnh từ TPHCM, Hà Nội. Tuyến Hà Nội giao trong 9–18 tiếng, cước từ 800đ/kg hàng nguyên xe, miễn phí bốc xếp, giao tận nơi.',
@@ -157,6 +166,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     description: 'Vận tải Phương Vy nhận chành xe gửi hàng hóa đi Quảng Ngãi đi các tỉnh với giá thành cạnh tranh. Xe chạy ngày 3 CHUYẾN. Gọi ngay 0933 87 1139',
   },
   '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': {
+    title: 'Dịch vụ vận chuyển hàng siêu trường siêu trọng | Phương Vy',
     description: 'Vận tải Phương Vy cung cấp dịch vụ vận chuyển hàng siêu trường siêu trọng, quá khổ quá tải, máy công trình trên tuyến bắc nam với giá cạnh tranh.',
   },
   '/van-chuyen-hang-hoa/soc-trang': {
@@ -166,6 +176,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Dịch vụ gửi hàng đi Sơn La giá tốt - Vận Tải Phương Vy',
   },
   '/van-chuyen-hang-hoa/tay-nguyen': {
+    title: 'Vận chuyển hàng hóa từ TPHCM đi Tây Nguyên | Phương Vy',
     description: 'Phương Vy cung cấp dịch vụ vận chuyển hàng hóa, chuyển hàng từ Sài Gòn đi các tỉnh Tây Nguyên với giá thành hợp lý, chất lượng dịch vụ tốt.',
   },
   '/van-chuyen-hang-hoa/tay-ninh': {
