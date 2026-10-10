@@ -164,7 +164,8 @@ const LINK_TARGETS: LinkTarget[] = [
  * claims, unproven comparisons with competitors and retired discounts (the running offer is 7% off for
  * new customers). Each edit names the sentence it belongs to and applies inside the run of text holding it.
  */
-type ClaimEdit = { sentence: string; changes: Array<[string, string]> };
+/** `remove` drops the whole block holding the sentence instead: its paragraph/list item/heading, or its table. */
+type ClaimEdit = { sentence: string; changes: Array<[string, string]>; remove?: 'block' | 'table' };
 const CLAIM_EDITS = read<ClaimEdit[]>('src/content/claim-edits.json');
 const appliedClaimEdits = new Set<ClaimEdit>();
 const TEXT_BLOCKS = new Set(['p', 'li', 'td', 'th', 'h2', 'h3', 'h4', 'figcaption', 'blockquote', 'ul', 'ol', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'div', 'figure', 'aside', 'hr', 'section']);
@@ -230,11 +231,18 @@ function applyClaimEdits($: cheerio.CheerioAPI) {
   const edits = CLAIM_EDITS.filter((edit) => pageText.includes(edit.sentence)).sort((a, b) => b.sentence.length - a.sentence.length);
   if (!edits.length) return;
   const emptied = new Set<AnyNode>();
+  const removed = new Set<AnyNode>();
   for (const texts of runs) {
     const original = runText(texts);
     for (const edit of edits) {
       if (!original.includes(edit.sentence)) continue;
       appliedClaimEdits.add(edit);
+      if (edit.remove) {
+        const block = $(texts[0].parent!).closest(edit.remove === 'table' ? 'table' : 'p, li, h2, h3, h4');
+        if (!block.length) throw new Error(`claim edit: no ${edit.remove} around: ${edit.sentence}`);
+        removed.add(block.get(0)!);
+        continue;
+      }
       // Edit inside this sentence only: the same phrase may also sit in another sentence of the run.
       const at = spacedPattern(edit.sentence).exec(texts.map((text) => text.data).join(''));
       if (!at) continue;
@@ -254,6 +262,7 @@ function applyClaimEdits($: cheerio.CheerioAPI) {
     }
     $(img).attr('alt', alt);
   });
+  for (const node of removed) $(node).closest('.table-scroll').add(node).first().remove();
   // A block left with no text by an edit (a stale "(MỚI NHẤT 2019)" label) goes with it.
   for (const node of emptied) {
     const block = $(node).closest('p, li, h2, h3, h4');

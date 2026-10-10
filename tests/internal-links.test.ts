@@ -168,3 +168,9 @@ test('article headings stay headings: no heading swallows a table, no empty link
     assert.equal(/<a\s[^>]*>\s*<\/a>/.test(item.html), false, `${item.path}: empty link`);
   }
 });
+
+test('article text runs down no competitors and promotes no overloading', () => {
+  for (const item of legacyItems) {
+    assert.equal(/Các công ty vận tải khác|chở quá tải cao nhất/.test(item.html), false, item.path);
+  }
+});
