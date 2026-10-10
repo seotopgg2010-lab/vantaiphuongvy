@@ -7,11 +7,12 @@ import { canonicalUrl } from './seo';
 const TAY_NGUYEN = '/van-chuyen-hang-hoa/tay-nguyen';
 
 /**
- * The region level of a route trail: Tây Nguyên has its own page; the other regions are groups
- * on the route hub, so their crumb links the group's anchor there.
+ * The group level of a route or cargo trail: Tây Nguyên has its own page; the other regions and
+ * the cargo services ("Loại hàng & phương thức") are groups on the route hub, so their crumb
+ * links the group's anchor there.
  */
 function regionCrumb(item: LegacyEntry): Crumb | undefined {
-  if (!item.region || item.region === 'loai-hang' || item.path === TAY_NGUYEN) return undefined;
+  if (!item.region || item.path === TAY_NGUYEN) return undefined;
   if (item.region === 'tay-nguyen') return { name: REGION_LABELS['tay-nguyen'], href: `${TAY_NGUYEN}/` };
   return { name: REGION_LABELS[item.region], href: `/van-chuyen-hang-hoa/#${regionAnchor(item.region)}` };
 }

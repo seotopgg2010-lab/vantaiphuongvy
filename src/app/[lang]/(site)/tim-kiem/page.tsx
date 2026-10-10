@@ -69,7 +69,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               { href: '/van-chuyen-hang-hoa/xe-may/', title: 'Tìm theo loại hàng', text: 'Xe máy, máy móc, hàng siêu trường…' },
               { href: '/thue-xe-tai/', title: 'Thuê xe tải', text: 'Bảng giá thuê xe theo khu vực' },
             ].map((card) => (
-              <Link key={card.href} href={card.href} className="card card-hover p-5"><span className="block font-bold text-ink">{card.title}</span><span className="mt-1 block text-sm text-muted">{card.text}</span></Link>
+              <Link key={card.href} href={card.href} className="card card-hover p-5"><span className="block font-bold text-ink">{card.title}</span>{' '}<span className="mt-1 block text-sm text-muted">{card.text}</span></Link>
             ))}
           </div>
         )}

@@ -25,7 +25,6 @@ export const CONTEXTUAL_LINKS: ContextualLink[] = [
   { href: '/blog/van-chuyen-hang-hoa-nguy-hiem/', phrases: ['đóng gói hàng hóa nguy hiểm', 'đóng gói, vận chuyển hàng hóa nguy hiểm'] },
   { href: '/blog/giay-to-van-chuyen-hang-hoa/', phrases: ['giấy tờ vận chuyển hàng hóa', 'giấy tờ cần thiết khi vận chuyển', 'giấy tờ xe'] },
   { href: '/blog/hang-hoa-thuong-gap-trong-nganh-van-tai/', phrases: ['hàng lẻ hàng ghép', 'hàng lẻ, hàng ghép', 'hàng ghép hàng lẻ', 'hàng ghép, hàng lẻ'] },
-  { href: '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh/', phrases: ['luồng xanh'] },
 ];
 
 /** Verb + direction phrases that point at a route page, e.g. "gửi hàng đi Hà Nội". */

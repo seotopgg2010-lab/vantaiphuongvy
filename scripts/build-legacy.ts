@@ -70,6 +70,9 @@ const OVERRIDES: Array<[string, string, LegacyRegion]> = [
   ['/van-chuyen-hang-hoa/phan-thiet', 'Phan Thiết', 'trung'],
   ['/van-chuyen-hang-hoa/mong-cai', 'Móng Cái', 'bac'],
   ['/van-chuyen-hang-hoa/vinh-phuc', 'Vĩnh Phúc', 'bac'],
+  // Sea and air freight are ways to ship, not destinations: they join the cargo services group.
+  ['/van-chuyen-hang-hoa/duong-bien', 'Vận chuyển đường biển', 'loai-hang'],
+  ['/van-chuyen-hang-hoa/duong-hang-khong', 'Vận chuyển hàng không', 'loai-hang'],
 ];
 for (const [href, label, region] of OVERRIDES) { navLabel.set(href, label); navRegion.set(href, region); }
 const LABEL_OVERRIDES: Array<[string, string]> = [
@@ -298,7 +301,9 @@ function addContextualLinks($: cheerio.CheerioAPI, path: string, limit: number) 
 
 // ---------- HTML transform ----------
 function transform(html: string, title: string, path: string, linkLimit: number) {
-  const $ = cheerio.load(html, null, false);
+  // A heading the editor closed with </p> ("<h2>Bảng Giá Cước</p>") swallows everything after it,
+  // tables included; close it as the heading it is.
+  const $ = cheerio.load(html.replace(/<(h[1-6])(\s[^>]*)?>([^<]*)<\/p>/gi, '<$1$2>$3</$1>'), null, false);
 
   // 0. The theme's "Về tác giả" box: the author's name and bio become data, the markup goes.
   const authorBox = $('.about-author').first();
@@ -561,7 +566,9 @@ function transform(html: string, title: string, path: string, linkLimit: number)
     allowedClasses: { aside: ['callout'], div: ['table-scroll'] },
     allowedSchemes: ['http', 'https', 'mailto', 'tel'],
     allowProtocolRelative: false,
-  }).replace(/\n{2,}/g, '\n').replace(/<p>\s*(<br\s*\/?>\s*)+/g, '<p>').replace(/(<br\s*\/?>\s*)+<\/p>/g, '</p>');
+  }).replace(/\n{2,}/g, '\n').replace(/<p>\s*(<br\s*\/?>\s*)+/g, '<p>').replace(/(<br\s*\/?>\s*)+<\/p>/g, '</p>')
+    // A link around nothing but spaces has no anchor text; keep the space, drop the link.
+    .replace(/<a\s[^>]*>(\s*)<\/a>/g, '$1');
 
   return { html: clean, toc, faq, paragraphs, firstImage: firstImage.attr('src'), firstImageAlt: firstImage.attr('alt'), words, author, rating };
 }
@@ -611,8 +618,8 @@ function commentThreads(postId: number): { threads: CommentThread[]; count: numb
   return { threads, count: own.length };
 }
 
-/** An upload's file name without its WordPress size suffix: ".../xe-tai-1030x710.jpg" → "xe-tai". */
-const uploadStem = (src: string) => src.replace(/[?#].*$/, '').split('/').pop()!.replace(/\.[a-z0-9]+$/i, '').replace(/-\d+x\d+$/, '').replace(/-scaled$/, '');
+/** An upload's path without host, extension or WordPress size suffix: ".../2018/08/xe-tai-1030x710.jpg" → "/wp-content/uploads/2018/08/xe-tai". */
+const uploadStem = (src: string) => src.replace(/[?#].*$/, '').replace(/^https?:\/\/[^/]+/, '').replace(/\.[a-z0-9]+$/i, '').replace(/-\d+x\d+$/, '').replace(/-scaled$/, '');
 
 /** The alt the article gives the hero image when the same upload (any size) also appears in the body. */
 function bodyAltFor(html: string, image: string): string | undefined {

@@ -127,7 +127,8 @@ test('route trails name the region: Tây Nguyên as its page, other regions as a
   assert.equal(danang[2].href, '/van-chuyen-hang-hoa/#khu-vuc-trung');
   assert.deepEqual(crumbsToJsonLd(danang, '/van-chuyen-hang-hoa/da-nang').map((crumb) => crumb.name), ['Trang chủ', 'Vận chuyển hàng hóa', 'Đà Nẵng']);
   assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/tay-nguyen')).length, 3, 'the region page has no crumb to itself');
-  assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/xe-may')).length, 3, 'cargo pages have no region');
+  assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/xe-may'))[2].href, '/van-chuyen-hang-hoa/#khu-vuc-loai-hang', 'cargo pages link their group on the hub');
+  assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/duong-bien'))[2].href, '/van-chuyen-hang-hoa/#khu-vuc-loai-hang', 'sea freight is a cargo service, not a destination');
 });
 
 test('the Tây Nguyên region page lists every route of the region first', () => {
@@ -140,5 +141,30 @@ test('hero intros taken from a description carry no shouted words', () => {
     const summary = heroSummary(item) ?? '';
     const shouted = summary.match(/\p{Lu}{4,}/gu)?.filter((word) => !['TPHCM'].includes(word)) ?? [];
     assert.deepEqual(shouted, [], item.path);
+  }
+});
+
+test('Laos and Cambodia are listed on the domestic routes nearest to them', () => {
+  for (const abroad of ['/van-chuyen-hang-hoa/lao', '/van-chuyen-hang-hoa/campuchia']) {
+    const listedOn = routeItems.filter((item) => item.region !== 'quoc-te' && relatedPaths(item.path).includes(abroad));
+    assert.ok(listedOn.length >= 3, `${abroad}: ${listedOn.length} domestic routes`);
+  }
+});
+
+test('service pages show two on-topic guides at most', () => {
+  for (const item of [...routeItems, ...cargoItems, ...truckItems]) assert.ok(relatedPosts(item, 2).length <= 2, item.path);
+  const truckGuides = relatedPosts(truckItems[0], 2).map((post) => post.path);
+  assert.equal(truckGuides.some((path) => /phong-thuy|luong-xanh|can-tim-doi-tac/.test(path)), false, 'no off-topic guides on truck pages');
+});
+
+test('the truck-ban guide links the route pages of the cities it covers', () => {
+  const services = relatedServices(byPath('/blog/bien-bao-cam-xe-tai-va-muc-phat')).map((entry) => entry.path);
+  assert.ok(services.includes('/van-chuyen-hang-hoa/tphcm') && services.includes('/van-chuyen-hang-hoa/ha-noi'));
+});
+
+test('article headings stay headings: no heading swallows a table, no empty links', () => {
+  for (const item of legacyItems) {
+    for (const [, text] of item.html.matchAll(/<h[2-4][^>]*>([\s\S]*?)<\/h[2-4]>/g)) assert.ok(text.replace(/<[^>]+>/g, '').length <= 200, `${item.path}: heading of ${text.length} chars`);
+    assert.equal(/<a\s[^>]*>\s*<\/a>/.test(item.html), false, `${item.path}: empty link`);
   }
 });

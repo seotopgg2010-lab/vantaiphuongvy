@@ -96,7 +96,7 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
                     </span>
                     <span className="min-w-0 flex-1">
                       {/* Wraps to 2 lines so long names ("Điện Biên – Lai Châu") stay readable in the 2-col mobile grid. */}
-                      <span className="line-clamp-2 text-sm font-semibold text-ink wrap-break-word sm:text-base">{item.label}</span>
+                      <span className="line-clamp-2 text-sm font-semibold text-ink wrap-break-word sm:text-base">{item.label}</span>{' '}
                       {/* Only a few routes have these facts; the compact home grid stays uniform without them. */}
                       {!compact && (item.transit || item.priceFrom) && (
                         <span className="block truncate text-xs text-muted">

@@ -163,7 +163,7 @@ export function renderLlmsTxt(): string {
     '## Dịch vụ chính',
     [`- [Trang chủ](${markdownUrl('/')}): tổng quan dịch vụ, tuyến, quy trình gửi hàng, ưu đãi`, ...hubs.map((item) => twinLink(item, item.label, note(item)))].join('\n'),
     ...routesByRegion().map((group) => `## Tuyến vận chuyển — ${group.label}\n\n${group.items.map((item) => twinLink(item, item.label, facts(item) || undefined)).join('\n')}`),
-    '## Vận chuyển theo loại hàng',
+    '## Loại hàng & phương thức vận chuyển',
     cargoItems.map((item) => twinLink(item, item.label, note(item))).join('\n'),
     '## Cho thuê xe tải theo khu vực',
     truckItems.map((item) => twinLink(item, item.label, note(item))).join('\n'),

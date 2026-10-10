@@ -51,8 +51,8 @@ export const REGION_LABELS: Record<LegacyRegion, string> = {
   trung: 'Miền Trung',
   nam: 'Miền Nam',
   'tay-nguyen': 'Tây Nguyên',
-  'quoc-te': 'Quốc tế & đa phương thức',
-  'loai-hang': 'Theo loại hàng',
+  'quoc-te': 'Quốc tế',
+  'loai-hang': 'Loại hàng & phương thức',
 };
 
 export const ROUTE_REGIONS: LegacyRegion[] = ['bac', 'trung', 'nam', 'tay-nguyen', 'quoc-te'];
@@ -126,6 +126,14 @@ const geoNeighbours: Map<string, LegacyEntry[]> = (() => {
       if (list.length < RELATED_LIMIT - 1 && !list.includes(item)) list.push(item);
     }
   }
+  // Laos and Cambodia are listed on the three domestic routes nearest to them (border provinces).
+  for (const abroad of routeItems.filter((item) => item.region === 'quoc-te' && ROUTE_COORDINATES[item.slug])) {
+    located
+      .map((page) => ({ page, km: distanceKm(ROUTE_COORDINATES[abroad.slug], ROUTE_COORDINATES[page.slug]) }))
+      .sort((a, b) => a.km - b.km || a.page.path.localeCompare(b.page.path))
+      .slice(0, 3)
+      .forEach(({ page }) => lists.get(page.path)!.push(abroad));
+  }
   return lists;
 })();
 
@@ -168,6 +176,10 @@ export function truckRelatedRoutes(item: LegacyEntry, limit = RELATED_LIMIT): Le
   return [route, ...relatedRoutes(route, limit).filter((entry) => entry.template === 'route')].slice(0, limit);
 }
 
+const SERVICE_TEMPLATES = new Set(['route', 'route-hub', 'cargo', 'truck', 'truck-hub']);
+/** Guides listed on a service page: two, so the guides do not outweigh the service pages around them. */
+export const SERVICE_RELATED_POSTS = 2;
+
 /** What each guide is about; pages and guides sharing a topic link to each other. */
 type Topic = 'truck' | 'cargo' | 'dangerous' | 'route' | 'business' | 'company';
 const POST_TOPICS: Record<string, Topic[]> = {
@@ -184,6 +196,7 @@ const POST_TOPICS: Record<string, Topic[]> = {
 
 function topicsOf(item: LegacyEntry): Topic[] {
   if (item.kind === 'post') return POST_TOPICS[item.path] ?? [];
+  if (item.template === 'home') return ['route', 'truck', 'cargo'];
   if (item.template === 'truck' || item.template === 'truck-hub') return ['truck'];
   if (item.path === '/van-chuyen-hang-hoa/dau-nhot') return ['dangerous', 'cargo'];
   if (item.template === 'cargo') return ['cargo'];
@@ -199,9 +212,12 @@ function topicsOf(item: LegacyEntry): Topic[] {
  */
 export function relatedPosts(item: LegacyEntry, limit = 3): LegacyEntry[] {
   const topics = new Set(topicsOf(item));
+  // Service pages only show guides on their topic; other pages may fill with the rest.
+  const onTopicOnly = SERVICE_TEMPLATES.has(item.template);
   const scored = legacyPosts
     .filter((post) => post.path !== item.path)
-    .map((post) => ({ post, score: topicsOf(post).filter((topic) => topics.has(topic)).length }));
+    .map((post) => ({ post, score: topicsOf(post).filter((topic) => topics.has(topic)).length }))
+    .filter((entry) => !onTopicOnly || entry.score > 0);
   const tiers = [...new Set(scored.map((entry) => entry.score))].sort((a, b) => b - a);
   const seed = seedOf(item.path);
   return tiers.flatMap((score) => rotate(scored.filter((entry) => entry.score === score).map((entry) => entry.post), seed)).slice(0, limit);
@@ -218,7 +234,12 @@ const TOPIC_SERVICES: Record<Topic, string[]> = {
 };
 
 /** Topic services first; the main route pages fill guides whose topics name only one or two. */
+/** Guides about specific cities link those cities' route pages (the truck-ban guide covers these four). */
+const POST_SERVICES: Record<string, string[]> = {
+  '/blog/bien-bao-cam-xe-tai-va-muc-phat': ['/van-chuyen-hang-hoa/tphcm', '/van-chuyen-hang-hoa/ha-noi', '/van-chuyen-hang-hoa/da-nang', '/van-chuyen-hang-hoa/nha-trang'],
+};
+
 export function relatedServices(item: LegacyEntry, limit = 4): LegacyEntry[] {
-  const paths = [...new Set([...topicsOf(item).flatMap((topic) => TOPIC_SERVICES[topic]), ...TOPIC_SERVICES.route])];
+  const paths = [...new Set([...(POST_SERVICES[item.path] ?? []), ...topicsOf(item).flatMap((topic) => TOPIC_SERVICES[topic]), ...TOPIC_SERVICES.route])];
   return byPaths(paths).slice(0, limit);
 }

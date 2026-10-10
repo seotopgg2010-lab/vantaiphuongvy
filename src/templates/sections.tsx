@@ -57,13 +57,15 @@ export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khá
         {items.map((item) => {
           const isRoute = item.template === 'route';
           const Icon = isRoute ? MapPin : Truck;
+          const kind = isRoute ? 'Tuyến' : item.template === 'truck' ? 'Thuê xe tải' : 'Dịch vụ';
           return (
             <li key={item.path}>
               <Link href={withSlash(item.path)} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-4 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white"><Icon className="h-5 w-5" aria-hidden="true" /></span>
                 <span className="min-w-0 flex-1">
-                  {/* The space keeps the anchor text "Tuyến Hải Phòng" rather than "TuyếnHải Phòng". */}
-                  <span className="block text-xs text-muted">{isRoute ? 'Tuyến' : item.template === 'truck' ? 'Thuê xe tải' : 'Dịch vụ'}</span>{' '}
+                  {/* The space keeps the anchor text "Tuyến Hải Phòng" rather than "TuyếnHải Phòng"; a label that
+                      already starts with the kind ("Thuê xe tải Đà Nẵng") does not repeat it. */}
+                  {!item.label.toLocaleLowerCase('vi').startsWith(kind.toLocaleLowerCase('vi')) && <><span className="block text-xs text-muted">{kind}</span>{' '}</>}
                   <span className="line-clamp-2 font-semibold text-ink">{item.label}</span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />

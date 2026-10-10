@@ -12,12 +12,12 @@ import { StatsStrip } from '@/components/site/marketing';
 import { UploadImage } from '@/components/site/upload-image';
 import { RouteWarehouses } from '@/components/site/warehouse-list';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
-import { relatedPosts, relatedRoutes, relatedServices, truckItems, truckRelatedRoutes } from '@/lib/legacy-content';
+import { cargoItems, relatedPosts, relatedRoutes, relatedServices, SERVICE_RELATED_POSTS, truckItems, truckRelatedRoutes } from '@/lib/legacy-content';
 import { displayTitle, heroContent, heroSummary } from '@/lib/legacy-render';
 import type { LegacyAuthor, LegacyEntry } from '@/lib/legacy-types';
 import { HERO_LEADS } from '@/lib/marketing';
 import { markdownPathFor } from '@/lib/markdown-paths';
-import { getExplorerRegions, withSlash } from '@/lib/navigation';
+import { getExplorerRegions, regionAnchor, withSlash } from '@/lib/navigation';
 import { absoluteUrl, canonicalUrl } from '@/lib/seo';
 import { ArticleBody } from './article-body';
 import { ContactTemplate } from './contact-template';
@@ -68,24 +68,27 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
         imageAlt={item.imageAlt || item.title}
         formHref="#bao-gia"
       />
-      <RouteWarehouses path={item.path} />
+      <RouteWarehouses path={item.path} origins={item.template === 'cargo'} />
       <ArticleBody html={body} toc={item.toc} quoteHeading={isRoute ? `Báo giá tuyến ${item.label}` : `Báo giá ${serviceSubject(item)}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
       <LeadSection title={isRoute ? `Nhận báo giá vận chuyển đi ${item.label}` : `Nhận báo giá ${serviceSubject(item)}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
-      {isTruck ? <><TruckLinks current={item.path} /><RelatedRoutes items={truckRelatedRoutes(item)} title="Chành xe gửi hàng đi tỉnh" /></> : item.region === 'loai-hang'
+      {isTruck ? <><TruckLinks current={item.path} /><RelatedRoutes items={truckRelatedRoutes(item, 4)} title={`Chành xe từ ${truckCity(item)} đi tỉnh`} /></> : item.region === 'loai-hang'
         ? <RelatedRoutes items={relatedRoutes(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ vận chuyển khác" />
         : <RelatedRoutes items={relatedRoutes(item)} />}
-      <RelatedPosts posts={relatedPosts(item)} action={null} />
+      <RelatedPosts posts={relatedPosts(item, SERVICE_RELATED_POSTS)} action={null} />
       <CtaBand />
     </>
   );
 }
+
+/** The city a truck rental page serves: "Thuê xe tải Đà Nẵng" → "Đà Nẵng". */
+const truckCity = (item: LegacyEntry) => item.label.replace(/^Thuê xe tải\s+/i, '');
 
 function TruckLinks({ current }: { current?: string }) {
   const items = truckItems.filter((truck) => truck.path !== current);
   return (
     <section aria-labelledby="truck-links" className="container-x py-10 md:py-14">
       {/* The hub lists these cards itself, so it gets no link back to itself. */}
-      <SectionHeading id="truck-links" eyebrow="Cho thuê xe tải" title="Thuê xe tải theo khu vực" action={current ? { label: 'Bảng giá thuê xe', href: '/thue-xe-tai/' } : undefined} />
+      <SectionHeading id="truck-links" eyebrow="Cho thuê xe tải" title={current ? 'Thuê xe tải ở thành phố khác' : 'Thuê xe tải theo khu vực'} action={current ? { label: 'Bảng giá thuê xe', href: '/thue-xe-tai/' } : undefined} />
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((truck) => (
           <li key={truck.path}>
@@ -94,7 +97,7 @@ function TruckLinks({ current }: { current?: string }) {
                 {truck.image && <UploadImage src={truck.image} alt={truck.imageAlt || truck.title} fill sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
               </span>
               <span className="flex items-center justify-between gap-3 p-5">
-                <span><span className="block text-lg font-bold text-ink">{truck.label}</span><span className="mt-1 block text-sm text-muted">Xe tải chở hàng nội thành & đi tỉnh</span></span>
+                <span><span className="block text-lg font-bold text-ink">{truck.label}</span>{' '}<span className="mt-1 block text-sm text-muted">Xe tải chở hàng nội thành & đi tỉnh</span></span>
                 <ArrowRight className="h-5 w-5 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />
               </span>
             </Link>
@@ -110,14 +113,19 @@ function RouteHubTemplate({ item }: { item: LegacyEntry }) {
   return (
     <>
       <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={heroSummary(item, lead)} updated={revisedOn(item)} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} rating={item.rating} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
+      <RouteWarehouses path={item.path} origins />
       <section aria-labelledby="route-directory" className="container-x py-12 md:py-16">
         <SectionHeading id="route-directory" eyebrow="Danh sách tuyến" title="Chọn tỉnh, thành phố cần gửi hàng" lead="Tra cứu nhanh tuyến vận chuyển từ TP.HCM đi các tỉnh và ngược lại. Mỗi tuyến có bảng giá, thời gian và lịch xe riêng." />
         <div className="mt-8"><RouteExplorer regions={getExplorerRegions()} /></div>
       </section>
+      {/* The cargo and mode services group; cargo page breadcrumbs link this anchor. */}
+      <div id={regionAnchor('loai-hang')} className="scroll-mt-28">
+        <RelatedRoutes items={cargoItems} eyebrow="Dịch vụ theo loại hàng" title="Loại hàng & phương thức vận chuyển" action={null} />
+      </div>
       <div className="border-y border-line bg-surface"><div className="container-x py-10"><StatsStrip /></div></div>
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá vận chuyển Bắc Nam" />
-      <LeadSection title="Nhận bảng giá vận chuyển mới nhất" page={withSlash(item.path)} />
-      <RelatedPosts posts={relatedPosts(item)} action={null} />
+      <LeadSection title="Nhận bảng giá vận chuyển Bắc Nam" page={withSlash(item.path)} />
+      <RelatedPosts posts={relatedPosts(item, SERVICE_RELATED_POSTS)} action={null} />
       <CtaBand />
     </>
   );
@@ -131,7 +139,7 @@ function TruckHubTemplate({ item }: { item: LegacyEntry }) {
       <TruckLinks />
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá thuê xe tải" />
       <LeadSection title="Nhận báo giá thuê xe tải" page={withSlash(item.path)} />
-      <RelatedPosts posts={relatedPosts(item)} action={null} />
+      <RelatedPosts posts={relatedPosts(item, SERVICE_RELATED_POSTS)} action={null} />
       <CtaBand />
     </>
   );

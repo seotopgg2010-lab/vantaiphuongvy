@@ -9,7 +9,7 @@ import { RouteExplorer } from '@/components/site/route-explorer';
 import { SectionHeading } from '@/components/site/section-heading';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
-import { getLegacyByPath, homeFaq, legacyPosts } from '@/lib/legacy-content';
+import { getLegacyByPath, homeFaq, legacyPosts, relatedPosts } from '@/lib/legacy-content';
 import { noBreakBrand } from '@/lib/legacy-render';
 import { ABOUT, HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES, SERVICES_LEAD } from '@/lib/marketing';
 import { getExplorerRegions } from '@/lib/navigation';
@@ -24,10 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function HomePage() {
   const faq = homeFaq();
-  const posts = legacyPosts.slice(0, 3);
+  const home = getLegacyByPath('/');
+  // Guides that support the service pages (routes, trucks, cargo), not simply the newest three.
+  const posts = home ? relatedPosts(home, 3) : legacyPosts.slice(0, 3);
   const regions = getExplorerRegions();
   const routeCount = regions.reduce((total, region) => total + region.items.length, 0);
-  const home = getLegacyByPath('/');
 
   return (
     <>
@@ -87,8 +88,8 @@ export default function HomePage() {
                 <UploadImage src={service.image} alt={service.imageAlt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
               </span>
               <span className="flex flex-1 flex-col p-5 sm:p-6">
-                <span className="text-xl font-bold text-ink sm:text-2xl">{service.title}</span>
-                <span className="mt-2 flex-1 text-muted">{service.text}</span>
+                <span className="text-xl font-bold text-ink sm:text-2xl">{service.title}</span>{' '}
+                <span className="mt-2 flex-1 text-muted">{service.text}</span>{' '}
                 <span className="mt-4 inline-flex items-center gap-1.5 font-semibold text-brand-600">{service.cta}<ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" aria-hidden="true" /></span>
               </span>
             </Link>
@@ -146,7 +147,7 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
             <div>
               <p className="eyebrow">Về Phương Vy</p>
-              <h2 id="about" className="h-section mt-2.5">{noBreakBrand(SITE_CONFIG.companyName)}</h2>
+              <h2 id="about" className="h-section mt-2.5"><Link href="/gioi-thieu/" className="transition hover:text-brand-600 hover:underline">{noBreakBrand(SITE_CONFIG.companyName)}</Link></h2>
               <div className="mt-4 space-y-4 text-[1.0625rem] leading-8 text-muted">
                 {ABOUT.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>

@@ -199,9 +199,9 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
         <div id={`${menuId}-services`} className="animate-mega absolute inset-x-0 top-full hidden border-t border-line bg-white shadow-[0_32px_64px_-32px_rgb(10_61_107/0.45)] lg:block" onMouseEnter={keepOpen}>
           <div className="container-x grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)_17rem] gap-8 py-6">
             <div>
-              <MenuTitle href="/van-chuyen-hang-hoa/">Vận chuyển theo loại hàng</MenuTitle>
+              <MenuTitle href="/van-chuyen-hang-hoa/#khu-vuc-loai-hang">Loại hàng &amp; phương thức</MenuTitle>
               <MenuTiles links={nav.cargo} pathname={pathname} />
-              <MenuTitle className="mt-5" href="/van-chuyen-hang-hoa/duong-bien/">Quốc tế &amp; đa phương thức</MenuTitle>
+              <MenuTitle className="mt-5" href="/van-chuyen-hang-hoa/#khu-vuc-quoc-te">Quốc tế</MenuTitle>
               <MenuTiles links={international} pathname={pathname} />
             </div>
             <div>
@@ -276,7 +276,7 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
                   </div>
                   <DrawerHeading>Dịch vụ</DrawerHeading>
                   <div className="divide-y divide-line rounded-xl border border-line">
-                    <DrawerGroup title="Theo loại hàng" count={nav.cargo.length} links={nav.cargo} pathname={pathname} icons />
+                    <DrawerGroup title="Loại hàng & phương thức" count={nav.cargo.length} links={nav.cargo} pathname={pathname} icons />
                     <DrawerGroup title="Thuê xe tải" count={nav.trucks.length} links={nav.trucks} pathname={pathname} />
                   </div>
                   <DrawerHeading>Về Phương Vy</DrawerHeading>

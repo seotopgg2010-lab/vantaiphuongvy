@@ -21,7 +21,8 @@ export function socialCardFor(path: string): SocialCard | undefined {
   if (!item) return undefined;
   const eyebrow = {
     route: item.region === 'quoc-te' ? 'Vận chuyển quốc tế' : `Chành xe · TP.HCM – ${item.label}`,
-    cargo: item.region === 'quoc-te' ? 'Vận chuyển quốc tế' : 'Vận chuyển theo loại hàng',
+    // Sea and air freight ship abroad too, though they sit with the cargo services.
+    cargo: item.region === 'quoc-te' || /\/duong-(bien|hang-khong)$/.test(item.path) ? 'Vận chuyển quốc tế' : 'Vận chuyển theo loại hàng',
     'route-hub': 'Chành xe Bắc – Trung – Nam',
     truck: 'Cho thuê xe tải',
     'truck-hub': 'Cho thuê xe tải chở hàng',
