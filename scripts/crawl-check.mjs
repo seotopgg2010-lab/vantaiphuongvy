@@ -62,14 +62,14 @@ await Promise.all(Array.from({ length: 6 }, worker));
 
 const contract = [
   ['/wp-login.php', 410], ['/xmlrpc.php', 410], ['/sitemap980.xml', 410],
-  ['/home-3/', 308], ['/sitemap_index.xml', 308], ['/feed/', 308], ['/?p=1337', 301],
+  ['/home-3/', 308], ['/sitemap_index.xml', 308], ['/feed/', 200], ['/feed/atom/', 308], ['/bang-gia-cuoc-phi-chuyen-hang-bac-nam/', 308], ['/author/admin/', 308], ['/?p=1337', 301],
   ['/en/', 404], ['/khong-ton-tai/', 404], ['/robots.txt', 200], ['/sitemap.xml', 200],
   // the internal locale prefix and the internal twin route are never public URLs
   ['/vi/faq/', 308], ['/md/blog/', 404],
   // dotted single-segment paths must not fall through to the home page (soft 404)
   ['/favicon.ico', 404], ['/ads.txt', 404], ['/foo.php', 404], ['/index.html', 404],
   // machine-readable surfaces
-  ['/index.md', 200], ['/blog.md', 200], ['/van-chuyen-hang-hoa/ha-noi.md', 200], ['/khong-ton-tai.md', 404],
+  ['/index.md', 200], ['/index.html.md', 200], ['/blog.md', 200], ['/van-chuyen-hang-hoa/ha-noi.md', 200], ['/khong-ton-tai.md', 404],
   ['/llms.txt', 200], ['/llms-full.txt', 200], ['/og/index.png', 200], ['/og/van-chuyen-hang-hoa/ha-noi.png', 200],
 ];
 for (const [path, expected] of contract) {
