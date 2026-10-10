@@ -8580,5 +8580,263 @@
     "thường tiết kiệm hơn nhờ"
    ]
   ]
+ },
+ {
+  "sentence": "Chiều cao (tính từ mặt đường bộ trở lên) lớn hơn 4,2 mét (trừ container)",
+  "changes": [
+   [
+    "Chiều cao (tính từ mặt đường bộ trở lên) lớn hơn 4,2 mét (trừ container)",
+    "Chiều cao tính từ điểm cao nhất của mặt đường xe chạy trở lên lớn hơn 4,2 mét; với xe chở container là lớn hơn 4,35 mét"
+   ]
+  ]
+ },
+ {
+  "sentence": "Hàng siêu trọng là hàng không thể tháo rời (chia nhỏ) có trọng lượng trên 32 tấn",
+  "changes": [
+   [
+    "Hàng siêu trọng là hàng không thể tháo rời (chia nhỏ) có trọng lượng trên 32 tấn",
+    "Hàng siêu trọng là hàng không thể tháo rời (chia nhỏ), khi xếp lên xe hoặc tổ hợp xe làm cho khối lượng toàn bộ của xe hoặc tổ hợp xe (kể cả hàng hóa) lớn hơn 48 tấn"
+   ]
+  ]
+ },
+ {
+  "sentence": "Vận chuyển hàng hóa siêu trường siêu trọng phải sử dụng xe vận tải phù hợp với loại hàng và phải có giấy phép sử dụng đường bộ do cơ quan nhà nước có thẩm quyền cấp",
+  "changes": [
+   [
+    "Vận chuyển hàng hóa siêu trường siêu trọng phải sử dụng xe vận tải phù hợp với loại hàng và phải có giấy phép sử dụng đường bộ do cơ quan nhà nước có thẩm quyền cấp",
+    "Vận chuyển hàng hóa siêu trường siêu trọng phải dùng xe phù hợp với loại hàng, kích thước, khối lượng của hàng và phải có giấy phép lưu hành xe do Sở Xây dựng cấp"
+   ]
+  ]
+ },
+ {
+  "sentence": "Tổng trọng lượng của xe gồm trọng lượng bản thân xe cộng với trọng lượng hàng hoá xếp trên xe (nếu có).",
+  "changes": [
+   [
+    "Tổng trọng lượng của xe gồm trọng lượng bản thân xe cộng với trọng lượng hàng hoá xếp trên xe (nếu có).",
+    "Khối lượng toàn bộ của xe gồm khối lượng bản thân xe, khối lượng thiết bị chuyên dùng hỗ trợ vận chuyển hàng siêu trường, siêu trọng lắp trên xe (nếu có) và khối lượng người, hành lý, hàng hóa xếp trên xe (kể cả công te nơ và thiết bị kê, chèn, chằng buộc)."
+   ]
+  ]
+ },
+ {
+  "sentence": "Tải trọng trục xe là tổng trọng lượng của xe phân bố trên mỗi trục xe (trục đơn, cụm trục kép, cụm trục ba).",
+  "changes": [
+   [
+    "Tải trọng trục xe là tổng trọng lượng của xe phân bố trên mỗi trục xe (trục đơn, cụm trục kép, cụm trục ba).",
+    "Tải trọng trục xe là khối lượng toàn bộ của xe phân bố trên mỗi trục xe hoặc cụm trục xe (trục đơn, cụm trục kép, cụm trục ba)."
+   ]
+  ]
+ },
+ {
+  "sentence": "Tổ hợp xe với rơ moóc hoặc sơ mi rơ moóc là một xe kéo một rơ moóc hoặc sự kết hợp một xe đầu kéo với một sơ mi rơ moóc.",
+  "changes": [
+   [
+    "Tổ hợp xe với rơ moóc hoặc sơ mi rơ moóc là một xe kéo một rơ moóc hoặc sự kết hợp một xe đầu kéo với một sơ mi rơ moóc.",
+    "Tổ hợp xe gồm một xe ô tô kéo một rơ moóc, một xe ô tô đầu kéo kéo một sơ mi rơ moóc, hoặc nhiều xe được ghép, nối để vận chuyển hàng siêu trường, siêu trọng."
+   ]
+  ]
+ },
+ {
+  "sentence": "Chủ phương tiện là tổ chức, cá nhân đứng tên đăng ký phương tiện.",
+  "changes": [],
+  "remove": "block"
+ },
+ {
+  "sentence": "Chiều cao tính từ điểm cao nhất của mặt đường xe chạy trở lên lớn hơn 4,2 mét; đối với xe chở container, theo quy định tại khoản 3 Điều 17 của Thông tư này.",
+  "changes": [
+   [
+    "đối với xe chở container, theo quy định tại khoản 3 Điều 17 của Thông tư này.",
+    "đối với xe chở container lớn hơn 4,35 mét (khoản 1 Điều 10 Thông tư 12/2025/TT-BXD)."
+   ]
+  ]
+ },
+ {
+  "sentence": "Hàng siêu trọng là hàng không thể tháo rời, có trọng lượng lớn hơn 32 tấn.",
+  "changes": [
+   [
+    "Hàng siêu trọng là hàng không thể tháo rời, có trọng lượng lớn hơn 32 tấn.",
+    "Hàng siêu trọng là hàng không thể tháo rời, khi xếp lên xe hoặc tổ hợp xe làm cho khối lượng toàn bộ của xe hoặc tổ hợp xe (kể cả hàng hóa) lớn hơn 48 tấn."
+   ]
+  ]
+ },
+ {
+  "sentence": "Phương tiện vận chuyển hàng siêu trường, siêu trọng là loại xe chuyên dùng được thiết kế, chế tạo để vận chuyển hàng siêu trường, siêu trọng có kích thước, tải trọng phù hợp với loại hàng hoá vận chuyển và phải tuân thủ theo các điều kiện quy định ghi trong giấy phép lưu hành xe.",
+  "changes": [
+   [
+    "Phương tiện vận chuyển hàng siêu trường, siêu trọng là loại xe chuyên dùng được thiết kế, chế tạo để vận chuyển hàng siêu trường, siêu trọng có kích thước, tải trọng phù hợp với loại hàng hoá vận chuyển và phải tuân thủ theo các điều kiện quy định ghi trong giấy phép lưu hành xe.",
+    "Xe vận chuyển hàng siêu trường, siêu trọng phải phù hợp với loại hàng, kích thước, khối lượng của hàng, đúng các thông số ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường, và phải có giấy phép lưu hành xe; khi cần, xe được ghép, nối thành tổ hợp nhiều xe."
+   ]
+  ]
+ },
+ {
+  "sentence": "– Xe có tải trọng thiết kế chở hàng từ 5 tấn trở lên (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 4,2 mét;",
+  "changes": [
+   [
+    "– Xe có tải trọng thiết kế chở hàng từ 5 tấn trở lên (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 4,2 mét;",
+    "– Xe có khối lượng hàng hóa chuyên chở theo thiết kế từ 5 tấn trở lên (ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường): chiều cao xếp hàng hóa không quá 4,2 mét;"
+   ]
+  ]
+ },
+ {
+  "sentence": "– Xe có tải trọng thiết kế chở hàng từ 2,5 tấn đến dưới 5 tấn (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 3,5 mét;",
+  "changes": [
+   [
+    "– Xe có tải trọng thiết kế chở hàng từ 2,5 tấn đến dưới 5 tấn (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 3,5 mét;",
+    "– Xe có khối lượng hàng hóa chuyên chở theo thiết kế từ 2,5 tấn đến dưới 5 tấn (ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường): chiều cao xếp hàng hóa không quá 3,5 mét;"
+   ]
+  ]
+ },
+ {
+  "sentence": "– Xe có tải trọng thiết kế chở hàng dưới 2,5 tấn (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 2,8 mét.",
+  "changes": [
+   [
+    "– Xe có tải trọng thiết kế chở hàng dưới 2,5 tấn (ghi trong giấy đăng ký xe): Chiều cao xếp hàng hóa không quá 2,8 mét.",
+    "– Xe có khối lượng hàng hóa chuyên chở theo thiết kế dưới 2,5 tấn (ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường): chiều cao xếp hàng hóa không quá 2,8 mét."
+   ]
+  ]
+ },
+ {
+  "sentence": "Xe chuyên dùng và xe chở container: Chiều cao xếp hàng hóa (tính từ điểm cao nhất của mặt đường xe chạy trở lên) thực hiện theo lộ trình sau:",
+  "changes": [
+   [
+    "Xe chuyên dùng và xe chở container: Chiều cao xếp hàng hóa (tính từ điểm cao nhất của mặt đường xe chạy trở lên) thực hiện theo lộ trình sau:",
+    "Xe chở container: chiều cao xếp hàng hóa tính từ điểm cao nhất của mặt đường xe chạy trở lên không quá 4,35 mét."
+   ]
+  ]
+ },
+ {
+  "sentence": "– Không quá 4,35 mét áp dụng đến hết ngày 31 tháng 12 năm 2010; khi qua khu vực cầu chui, cầu vượt xe chỉ được phép chạy với tốc độ không quá 30 km/giờ;",
+  "changes": [],
+  "remove": "block"
+ },
+ {
+  "sentence": "– Không quá 4,2 mét áp dụng từ ngày 01 tháng 01 năm 2011.",
+  "changes": [],
+  "remove": "block"
+ },
+ {
+  "sentence": "Trường hợp xe chở hàng rời, vật liệu xây dựng như đất, đá, cát, sỏi, than, quặng hoặc các hàng có tính chất tương tự: Chiều cao xếp hàng hóa không vượt quá chiều cao của thùng xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt.",
+  "changes": [
+   [
+    "Trường hợp xe chở hàng rời, vật liệu xây dựng như đất, đá, cát, sỏi, than, quặng hoặc các hàng có tính chất tương tự: Chiều cao xếp hàng hóa không vượt quá chiều cao của thùng xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt.",
+    "Xe chở hàng rời, vật liệu xây dựng, phế thải phải che đậy kín, không để rơi vãi, và chiều cao tối đa của hàng phải thấp hơn mép trên thành thùng xe ít nhất 10 cm."
+   ]
+  ]
+ },
+ {
+  "sentence": "– Chiều rộng xếp hàng hóa cho phép trên phương tiện giao thông cơ giới đường bộ là chiều rộng của thùng xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt.",
+  "changes": [
+   [
+    "– Chiều rộng xếp hàng hóa cho phép trên phương tiện giao thông cơ giới đường bộ là chiều rộng của thùng xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt.",
+    "– Chiều rộng xếp hàng hóa cho phép trên phương tiện giao thông cơ giới đường bộ là chiều rộng của thùng xe theo thiết kế ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường của xe."
+   ]
+  ]
+ },
+ {
+  "sentence": "– Chiều dài xếp hàng hóa cho phép trên phương tiện giao thông cơ giới đường bộ không được lớn hơn 1,1 lần chiều dài toàn bộ của xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt và không lớn hơn 20,0 mét.",
+  "changes": [
+   [
+    "– Chiều dài xếp hàng hóa cho phép trên phương tiện giao thông cơ giới đường bộ không được lớn hơn 1,1 lần chiều dài toàn bộ của xe theo thiết kế của nhà sản xuất hoặc theo thiết kế cải tạo đã được cơ quan có thẩm quyền phê duyệt và không lớn hơn 20,0 mét.",
+    "– Chiều dài xếp hàng hóa cho phép không được lớn hơn 1,1 lần chiều dài toàn bộ của xe ghi trong giấy chứng nhận kiểm định an toàn kỹ thuật và bảo vệ môi trường, không lớn hơn 20,0 mét và không được vượt phía trước, phía sau thùng xe quá 10% chiều dài toàn bộ của xe."
+   ]
+  ]
+ },
+ {
+  "sentence": "Vận chuyển quá khổ quá tải là vận chuyển các máy móc thiết bị có kích thước hoặc trọng lượng hàng vượt quá mức quy định được phép vận chuyển của BGTVT đưa ra, các mặt hàng này không thể tháo rời hoặc chia nhỏ buộc phải vận chuyển nguyên trạng của hàng.",
+  "changes": [
+   [
+    "Vận chuyển quá khổ quá tải là vận chuyển các máy móc thiết bị có kích thước hoặc trọng lượng hàng vượt quá mức quy định được phép vận chuyển của BGTVT đưa ra, các mặt hàng này không thể tháo rời hoặc chia nhỏ buộc phải vận chuyển nguyên trạng của hàng.",
+    "Vận chuyển quá khổ quá tải là chở máy móc, thiết bị không thể chia nhỏ, tháo rời mà khi xếp lên xe làm xe vượt kích thước hoặc khối lượng cho phép theo Thông tư 12/2025/TT-BXD của Bộ Xây dựng, nên phải chở nguyên trạng và có giấy phép lưu hành xe."
+   ]
+  ]
+ },
+ {
+  "sentence": "Xe quá khổ là phương tiện giao thông cơ giới đường bộ, có trọng lượng kích thước bao ngoài kể cả hàng hóa xếp lên xe (nếu có) vượt quá kích thước tối đa cho phép quy định cho các phương tiện giao thông cơ giới đường bộ khi tham gia giao thông trên đường bộ.",
+  "changes": [
+   [
+    "Xe quá khổ là phương tiện giao thông cơ giới đường bộ, có trọng lượng kích thước bao ngoài kể cả hàng hóa xếp lên xe (nếu có) vượt quá kích thước tối đa cho phép quy định cho các phương tiện giao thông cơ giới đường bộ khi tham gia giao thông trên đường bộ.",
+    "Xe quá khổ giới hạn là xe cơ giới, xe máy chuyên dùng có kích thước bao ngoài (kể cả hàng hóa xếp trên xe) vượt quá kích thước giới hạn cho phép của xe, vượt quá kích thước cho phép xếp hàng hóa của xe hoặc vượt quá khổ giới hạn của đường bộ."
+   ]
+  ]
+ },
+ {
+  "sentence": "Quy định về hàng siêu trường, siêu trọng trên đường bộ được Bộ Giao Thông Vận Tải quy định và ban hành năm 2015, theo đó:",
+  "changes": [
+   [
+    "Quy định về hàng siêu trường, siêu trọng trên đường bộ được Bộ Giao Thông Vận Tải quy định và ban hành năm 2015, theo đó:",
+    "Hàng siêu trường, siêu trọng trên đường bộ hiện được quy định tại Thông tư 12/2025/TT-BXD của Bộ Xây dựng (sửa đổi bởi Thông tư 19/2026/TT-BXD), theo đó:"
+   ]
+  ]
+ },
+ {
+  "sentence": "Hàng siêu trọng là hàng không thể tháo rời và có trọng lượng lớn hơn 32 tấn.",
+  "changes": [
+   [
+    "Hàng siêu trọng là hàng không thể tháo rời và có trọng lượng lớn hơn 32 tấn.",
+    "Hàng siêu trọng là hàng không thể tháo rời, khi xếp lên xe hoặc tổ hợp xe làm cho khối lượng toàn bộ của xe hoặc tổ hợp xe (kể cả hàng hóa) lớn hơn 48 tấn."
+   ]
+  ]
+ },
+ {
+  "sentence": "Có chiều dài lớn hơn 20 mét, chiều rộng lớn hơn 2.5 mét, chiều cao lớn hơn 4.2 mét hoặc trọng lượng trên 32 tấn.",
+  "changes": [
+   [
+    "Có chiều dài lớn hơn 20 mét, chiều rộng lớn hơn 2.5 mét, chiều cao lớn hơn 4.2 mét hoặc trọng lượng trên 32 tấn.",
+    "Khi xếp lên xe, xe cùng hàng dài hơn 20 mét, rộng hơn 2,5 mét, cao hơn 4,2 mét tính từ mặt đường (xe chở container: hơn 4,35 mét) hoặc có khối lượng toàn bộ hơn 48 tấn."
+   ]
+  ]
+ },
+ {
+  "sentence": "Đối với xe bán tải chiều dài khi xếp hàng hóa lên thùng xe bán tải không được quá 1,1 lần chiều dài của toàn bộ xe theo thiết kế chuẩn và không quá 20m. và hàng hóa trên xe có chiều cao không được vượt quá chiều cao của thùng xe.",
+  "changes": [
+   [
+    "Đối với xe bán tải chiều dài khi xếp hàng hóa lên thùng xe bán tải không được quá 1,1 lần chiều dài của toàn bộ xe theo thiết kế chuẩn và không quá 20m. và hàng hóa trên xe có chiều cao không được vượt quá chiều cao của thùng xe.",
+    "Đối với xe bán tải, chiều dài xếp hàng không được quá 1,1 lần chiều dài toàn bộ của xe ghi trong giấy chứng nhận kiểm định, không quá 20 m và không vượt phía trước, phía sau thùng xe quá 10% chiều dài toàn bộ của xe; chiều cao xếp hàng theo Điều 16 Thông tư 12/2025/TT-BXD (thùng có mui: trong phạm vi thùng xe; thùng hở không mui: hàng vượt thành thùng phải chằng buộc chắc chắn và không cao quá mức theo tải trọng chở hàng của xe, với xe chở dưới 2,5 tấn là 2,8 m tính từ mặt đường)."
+   ]
+  ]
+ },
+ {
+  "sentence": "Các phương tiện vận chuyển này đều được cấp phép vận chuyển hàng quá khổ quá tải theo quy định của Bộ Giao thông Vận tải.",
+  "changes": [
+   [
+    "Các phương tiện vận chuyển này đều được cấp phép vận chuyển hàng quá khổ quá tải theo quy định của Bộ Giao thông Vận tải.",
+    "Xe chở hàng quá khổ, quá tải chỉ được lưu hành khi có giấy phép lưu hành xe cho tuyến đường cụ thể theo Thông tư 12/2025/TT-BXD của Bộ Xây dựng."
+   ]
+  ]
+ },
+ {
+  "sentence": "Đặc biệt, trường hợp, bạn cần vận chuyển hàng siêu trường, siêu rộng, Vận tải Phương Vy là một trong số ít những đơn vị vận tải hiện nay sẵn sàng cung cấp cho khách hàng giải pháp vận chuyển các loại hàng quá khổ quá tải bằng các loại hình xe chuyên dụng đặc biệt theo từng quy chuẩn hàng hóa đúng với quy định của Bộ Giao Thông Vận Tải.",
+  "changes": [
+   [
+    "đúng với quy định của Bộ Giao Thông Vận Tải",
+    "đúng quy định tại Thông tư 12/2025/TT-BXD của Bộ Xây dựng"
+   ]
+  ]
+ },
+ {
+  "sentence": "Hàng quá khổ, siêu trường",
+  "changes": [
+   [
+    "Hàng quá khổ, siêu trường",
+    "Hàng nặng, cồng kềnh"
+   ]
+  ]
+ },
+ {
+  "sentence": "Hàng vượt quá giới hạn được xếp vào dịch vụ hàng siêu trường siêu trọng — liên hệ 0933 87 1139 để được tư vấn riêng.",
+  "changes": [
+   [
+    "dịch vụ hàng siêu trường siêu trọng",
+    "dịch vụ hàng nặng, cồng kềnh"
+   ]
+  ]
+ },
+ {
+  "sentence": "Đối với xe tải thùng kín (có mui), chiều cao xếp hàng hoá cho phép là chiều cao giới hạn trong phạm vi thùng xe",
+  "changes": [
+   [
+    "xe tải thùng kín (có mui)",
+    "xe tải thùng hở có mui"
+   ]
+  ]
  }
 ]
