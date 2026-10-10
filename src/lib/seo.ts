@@ -185,6 +185,8 @@ function personJsonLd(author: NonNullable<LegacyEntry['author']>) {
 }
 
 const SERVICE_TEMPLATES = new Set(['route', 'route-hub', 'cargo', 'truck', 'truck-hub']);
+/** Pages about the business itself, where a rating would be a self-review (no rating markup). */
+export const SELF_RATED_PAGES = new Set(['/gioi-thieu', '/lien-he']);
 
 function serviceType(item: LegacyEntry) {
   if (item.template.startsWith('truck')) return 'Cho thuê xe tải chở hàng';
@@ -258,7 +260,9 @@ export function generateLegacyJsonLd(item: LegacyEntry, breadcrumbs: Array<{ nam
   }
   if (item.faq.length >= 2) blocks.push(generateFaqJsonLd(item.faq, url));
   // The visitor rating the WordPress page published (kk Star Ratings): same type, name and numbers, shown in the hero.
-  if (item.rating) {
+  // Not on the About and Contact pages: there the stars rate the business itself, which Google treats
+  // as self-serving review markup; the stars stay visible on the page.
+  if (item.rating && !SELF_RATED_PAGES.has(item.path)) {
     blocks.push({
       '@context': 'https://schema.org', '@type': 'CreativeWorkSeries', name: item.rating.name,
       aggregateRating: { '@type': 'AggregateRating', ratingValue: item.rating.score, bestRating: item.rating.best, ratingCount: item.rating.count },

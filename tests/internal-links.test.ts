@@ -136,10 +136,10 @@ test('the Tây Nguyên region page lists every route of the region first', () =>
   assert.deepEqual(relatedPaths('/van-chuyen-hang-hoa/tay-nguyen').slice(0, members.length).sort(), [...members].sort());
 });
 
-test('hero intros taken from a description carry no shouted words', () => {
-  for (const item of [...routeItems, ...cargoItems, ...truckItems].filter((entry) => !heroContent(entry).lead)) {
-    const summary = heroSummary(item) ?? '';
-    const shouted = summary.match(/\p{Lu}{4,}/gu)?.filter((word) => !['TPHCM'].includes(word)) ?? [];
+test('hero intros not written for the hero carry no shouted words', () => {
+  for (const item of [...routeItems, ...cargoItems, ...truckItems].filter((entry) => !HERO_LEADS[entry.path])) {
+    const summary = heroSummary(item, heroContent(item).lead) ?? '';
+    const shouted = summary.match(/\p{Lu}{4,}/gu)?.filter((word) => !['TPHCM', 'TNHH', 'GTGT'].includes(word)) ?? [];
     assert.deepEqual(shouted, [], item.path);
   }
 });

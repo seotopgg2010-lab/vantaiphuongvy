@@ -14,7 +14,7 @@ import { getLegacyByPath, indexablePaths, legacyItems } from '../src/lib/legacy-
 import { ratingScore } from '../src/lib/legacy-render';
 import type { CommentThread, LegacyComment, LegacyRating } from '../src/lib/legacy-types';
 import { renderLlmsFull, renderLlmsTxt, renderTwin } from '../src/lib/markdown-twins';
-import { generateLegacyJsonLd } from '../src/lib/seo';
+import { generateLegacyJsonLd, SELF_RATED_PAGES } from '../src/lib/seo';
 import { WAREHOUSES, warehousesFor } from '../src/lib/warehouses';
 
 const root = process.cwd();
@@ -32,6 +32,10 @@ test('star ratings keep the WordPress votes and publish the same CreativeWorkSer
   for (const item of rated) {
     assert.ok(renderTwin(item.path)!.includes(`- Đánh giá: ${ratingScore(item.rating!)} (${item.rating!.count} bình chọn)`), `${item.path}: twin shows the rating`);
     const series = generateLegacyJsonLd(item, []).filter((block) => (block as { '@type'?: string })['@type'] === 'CreativeWorkSeries') as Array<{ name: string; aggregateRating: { ratingValue: number; ratingCount: number; bestRating: number } }>;
+    if (SELF_RATED_PAGES.has(item.path)) {
+      assert.equal(series.length, 0, `${item.path}: no self-review markup on the business's own pages`);
+      continue;
+    }
     assert.equal(series.length, 1, item.path);
     assert.equal(series[0].name, item.rating!.name);
     assert.deepEqual(series[0].aggregateRating, { '@type': 'AggregateRating', ratingValue: item.rating!.score, bestRating: item.rating!.best, ratingCount: item.rating!.count });

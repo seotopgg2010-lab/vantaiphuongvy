@@ -176,13 +176,36 @@ export function renderLlmsTxt(): string {
   ].join('\n\n')}\n`;
 }
 
-/** Every twin in reading order (home, hubs, routes, cargo, trucks, posts, company, policies). */
+/** A route page in llms-full.txt: what it serves and its key facts, with the full twin one link away. */
+function routeDigest(item: LegacyEntry) {
+  const warehouses = warehousesFor(item.path);
+  return [
+    `# ${displayTitle(item.title)}`,
+    `- URL: ${canonicalUrl(item.path)}`,
+    `- Toàn văn: ${markdownUrl(item.path)}`,
+    facts(item) && `- Dữ kiện: ${facts(item)}`,
+    warehouses.length > 0 && `- Kho: ${warehouses.map((warehouse) => `${warehouse.label}: ${warehouse.address}`).join('; ')}`,
+    oneLine(HERO_LEADS[item.path] || item.seo.description || item.summary),
+  ].filter(Boolean).join('\n');
+}
+
+/**
+ * Every page in reading order (home, hubs, routes, cargo, trucks, posts, company, policies), sized for
+ * an assistant's context window: full text for hubs, services, guides and company pages; a digest for
+ * each of the 65 route pages (their full twin is linked); the contact block once, at the end.
+ */
 export function renderLlmsFull(): string {
   const routeOrder = routesByRegion().flatMap((group) => group.items.map((item) => item.path));
+  const routes = new Set(routeOrder);
   const order = [
     '/', '/van-chuyen-hang-hoa', ...routeOrder, ...cargoItems.map((item) => item.path),
     '/thue-xe-tai', ...truckItems.map((item) => item.path), '/blog', ...legacyPosts.map((post) => post.path),
   ];
   const rest = TWIN_PATHS.filter((path) => !order.includes(path));
-  return `${[...new Set([...order, ...rest])].map((path) => renderTwin(path)).filter(Boolean).join('\n\n---\n\n')}`;
+  const contact = `---\n\n${contactSection()}`;
+  const sections = [...new Set([...order, ...rest])].map((path) => {
+    if (routes.has(path)) return routeDigest(getLegacyByPath(path)!);
+    return renderTwin(path)?.replace(contact, '').trim();
+  });
+  return `${[...sections.filter(Boolean), contactSection()].join('\n\n---\n\n')}\n`;
 }

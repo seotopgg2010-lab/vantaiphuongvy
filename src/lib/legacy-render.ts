@@ -77,9 +77,14 @@ export function calmShouting(text: string): string {
   return calm.charAt(0).toLocaleUpperCase('vi') + calm.slice(1);
 }
 
-/** Hero intro: the page's own or curated lead, else its approved description with shouted words lowered. */
+/**
+ * Hero intro: a curated lead as written; otherwise the page's opening paragraph, or failing that its
+ * approved description, with shouted words lowered.
+ */
 export function heroSummary(item: LegacyEntry, lead?: string): string | undefined {
-  return lead || (item.seo.description ? calmShouting(item.seo.description) : undefined);
+  if (lead && HERO_LEADS[item.path]) return lead;
+  const text = lead || item.seo.description;
+  return text ? calmShouting(text) : undefined;
 }
 
 /** "4,9/5": a visitor rating as the page hero and the markdown twin both print it. */
