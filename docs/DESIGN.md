@@ -72,4 +72,4 @@
 |---|---|
 | "Gọi 0933 871 139" | "Liên hệ ngay hôm nay!!!" |
 | "Xe tải 0,5 – 30 tấn" | "Đội xe hùng hậu nhất Việt Nam" |
-| "12 báo điện tử đã đưa tin" (đếm từ `PRESS`) | "Được hàng nghìn khách hàng tin tưởng" (không có nguồn) |
+| "10 báo điện tử đã đưa tin" (đếm từ `PRESS`) | "Được hàng nghìn khách hàng tin tưởng" (không có nguồn) |

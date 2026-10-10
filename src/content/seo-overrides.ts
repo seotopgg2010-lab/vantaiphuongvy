@@ -31,7 +31,9 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Các loại hàng hóa thường gặp trong ngành vận tải | Phương Vy',
   },
   '/blog/quy-dinh-van-chuyen-hang-hoa-nguy-hiem': {
+    title: 'Quy định vận chuyển hàng nguy hiểm, cấp phép | Phương Vy',
     description: 'Tổng hợp tất cả thông tin cần biết khi vận chuyển hàng hóa nguy hiểm trên tuyến đường bắc nam bằng đường bộ, tàu hỏa cũng như hàng không.',
+    heading: 'Quy định vận chuyển hàng hóa nguy hiểm',
   },
   '/blog/van-chuyen-hang-hoa-nguy-hiem': {
     title: 'Vận chuyển hàng hóa nguy hiểm: bạn cần biết gì? | Phương Vy',
@@ -47,18 +49,20 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Thư ngỏ - Vận Tải Phương Vy',
   },
   '/thue-xe-tai': {
-    title: 'Bảng báo giá cho thuê xe tải chở hàng | Vận Tải Phương Vy',
-    description: 'CẬP NHẬT bảng báo giá cho thuê xe tải chở hàng mới của vận tải Phương Vy chở hàng hóa từ bắc chí nam với giá thành rẻ, chất lượng dịch vụ tốt.',
+    title: 'Thuê xe tải 0,5–30 tấn nội thành, đi tỉnh | Phương Vy',
+    description: 'Cho thuê xe tải thùng kín, mui bạt 0,5–30 tấn và container chở hàng nội thành, đi tỉnh; miễn phí lưu kho, bốc xếp tại kho. Gọi 0933 871 139.',
+    heading: 'Thuê xe tải chở hàng nội thành và đi tỉnh',
   },
   '/thue-xe-tai/da-nang': {
-    description: 'Vận tải Phương Vy cung cấp dịch vụ cho thuê xe tải chở hàng hóa tại Đà Nẵng, Quảng Nam, Hội An với giá thành SIÊU RẺ, nhanh chóng, chất lượng.',
+    description: 'Vận tải Phương Vy cung cấp dịch vụ cho thuê xe tải chở hàng hóa tại Đà Nẵng, Quảng Nam, Hội An với giá thành siêu rẻ, nhanh chóng, chất lượng.',
   },
   '/thue-xe-tai/ha-noi': {
     title: 'Cho thuê xe tải chở hàng giá rẻ tại Hà Nội | Phương Vy',
   },
   '/van-chuyen-hang-hoa': {
-    title: 'Dịch vụ vận chuyển hàng hóa Bắc Nam | Vận Tải Phương Vy',
-    description: 'Bảng báo giá cước vận chuyển hàng hóa bắc nam giá rẻ bằng xe tải, container, tàu hỏa, đường sắt, đường biển, máy bay nhanh, uy tín.',
+    title: 'Vận chuyển hàng hóa Bắc Nam khoảng 48 giờ | Phương Vy',
+    description: 'Chành xe Bắc Nam bằng xe tải 1–30 tấn và container, khoảng 48 giờ. Hàng nặng tính theo kg, hàng nhẹ theo khối; giảm 7% khách mới. Gọi 0933 871 139.',
+    heading: 'Vận chuyển hàng hóa Bắc Nam',
   },
   '/van-chuyen-hang-hoa/an-giang': {
     title: 'Chành xe gửi hàng đi An Giang trong ngày - Vận Tải Phương Vy',
@@ -121,10 +125,11 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Vận chuyển hàng hóa bằng đường hàng không | Phương Vy',
   },
   '/van-chuyen-hang-hoa/ha-tinh': {
-    description: 'Chành xe gửi hàng đi Hà Tĩnh từ TPHCM, Hà Nội. Tuyến Hà Nội giao trong 9–18 tiếng, cước từ 800đ/kg hàng nguyên xe, miễn phí bốc xếp, giao tận nơi.',
+    description: 'Chành xe gửi hàng đi Hà Tĩnh từ TPHCM, Hà Nội. Tuyến Hà Nội giao trong 9–12 tiếng, cước từ 800đ/kg cho đơn trên 1 tấn, miễn phí bốc xếp, giao tận nơi.',
   },
   '/van-chuyen-hang-hoa/hai-phong': {
-    description: 'Dịch vụ chành xe chuyển hàng từ TPHCM (Sài Gòn), Hà Nội đi Hải Phòng với cước phí rẻ, giảm 7% cho khách hàng mới. Miễn phí bốc xếp, lưu kho.',
+    title: 'Chành xe gửi hàng đi Hải Phòng 2–3 ngày | Vận Tải Phương Vy',
+    description: 'Gửi hàng đi Hải Phòng: từ TP.HCM 2–3 ngày, 3 chuyến mỗi ngày; từ Hà Nội 2–3 giờ, 5 chuyến mỗi ngày. Giảm 7% cho khách mới. Gọi 0933 871 139.',
   },
   '/van-chuyen-hang-hoa/hau-giang': {
     title: 'Chành xe gửi hàng đi Hậu Giang cước rẻ - Vận Tải Phương Vy',
@@ -140,7 +145,8 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     description: 'Phương Vy nhận chành xe vận chuyển hàng hóa từ miền tây Long An đi Hà Nội và ngược lại. Giá cước tốt, giảm 7% cho khách hàng mới.',
   },
   '/van-chuyen-hang-hoa/may-moc-thiet-bi': {
-    title: 'Dịch vụ vận chuyển máy móc thiết bị - Vận Tải Phương Vy',
+    title: 'Vận chuyển máy móc thiết bị bằng xe 1–35 tấn | Phương Vy',
+    description: 'Vận chuyển máy móc, thiết bị từ TP.HCM, Hà Nội đi toàn quốc bằng xe tải 1–35 tấn, xe cẩu, rơ moóc lùn, rơ moóc sàn. Gọi 0933 871 139 báo giá.',
     heading: 'Dịch vụ vận chuyển máy móc thiết bị',
   },
   '/van-chuyen-hang-hoa/mong-cai': {
@@ -154,20 +160,22 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     title: 'Chành xe gửi hàng đi Nha Trang giá rẻ | Vận Tải Phương Vy',
   },
   '/van-chuyen-hang-hoa/phan-thiet': {
+    title: 'Chành xe gửi hàng đi Phan Thiết, Mũi Né | Vận Tải Phương Vy',
     description: 'Dịch vụ chành xe tải vận chuyển hàng hóa về Phan Thiết, Mũi Né, La Gi Bình Thuận từ Sài Gòn, Hà Nội với giá cước phí rẻ.',
   },
   '/van-chuyen-hang-hoa/phu-yen': {
     title: 'Chành xe gửi hàng từ TPHCM, Hà Nội đi Phú Yên | Phương Vy',
+    description: 'Vận tải Phương Vy nhận chuyển hàng từ TPHCM (Sài Gòn), Hà Nội đi Tuy Hòa Phú Yên với giá cước phí rẻ, đặc biệt giao hàng tận nơi.',
   },
   '/van-chuyen-hang-hoa/quang-binh': {
     description: 'Vận tải Phương Vy cung cấp dịch vụ gửi hàng, chành xe Quảng Bình đi các tỉnh thành trên cả nước với giá thành hợp lý và tốc độ nhanh.',
   },
   '/van-chuyen-hang-hoa/quang-ngai': {
-    description: 'Vận tải Phương Vy nhận chành xe gửi hàng hóa đi Quảng Ngãi đi các tỉnh với giá thành cạnh tranh. Xe chạy ngày 3 CHUYẾN. Gọi ngay 0933 87 1139',
+    description: 'Vận tải Phương Vy nhận chành xe gửi hàng hóa đi Quảng Ngãi đi các tỉnh với giá thành cạnh tranh. Xe chạy ngày 3 chuyến. Gọi ngay 0933 87 1139',
   },
   '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': {
-    title: 'Dịch vụ vận chuyển hàng siêu trường siêu trọng | Phương Vy',
-    description: 'Vận tải Phương Vy cung cấp dịch vụ vận chuyển hàng siêu trường siêu trọng, quá khổ quá tải, máy công trình trên tuyến bắc nam với giá cạnh tranh.',
+    title: 'Vận chuyển hàng siêu trường siêu trọng, có cẩu | Phương Vy',
+    description: 'Chở hàng siêu trường siêu trọng, máy công trình từ TP.HCM: Đồng Nai, Vũng Tàu từ 4 giờ, miền Tây từ 12 giờ, có cẩu xếp hàng. Gọi 0933 871 139.',
   },
   '/van-chuyen-hang-hoa/soc-trang': {
     title: 'Chành xe gửi hàng đi Sóc Trăng nhanh chóng trong ngày',
@@ -178,18 +186,21 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   '/van-chuyen-hang-hoa/tay-nguyen': {
     title: 'Vận chuyển hàng hóa từ TPHCM đi Tây Nguyên | Phương Vy',
     description: 'Phương Vy cung cấp dịch vụ vận chuyển hàng hóa, chuyển hàng từ Sài Gòn đi các tỉnh Tây Nguyên với giá thành hợp lý, chất lượng dịch vụ tốt.',
+    heading: 'Vận chuyển hàng hóa đi Tây Nguyên',
   },
   '/van-chuyen-hang-hoa/tay-ninh': {
     description: 'Vận tải Phương Vy cung cấp dịch vụ chành xe gửi hàng đi Tây Ninh từ các tỉnh miền bắc, miền trung và ngược lại với giá cước rẻ, thời gian nhanh chóng.',
   },
   '/van-chuyen-hang-hoa/thai-binh': {
     title: 'Vận chuyển gửi hàng hóa từ TPHCM đi Thái Bình trong 40h',
+    description: 'Vận tải Phương Vy cung cấp dịch vụ chành xe vận chuyển hàng từ Sài Gòn đi Thái Bình nhanh chỉ trong 40h với giá cước cực rẻ.',
   },
   '/van-chuyen-hang-hoa/thai-nguyen': {
     description: 'Phương Vy cung cấp dịch vụ vận chuyển hàng hóa đi Thái Nguyên từ Sài Gòn, Hà Nội với thời gian nhanh chóng bằng xe tải, Giao hàng tận nơi.',
   },
   '/van-chuyen-hang-hoa/thanh-hoa': {
     title: 'Vận chuyển hàng, chành xe Sài Gòn đi Thanh Hóa nhanh, rẻ',
+    description: 'Vận tải Phương Vy cung cấp dịch vụ vận chuyển gửi hàng hóa từ TPHCM đi Thanh Hóa với giá cước siêu rẻ, siêu hấp dẫn, thời gian chuyển hàng nhanh.',
   },
   '/van-chuyen-hang-hoa/tien-giang': {
     title: 'Chành xe gửi hàng đi Tiền Giang nhanh chóng trong ngày',
@@ -207,9 +218,50 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
     description: 'Dịch vụ vận chuyển hàng hóa đi Vĩnh Phúc từ Sài Gòn và Hà Nội của vận tải Phương Vy, giá rẻ, giảm 7% cho khách hàng mới, miễn phí bốc dỡ hàng, lưu kho.',
   },
   '/van-chuyen-hang-hoa/xe-may': {
-    description: 'Dịch vụ vận chuyển xe máy bắc nam bằng xe khách, ô tô tải, tàu hỏa đường sắt với giá cước phí rẻ, ưu đãi. KHÔNG TĂNG GIÁ ngày lễ, tết.',
+    title: 'Vận chuyển xe máy Bắc Nam từ 48h, giao tận nơi | Phương Vy',
+    description: 'Gửi xe máy Bắc – Nam bằng xe tải, xe khách: xuất bến 15h–20h mỗi ngày, nhận xe từ 48h, không tăng giá ngày lễ, Tết. Gọi 0933 871 139.',
+    heading: 'Vận chuyển xe máy Bắc Nam',
   },
   '/van-chuyen-hang-hoa/yen-bai': {
     description: 'Vận chuyển hàng hóa đi Yên Bái từ TPHCM hay Hà Nội với mức giá cực cạnh tranh cùng vận tải Phương Vy. Gọi ngay 0933 87 1139 để nhận báo giá.',
+  },
+  // Money pages: the title and description lead with the service and a delivery-time or fleet fact from the page.
+  '/van-chuyen-hang-hoa/ha-noi': {
+    title: 'Gửi hàng TPHCM đi Hà Nội 36–48h, giao tận nơi | Phương Vy',
+    description: 'Chành xe TPHCM đi Hà Nội 1.700 km: hàng nguyên xe 36–48h, hàng ghép 2–4 ngày, 3 chuyến mỗi ngày từ kho Hóc Môn. Gọi 0933 871 139.',
+    heading: 'Vận chuyển hàng hóa TPHCM đi Hà Nội',
+  },
+  '/van-chuyen-hang-hoa/tphcm': {
+    title: 'Vận chuyển hàng hóa TPHCM đi tỉnh, xe 1–30 tấn | Phương Vy',
+    description: 'Chành xe Sài Gòn đi các tỉnh bằng xe tải 1–30 tấn và container; hàng ghép 2–3 ngày, xe chạy 5h–22h cả thứ Bảy, Chủ nhật. Gọi 0933 871 139.',
+    heading: 'Vận chuyển hàng hóa TPHCM đi tỉnh và nội thành',
+  },
+  '/van-chuyen-hang-hoa/da-nang': {
+    title: 'Chành xe TPHCM đi Đà Nẵng 24–36h, giao tận nơi | Phương Vy',
+    description: 'Chành xe TPHCM đi Đà Nẵng khoảng 960 km: hàng nguyên xe 24–36h, 3 chuyến mỗi ngày, bảo hiểm cơ bản miễn phí, giao tận nơi. Gọi 0933 871 139.',
+    heading: 'Vận chuyển gửi hàng hóa TPHCM đi Đà Nẵng',
+  },
+  '/thue-xe-tai/hcm': {
+    title: 'Thuê xe tải TPHCM 0,5–30 tấn, chạy cả ngày lễ | Phương Vy',
+    description: 'Thuê xe tải 0,5–30 tấn và container chở hàng nội thành TP.HCM, đi tỉnh, kể cả Chủ nhật, ngày lễ; có hợp đồng, hóa đơn GTGT. Gọi 0933 871 139.',
+  },
+  // Money pages: the title and description lead with the service and a delivery-time or fleet fact from the page.
+  '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': {
+    description: 'Cần tìm đối tác vận chuyển hàng hóa cam kết đầy hàng ở 2 chiều đi và về. Lượng khách có hàng cần tìm công ty vận tải rất lớn',
+  },
+  '/van-chuyen-hang-hoa/hai-duong': {
+    description: 'Vận tải Phương Vy chuyên vận chuyển hàng hóa gửi xe máy từ Hải Dương đi Hà Nội, TPHCM và ngược lại. Dịch vụ uy tín, nhanh chóng, an toàn. liên hệ ngay',
+  },
+  '/van-chuyen-hang-hoa/kontum': {
+    description: 'Dịch vụ vận chuyển hàng hóa, chành xe từ Sài Gòn đi Kontum là một trong những thế mạnh của Phương Vy nhờ vào giá cước rẻ, chất lượng, uy tín.',
+  },
+  '/van-chuyen-hang-hoa/lao': {
+    description: 'Vận tải Phương Vy cung cấp dịch vụ gửi hàng, chành xe hai chiều Lào - Việt Nam với giá cước ưu đãi, nhanh chóng đến tận nơi khách yêu cầu.',
+  },
+  '/van-chuyen-hang-hoa/ninh-thuan': {
+    description: 'Vận tải Phương Vy cung cấp dịch vụ gửi hàng, chành xe Ninh Thuận đi các tỉnh và ngược lại với giá cước ưu đãi, thời gian vận chuyển nhanh chóng, đúng hẹn.',
+  },
+  '/van-chuyen-hang-hoa/quang-tri': {
+    description: 'Vận tải Phương Vy cung cấp dịch vụ chành xe gửi hàng từ TPHCM (Sài Gòn), Hà Nội đi Quảng Trị với giá cước ưu đãi. Xe xuất bến liên tục.',
   },
 };

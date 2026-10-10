@@ -98,12 +98,11 @@ export const SERVICES = [
   },
 ] as const;
 
-/** Press coverage from the live home page (tracking parameters stripped). */
+/** Press coverage from the live home page (tracking parameters stripped); vtc.vn and baobinhdinh.vn were dropped once their articles no longer existed (checked 10/10/2026). */
 export const PRESS = [
   { outlet: '24h.com.vn', href: 'https://www.24h.com.vn/doanh-nghiep/tham-vong-cua-van-tai-phuong-vy-c849a1245089.html', image: '/wp-content/uploads/2023/12/bao-24h-977x430.jpg' },
   { outlet: 'cafef.vn', href: 'https://cafef.vn/van-tai-phuong-vy-khang-dinh-ten-tuoi-nho-nhanh-chong-va-dang-tin-cay-188230916091907459.chn', image: '/wp-content/uploads/2023/12/bao-cafef-1250x430.jpg' },
   { outlet: 'tienphong.vn', href: 'https://tienphong.vn/van-tai-phuong-vy-va-tham-vong-tien-len-vi-tri-so-1-nganh-van-tai-post1330759.tpo', image: '/wp-content/uploads/2023/12/bao-tienphong-1349x430.jpg' },
-  { outlet: 'vtc.vn', href: 'https://vtc.vn/van-chuyen-hang-hoa-bac-nam-de-dang-cung-van-tai-phuong-vy-ar820727.html', image: '/wp-content/uploads/2023/12/bao-vtc-1223x430.jpg' },
   { outlet: 'hanoimoi.vn', href: 'https://hanoimoi.vn/chon-ngay-van-tai-phuong-vy-467890.html', image: '/wp-content/uploads/2023/12/bao-hanoimoi-1289x430.jpg' },
   { outlet: 'baodanang.vn', href: 'https://baodanang.vn/can-biet/202111/van-tai-phuong-vy-gui-hang-tu-sai-gon-di-da-nang-gia-tot-3897332/', image: '/wp-content/uploads/2023/12/baodanang-1082x430.jpg' },
   { outlet: 'nguoiduatin.vn', href: 'https://www.nguoiduatin.vn/dich-vu-van-tai-hang-hoa-bac-nam-nao-co-chi-phi-re-va-giao-hang-toi-uu-a626665.html', image: '/wp-content/uploads/2023/12/bao-nguoiduatin-1274x430.jpg' },
@@ -111,7 +110,6 @@ export const PRESS = [
   { outlet: 'baothaibinh.com.vn', href: 'https://baothaibinh.com.vn/tin-tuc/206/140540/van-tai-phuong-vy-dich-vu-gui-hang-tu-sai-gon-di-thai-binh-chuyen-nghiep', image: '/wp-content/uploads/2023/12/baothaibinh-1299x430.jpg' },
   { outlet: 'baothanhhoa.vn', href: 'https://baothanhhoa.vn/thi-truong/gui-hang-sai-gon-thanh-hoa-va-nguoc-lai-chon-ngay-van-tai-phuong-vy/148739.htm', image: '/wp-content/uploads/2023/12/baothanhhoa-1233x430.jpg' },
   { outlet: 'vanhoavaphattrien.vn', href: 'https://vanhoavaphattrien.vn/dich-vu-van-tai-hang-hoa-bac-nam-giao-nhan-hang-hoa-tai-63-tinh-thanh-a20756.html', image: '/wp-content/uploads/2023/12/bao-vanhoavaphattrien-1089x430.jpg' },
-  { outlet: 'baobinhdinh.vn', href: 'https://baobinhdinh.vn/viewer.aspx?macm=39&macmp=39&mabb=222823', image: '/wp-content/uploads/2023/12/baobinhdinh-1033x430.jpg' },
 ] as const;
 
 export const TESTIMONIALS = [
@@ -127,17 +125,21 @@ export const TESTIMONIALS = [
  * original opening paragraph stays in the article body.
  */
 export const HERO_LEADS: Record<string, string> = {
-  '/van-chuyen-hang-hoa': 'Chành xe từ TP.HCM đi các tỉnh và chiều ngược lại bằng xe tải, container. Hàng nặng tính cước theo kg, hàng nhẹ theo khối; mỗi tuyến có bảng giá, thời gian và lịch xe riêng.',
+  '/van-chuyen-hang-hoa/hai-phong': 'Chành xe đi Hải Phòng từ TP.HCM mất 2–3 ngày (khoảng 1.760 km, 3 chuyến mỗi ngày), từ Hà Nội 2–3 giờ. Hàng hư hỏng hoặc thất lạc được bồi thường 100% giá trị thực.',
+  '/van-chuyen-hang-hoa/da-nang': 'Xe Phương Vy chạy TP.HCM – Đà Nẵng (khoảng 960 km) 3 chuyến mỗi ngày; hàng nguyên xe giao trong 24–36h. Mọi đơn có bảo hiểm cơ bản miễn phí và được giao tận nơi.',
+  '/van-chuyen-hang-hoa/tphcm': 'Phương Vy nhận hàng tại TP.HCM đi các tỉnh bằng xe tải 1–30 tấn và container, xe chạy 5h–22h mỗi ngày kể cả thứ Bảy, Chủ nhật. Hàng ghép đi tỉnh thường mất 2–3 ngày.',
+  '/van-chuyen-hang-hoa/ha-noi': 'Xe Phương Vy chạy TP.HCM – Hà Nội 3 chuyến mỗi ngày từ kho Hóc Môn: hàng nguyên xe giao trong 36–48h, hàng ghép 2–4 ngày. Giao tận nơi tại 30 quận huyện Hà Nội.',
+  '/van-chuyen-hang-hoa': 'Chành xe từ TP.HCM đi các tỉnh và chiều ngược lại bằng xe tải 1–30 tấn, container; tuyến Bắc Nam khoảng 48 giờ. Hàng nặng tính cước theo kg, hàng nhẹ theo khối.',
   '/van-chuyen-hang-hoa/dau-nhot': 'Vận chuyển dầu nhớt, dầu nhờn và mỡ bôi trơn tuyến Bắc – Nam bằng xe tải từ 5 đến trên 20 tấn, đầu kéo, container. Giao tận nơi, miễn phí bốc xếp, xe chạy 5 chuyến mỗi ngày hai chiều.',
   '/van-chuyen-hang-hoa/duong-bien': 'Gửi hàng nội địa và đi nước ngoài bằng đường biển: nhận hàng lẻ từ 1 khối (CBM) hoặc nguyên container, tàu chạy nhiều chuyến mỗi tuần, giao nhận tận nơi (door to door).',
   '/van-chuyen-hang-hoa/duong-hang-khong': 'Gửi hàng bằng máy bay khi cần nhanh: thường nhận hàng sau 24 – 48 giờ; chuyển phát quốc tế 1 – 3 ngày đi châu Á, 3 – 4 ngày đi châu Âu, 4 – 5 ngày đi châu Mỹ. Lấy hàng và giao tận nơi.',
   '/van-chuyen-hang-hoa/may-moc-thiet-bi': 'Vận chuyển máy móc, thiết bị từ TP.HCM, Hà Nội đi toàn quốc bằng xe tải 1 – 35 tấn, đầu kéo container, xe cẩu và rơ moóc lùn, rơ moóc sàn cho hàng quá khổ.',
-  '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': 'Vận chuyển hàng siêu trường, siêu trọng, quá khổ quá tải và máy công trình trên tuyến Bắc – Nam, có hỗ trợ cẩu xếp hàng. Giao nhận tận nơi, hồ sơ, hợp đồng và hóa đơn rõ ràng.',
+  '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': 'Vận chuyển hàng siêu trường, siêu trọng, quá khổ quá tải và máy công trình trên tuyến Bắc – Nam, có cẩu xếp hàng. Từ TP.HCM đi Huế, Đà Nẵng từ 24 giờ, đi miền Tây từ 12 giờ.',
   '/van-chuyen-hang-hoa/xe-may': 'Gửi xe máy Bắc – Nam bằng xe tải, xe khách: xe xuất bến từ 15h đến 20h mỗi ngày, nhận xe chỉ từ 48 giờ, có lấy và giao xe tận nơi. Không tăng giá ngày lễ, Tết.',
-  '/thue-xe-tai': 'Cho thuê xe tải thùng kín, mui bạt và container 20′ – 50′ chở hàng nội thành và đi tỉnh, có cẩu xếp hàng quá khổ. Miễn phí xuất hóa đơn, hàng giá trị lớn được mua bảo hiểm.',
+  '/thue-xe-tai': 'Cho thuê xe tải thùng kín, mui bạt 0,5–30 tấn và container 20′–50′ chở hàng nội thành và đi tỉnh, có cẩu xếp hàng quá khổ. Miễn phí xuất hóa đơn, hàng giá trị lớn được mua bảo hiểm.',
   '/thue-xe-tai/da-nang': 'Thuê xe tải thùng dài đến 12 m chở hàng tại Đà Nẵng và đi các tỉnh. Miễn phí lưu kho, bốc dỡ, xe nâng và cẩu trục cho hàng quá khổ, quá tải.',
   '/thue-xe-tai/ha-noi': 'Thuê xe tải và container chở hàng tại Hà Nội, chạy chuyến trong ngày, giao tại kho hoặc tận nơi. Có cẩu nâng, nhân công bốc xếp và đầy đủ hồ sơ, hóa đơn.',
-  '/thue-xe-tai/hcm': 'Thuê xe tải và container chở hàng nội thành TP.HCM và đi các tỉnh, kể cả thứ Bảy, Chủ nhật và ngày lễ. Có hợp đồng, hóa đơn GTGT và biên bản giao nhận.',
+  '/thue-xe-tai/hcm': 'Thuê xe tải 0,5–30 tấn và container chở hàng nội thành TP.HCM và đi các tỉnh, kể cả thứ Bảy, Chủ nhật và ngày lễ. Có hợp đồng, hóa đơn GTGT và biên bản giao nhận.',
   '/gioi-thieu': 'Hơn 10 năm chành xe Bắc – Nam: từ dàn xe tải 10 – 15 tấn chạy TP.HCM, Hà Nội đi các tỉnh trước năm 2015 đến đội xe tải, xe cẩu, đầu kéo container và bãi xe ở TP.HCM, Đà Nẵng, Hà Nội.',
   '/faq': 'Giải nghĩa nhanh các khái niệm vận tải hay gặp — hình thức kinh doanh vận tải, rơ moóc và sơ mi rơ moóc, TEU, ETA — để bạn gửi hàng, thuê xe dễ hơn.',
   '/tuyen-dung': 'Phương Vy tuyển nhân viên kinh doanh, kế toán, SEO và tài xế xe tải tại TP.HCM và Hà Nội. Mô tả công việc, yêu cầu kinh nghiệm và giờ làm việc của từng vị trí ở bên dưới.',
