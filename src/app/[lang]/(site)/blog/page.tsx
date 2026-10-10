@@ -6,7 +6,7 @@ import { PostCard } from '@/components/site/post-card';
 import { legacyPosts } from '@/lib/legacy-content';
 import { BLOG_PAGE } from '@/lib/marketing';
 import { withSlash } from '@/lib/navigation';
-import { canonicalUrl, generateBreadcrumbJsonLd, pageMetadata, WEBSITE_ID } from '@/lib/seo';
+import { canonicalUrl, generateBreadcrumbJsonLd, ORGANIZATION_ID, pageMetadata, WEBSITE_ID } from '@/lib/seo';
 
 const { title: TITLE, heading: HEADING, description: DESCRIPTION } = BLOG_PAGE;
 
@@ -19,9 +19,10 @@ export default function BlogIndex() {
     <>
       <JsonLd
         data={[
-          generateBreadcrumbJsonLd([{ name: 'Trang chủ', url: canonicalUrl('/') }, { name: HEADING, url }]),
+          generateBreadcrumbJsonLd([{ name: 'Trang chủ', url: canonicalUrl('/') }, { name: HEADING, url }], `${url}#breadcrumb`),
           {
             '@context': 'https://schema.org', '@type': 'CollectionPage', '@id': `${url}#webpage`, url, name: TITLE, description: DESCRIPTION, inLanguage: 'vi-VN', isPartOf: { '@id': WEBSITE_ID },
+            breadcrumb: { '@id': `${url}#breadcrumb` }, publisher: { '@id': ORGANIZATION_ID },
             mainEntity: { '@type': 'ItemList', itemListElement: legacyPosts.map((post, index) => ({ '@type': 'ListItem', position: index + 1, url: canonicalUrl(post.path), name: post.title })) },
           },
         ]}

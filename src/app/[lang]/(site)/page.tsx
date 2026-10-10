@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, Gift, MessageCircle, Phone, Search } from 'lucide-react';
 import { FaqList } from '@/components/site/faq-list';
+import { JsonLd } from '@/components/site/json-ld';
 import { CommitmentGrid, PressGrid, PressStrip, ProcessSteps, StatsStrip, Testimonials } from '@/components/site/marketing';
 import { PostCard } from '@/components/site/post-card';
 import { RouteExplorer } from '@/components/site/route-explorer';
@@ -12,7 +13,7 @@ import { getLegacyByPath, homeFaq, legacyPosts } from '@/lib/legacy-content';
 import { noBreakBrand } from '@/lib/legacy-render';
 import { ABOUT, HERO, HERO_IMAGE, OFFER, POPULAR_ROUTES, SERVICES, SERVICES_LEAD } from '@/lib/marketing';
 import { getExplorerRegions } from '@/lib/navigation';
-import { legacyMetadata } from '@/lib/seo';
+import { generateLegacyJsonLd, legacyMetadata } from '@/lib/seo';
 import { toTelHref } from '@/lib/site';
 import { LeadSection } from '@/templates/sections';
 
@@ -26,9 +27,11 @@ export default function HomePage() {
   const posts = legacyPosts.slice(0, 3);
   const regions = getExplorerRegions();
   const routeCount = regions.reduce((total, region) => total + region.items.length, 0);
+  const home = getLegacyByPath('/');
 
   return (
     <>
+      {home && <JsonLd data={generateLegacyJsonLd(home, [])} />}
       {/* ---------- hero ---------- */}
       <section className="relative isolate overflow-hidden bg-brand-700 text-white">
         <UploadImage src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill preload sizes="100vw" className="-z-20 object-cover object-center" />
