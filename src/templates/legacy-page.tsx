@@ -32,6 +32,23 @@ function routeFacts(item: LegacyEntry): HeroFact[] {
   return facts;
 }
 
+/**
+ * What a non-route service page offers, ready to follow "Nhận báo giá …": its label with only the
+ * first letter lowered so place names keep their capitals ("Thuê xe tải Đà Nẵng" → "thuê xe tải Đà
+ * Nẵng"), and "vận chuyển" in front of a bare cargo label ("Máy móc & thiết bị").
+ */
+function serviceSubject(item: LegacyEntry) {
+  const subject = item.label.charAt(0).toLocaleLowerCase('vi') + item.label.slice(1);
+  return /^(vận chuyển|thuê xe)/.test(subject) ? subject : `vận chuyển ${subject}`;
+}
+
+/**
+ * Pages rewritten from 2026 on show their update date in the hero. Older pages carry a
+ * 27–28/10/2025 date from a bulk WordPress save, which says nothing about their content.
+ */
+const SHOW_UPDATED_SINCE = '2026-01-01';
+const revisedOn = (item: LegacyEntry) => (item.modified && item.modified >= SHOW_UPDATED_SINCE ? item.modified : undefined);
+
 function ServiceTemplate({ item }: { item: LegacyEntry }) {
   const { lead, body } = heroContent(item);
   const isRoute = item.template === 'route';
@@ -43,16 +60,17 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
         crumbs={legacyCrumbs(item)}
         eyebrow={eyebrow}
         title={displayTitle(item.title)}
-        summary={lead}
+        summary={lead || item.seo.description}
         facts={isRoute || item.template === 'cargo' ? routeFacts(item) : [{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Có tài xế, bốc xếp' }, { text: 'Có hóa đơn VAT' }]}
         rating={item.rating}
+        updated={revisedOn(item)}
         image={item.image}
         imageAlt={item.imageAlt || item.title}
         formHref="#bao-gia"
       />
       <RouteWarehouses path={item.path} />
-      <ArticleBody html={body} toc={item.toc} quoteHeading={isTruck ? `Báo giá ${item.label.toLowerCase()}` : `Báo giá tuyến ${item.label}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
-      <LeadSection title={isTruck ? `Nhận báo giá ${item.label.toLowerCase()}` : `Nhận báo giá vận chuyển đi ${item.label}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
+      <ArticleBody html={body} toc={item.toc} quoteHeading={isRoute ? `Báo giá tuyến ${item.label}` : `Báo giá ${serviceSubject(item)}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
+      <LeadSection title={isRoute ? `Nhận báo giá vận chuyển đi ${item.label}` : `Nhận báo giá ${serviceSubject(item)}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
       {isTruck ? <TruckLinks current={item.path} /> : item.region === 'loai-hang'
         ? <RelatedRoutes items={relatedRoutes(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ vận chuyển khác" />
         : <RelatedRoutes items={relatedRoutes(item)} />}
@@ -90,7 +108,7 @@ function RouteHubTemplate({ item }: { item: LegacyEntry }) {
   const { lead, body } = heroContent(item);
   return (
     <>
-      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={lead || item.seo.description} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} rating={item.rating} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
+      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={lead || item.seo.description} updated={revisedOn(item)} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} rating={item.rating} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
       <section aria-labelledby="route-directory" className="container-x py-12 md:py-16">
         <SectionHeading id="route-directory" eyebrow="Danh sách tuyến" title="Chọn tỉnh, thành phố cần gửi hàng" lead="Tra cứu nhanh tuyến vận chuyển từ TP.HCM đi các tỉnh và ngược lại. Mỗi tuyến có bảng giá, thời gian và lịch xe riêng." />
         <div className="mt-8"><RouteExplorer regions={getExplorerRegions()} /></div>
@@ -108,7 +126,7 @@ function TruckHubTemplate({ item }: { item: LegacyEntry }) {
   const { lead, body } = heroContent(item);
   return (
     <>
-      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Cho thuê xe tải chở hàng" title={displayTitle(item.title)} summary={lead || item.seo.description} facts={[{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Thùng kín, thùng bạt' }, { text: 'Nội thành & đi tỉnh' }]} rating={item.rating} image="/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg" imageAlt="Đội xe tải cho thuê của Vận tải Phương Vy" formHref="#bao-gia" />
+      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Cho thuê xe tải chở hàng" title={displayTitle(item.title)} summary={lead || item.seo.description} updated={revisedOn(item)} facts={[{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Thùng kín, thùng bạt' }, { text: 'Nội thành & đi tỉnh' }]} rating={item.rating} image="/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg" imageAlt="Đội xe tải cho thuê của Vận tải Phương Vy" formHref="#bao-gia" />
       <TruckLinks />
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá thuê xe tải" />
       <LeadSection title="Nhận báo giá thuê xe tải" page={withSlash(item.path)} />

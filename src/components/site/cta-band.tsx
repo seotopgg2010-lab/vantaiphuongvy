@@ -3,7 +3,7 @@ import { MessageCircle, Phone } from 'lucide-react';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
 import { toTelHref } from '@/lib/site';
 
-/** Full-width closing call-to-action band. */
+/** Full-width closing call-to-action band. Its title is a paragraph: the same prompt closes every page, so it stays out of each page's heading outline. */
 export function CtaBand({
   title = 'Cần gửi hàng hoặc thuê xe tải hôm nay?',
   text = `Gọi ${SITE_CONFIG.hotline} hoặc nhắn Zalo — nhân viên Phương Vy báo giá ngay trong giờ làm việc (${SITE_CONFIG.businessHours}, cả ngày lễ).`,
@@ -16,7 +16,7 @@ export function CtaBand({
       <div className="container-x flex flex-col gap-8 py-10 md:py-12 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl">
           <p className="eyebrow eyebrow-light">Báo giá miễn phí</p>
-          <h2 id="cta-band-title" className="h-section mt-3 text-white">{title}</h2>
+          <p id="cta-band-title" className="h-section mt-3 text-white">{title}</p>
           <p className="mt-3 text-on-brand">{text}</p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">

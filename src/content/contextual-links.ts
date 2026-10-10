@@ -32,5 +32,5 @@ export const CONTEXTUAL_LINKS: ContextualLink[] = [
 export const ROUTE_PHRASE_VERBS = ['vận chuyển hàng hóa', 'vận chuyển hàng', 'gửi hàng hóa', 'gửi hàng', 'chuyển hàng', 'chở hàng', 'chành xe'];
 export const ROUTE_PHRASE_DIRECTIONS = ['đi', 'ra', 'vào', 'tới', 'đến', 'lên'];
 
-/** Link caps per page: guides can carry a few more than service pages. */
-export const CONTEXTUAL_LINK_LIMITS = { post: 5, page: 3 } as const;
+/** Link caps per page: up to five, so province links still fit after the service links. */
+export const CONTEXTUAL_LINK_LIMITS = { post: 5, page: 5 } as const;

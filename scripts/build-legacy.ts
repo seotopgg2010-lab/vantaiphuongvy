@@ -611,6 +611,20 @@ function commentThreads(postId: number): { threads: CommentThread[]; count: numb
   return { threads, count: own.length };
 }
 
+/** An upload's file name without its WordPress size suffix: ".../xe-tai-1030x710.jpg" → "xe-tai". */
+const uploadStem = (src: string) => src.replace(/[?#].*$/, '').split('/').pop()!.replace(/\.[a-z0-9]+$/i, '').replace(/-\d+x\d+$/, '').replace(/-scaled$/, '');
+
+/** The alt the article gives the hero image when the same upload (any size) also appears in the body. */
+function bodyAltFor(html: string, image: string): string | undefined {
+  const stem = uploadStem(image);
+  for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
+    const src = tag.match(/\ssrc="([^"]+)"/i)?.[1];
+    const alt = tag.match(/\salt="([^"]*)"/i)?.[1]?.trim();
+    if (src && alt && uploadStem(src) === stem) return decodeEntities(alt);
+  }
+  return undefined;
+}
+
 function extractFacts(texts: string[]) {
   const joined = texts.join(' ');
   const transit = joined.match(/(?:trong|chỉ|mất|từ)\s+(\d+\s*(?:[-–]\s*\d+\s*)?(?:h|giờ|tiếng|ngày))\b/i)?.[1]?.replace(/\s+/g, ' ');
@@ -644,7 +658,7 @@ function build(item: WpItem, kind: 'page' | 'post'): LegacyEntry {
     id: item.id, kind, path, slug: item.slug, template, title, label,
     region: navRegion.get(path),
     html, toc, faq, summary,
-    image, imageAlt: image === firstImage ? firstImageAlt || title : title,
+    image, imageAlt: (image === firstImage ? firstImageAlt : image && bodyAltFor(html, image)) || title,
     facts: extractFacts([seoDescription ?? '']),
     date: wpDate(item.date), modified: wpDate(update?.modified ?? item.modified),
     readingMinutes: Math.max(1, Math.round(words / 220)),

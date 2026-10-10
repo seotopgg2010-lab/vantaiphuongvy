@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CheckCircle2, Clock3, MessageCircle, Phone, Tag } from 'lucide-react';
 import { Breadcrumbs, type Crumb } from '@/components/site/breadcrumbs';
+import { formatDateVi } from '@/components/site/post-card';
 import { RatingSummary } from '@/components/site/rating-summary';
 import { UploadImage } from '@/components/site/upload-image';
 import { SITE_CONFIG, ZALO_URL } from '@/lib/constants';
@@ -23,6 +24,7 @@ export function PageHero({
   summary,
   facts = [],
   rating,
+  updated,
   image,
   imageAlt = '',
   showActions = true,
@@ -35,6 +37,8 @@ export function PageHero({
   facts?: HeroFact[];
   /** Visitor rating from WordPress, shown under the title where its star widget sat. */
   rating?: LegacyRating;
+  /** ISO date the page content was last revised, shown as "Cập nhật dd/mm/yyyy". */
+  updated?: string;
   image?: string;
   imageAlt?: string;
   showActions?: boolean;
@@ -49,6 +53,7 @@ export function PageHero({
           {eyebrow && <p className="eyebrow eyebrow-light mt-6">{eyebrow}</p>}
           <h1 className="h-display mt-3 text-white">{title}</h1>
           {rating && <div className="mt-3"><RatingSummary rating={rating} tone="light" /></div>}
+          {updated && <p className="mt-3 text-sm text-on-brand">Cập nhật <time dateTime={updated}>{formatDateVi(updated)}</time></p>}
           {summary && <p className="mt-5 max-w-2xl text-base leading-7 text-on-brand sm:text-[1.0625rem] sm:leading-8">{summary}</p>}
           {facts.length > 0 && (
             <ul className="mt-6 flex flex-wrap gap-2">
