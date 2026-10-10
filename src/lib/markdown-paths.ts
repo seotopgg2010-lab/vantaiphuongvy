@@ -35,7 +35,7 @@ export function prefersMarkdown(accept: string | null | undefined): boolean {
 
 /** Rewrite target for a public "*.md" request, or null when the path is not a twin URL. */
 export function markdownRewriteTarget(pathname: string): string | null {
-  if (pathname === '/index.md') return MARKDOWN_ROUTE;
+  if (pathname === '/index.md' || pathname === '/index.html.md') return MARKDOWN_ROUTE;
   const match = pathname.match(/^((?:\/[^/.]+)+)\.md$/);
   return match ? `${MARKDOWN_ROUTE}${match[1]}` : null;
 }

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import ATTACHMENT_REDIRECTS from './src/content/attachment-redirects.json';
 import { LOCALE_REDIRECTS, PUBLIC_REWRITES } from './src/lib/public-routing';
 
 function getSupabaseHost() {
@@ -34,13 +35,21 @@ const nextConfig: NextConfig = {
       { source: '/home-3', destination: '/', permanent: true },
       // WordPress front controller, which 301'd to the home page
       { source: '/index.php', destination: '/', permanent: true },
+      // WordPress feed variants -> the RSS feed at /feed/ (src/app/feed/route.ts)
+      { source: '/feed/:format(atom|rss|rss2|rdf)', destination: '/feed/', permanent: true },
+      { source: '/rss', destination: '/feed/', permanent: true },
       // WordPress feeds & archives that have no equivalent page
-      { source: '/feed', destination: '/blog/', permanent: true },
       { source: '/comments/feed', destination: '/blog/', permanent: true },
       { source: '/blog/:slug/feed', destination: '/blog/:slug/', permanent: true },
       { source: '/category/:path*', destination: '/blog/', permanent: true },
       { source: '/tag/:path*', destination: '/blog/', permanent: true },
-      { source: '/author/:path*', destination: '/blog/', permanent: true },
+      // The guides' author is presented on the About page.
+      { source: '/author/:path*', destination: '/gioi-thieu/', permanent: true },
+      // Per-page comment feeds and comment pagination -> the page itself
+      { source: '/:path+/feed', destination: '/:path+/', permanent: true },
+      { source: '/:path+/comment-page-:n(\\d+)', destination: '/:path+/', permanent: true },
+      // WordPress attachment pages, to where WordPress (Rank Math) sent them (snapshot: src/content/attachment-redirects.json)
+      ...Object.entries(ATTACHMENT_REDIRECTS).map(([source, destination]) => ({ source, destination, permanent: true })),
       { source: '/page/:n(\\d+)', destination: '/', permanent: true },
       { source: '/blog/page/:n(\\d+)', destination: '/blog/', permanent: true },
       ...LOCALE_REDIRECTS,
@@ -65,6 +74,13 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        // Preview and *.vercel.app copies of the site stay out of search indexes; only the
+        // production domain is indexable (its pages already carry a canonical to it).
+        source: '/:path*',
+        has: [{ type: 'host', value: '.*\\.vercel\\.app' }],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      },
       {
         source: '/wp-content/uploads/:path*',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],

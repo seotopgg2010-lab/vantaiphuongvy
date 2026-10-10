@@ -26,7 +26,7 @@ test('robots protects internal and unsupported locale paths', () => {
   const rule = Array.isArray(result.rules) ? result.rules[0] : result.rules;
   assert.ok(Array.isArray(rule.disallow));
   assert.ok(rule.disallow.includes('/admin/'));
-  assert.ok(rule.disallow.includes('/en/'));
+  assert.equal(rule.disallow.includes('/en/'), false, 'retired /en/ URLs must be crawlable to see their 404');
   assert.equal(result.sitemap, `${getSiteUrl()}/sitemap.xml`);
 });
 

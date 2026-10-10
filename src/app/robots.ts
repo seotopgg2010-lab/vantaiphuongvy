@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/en/'],
+        // /en/ is not disallowed: those retired URLs answer 404, which crawlers must see to drop them.
+        disallow: ['/admin/'],
       },
     ],
     sitemap: `${getSiteUrl()}/sitemap.xml`,

@@ -15,6 +15,7 @@ test('markdown twin URLs map to and from page paths', () => {
   assert.equal(markdownPathFor('/blog'), '/blog.md');
   assert.equal(markdownPathFor('/van-chuyen-hang-hoa/da-nang/'), '/van-chuyen-hang-hoa/da-nang.md');
   assert.equal(markdownRewriteTarget('/index.md'), '/md');
+  assert.equal(markdownRewriteTarget('/index.html.md'), '/md');
   assert.equal(markdownRewriteTarget('/blog.md'), '/md/blog');
   assert.equal(markdownRewriteTarget('/van-chuyen-hang-hoa/da-nang.md'), '/md/van-chuyen-hang-hoa/da-nang');
   for (const other of ['/', '/llms.txt', '/x.y.md', '/.md', '/a/b.md/c', '/wp-content/uploads/a.jpg']) {

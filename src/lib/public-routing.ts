@@ -21,6 +21,8 @@ export const PUBLIC_REWRITES = {
   beforeFiles: [
     { source: '/md/:path*', destination: `/${DEFAULT_LOCALE}/md/:path*` },
     { source: '/index.md', destination: '/md' },
+    // llms.txt convention for a URL ending in "/": the home twin is also served at /index.html.md.
+    { source: '/index.html.md', destination: '/md' },
     { source: '/:path((?:[^/.]+/)*[^/.]+)\\.md', destination: '/md/:path' },
   ],
   // Every other public path is served from the default-locale segment ("/x/" -> "/vi/x/").
