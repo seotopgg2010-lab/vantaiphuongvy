@@ -174,3 +174,13 @@ test('article text runs down no competitors and promotes no overloading', () => 
     assert.equal(/Các công ty vận tải khác|chở quá tải cao nhất/.test(item.html), false, item.path);
   }
 });
+
+test('every province merger note belongs to a route page and reaches its markdown twin', async () => {
+  const { PROVINCE_MERGERS } = await import('../src/content/province-mergers');
+  const { renderTwin } = await import('../src/lib/markdown-twins');
+  for (const [slug, note] of Object.entries(PROVINCE_MERGERS)) {
+    const item = routeItems.find((entry) => entry.slug === slug);
+    assert.ok(item, `${slug} is not a route page`);
+    assert.ok(renderTwin(item.path)?.includes(note), `${slug}: twin is missing the note`);
+  }
+});

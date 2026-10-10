@@ -16,6 +16,7 @@ import { cargoItems, relatedPosts, relatedRoutes, relatedServices, SERVICE_RELAT
 import { displayTitle, heroContent, heroSummary } from '@/lib/legacy-render';
 import type { LegacyAuthor, LegacyEntry } from '@/lib/legacy-types';
 import { HERO_LEADS } from '@/lib/marketing';
+import { PROVINCE_MERGERS } from '@/content/province-mergers';
 import { markdownPathFor } from '@/lib/markdown-paths';
 import { getExplorerRegions, regionAnchor, withSlash } from '@/lib/navigation';
 import { absoluteUrl, canonicalUrl } from '@/lib/seo';
@@ -69,6 +70,9 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
         formHref="#bao-gia"
       />
       <RouteWarehouses path={item.path} origins={item.template === 'cargo'} />
+      {isRoute && PROVINCE_MERGERS[item.slug] && (
+        <p className="container-x py-3 text-sm text-muted"><span className="font-semibold text-ink">Địa giới mới:</span> {PROVINCE_MERGERS[item.slug]}</p>
+      )}
       <ArticleBody html={body} toc={item.toc} quoteHeading={isRoute ? `Báo giá tuyến ${item.label}` : `Báo giá ${serviceSubject(item)}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
       <LeadSection title={isRoute ? `Nhận báo giá vận chuyển đi ${item.label}` : `Nhận báo giá ${serviceSubject(item)}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
       {isTruck ? <><TruckLinks current={item.path} /><RelatedRoutes items={truckRelatedRoutes(item, 4)} title={`Chành xe từ ${truckCity(item)} đi tỉnh`} /></> : item.region === 'loai-hang'

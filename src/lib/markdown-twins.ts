@@ -1,4 +1,5 @@
 import bodies from '@/legacy-content/legacy-markdown.json';
+import { PROVINCE_MERGERS } from '@/content/province-mergers';
 import { SITE_CONFIG, ZALO_URL } from './constants';
 import { WAREHOUSES, type Warehouse, warehouseArea, warehousesFor } from './warehouses';
 import { cargoItems, getLegacyByPath, homeFaq, indexablePaths, latestPostDate, legacyPosts, routesByRegion, truckItems } from './legacy-content';
@@ -132,6 +133,7 @@ function entryMarkdown(item: LegacyEntry) {
     }),
     HERO_LEADS[item.path],
     warehouses.length > 0 && `## Kho hàng Phương Vy tại ${warehouseArea(warehouses[0])}\n\n${warehouseLines(warehouses)}`,
+    item.template === 'route' && PROVINCE_MERGERS[item.slug] && `Địa giới mới: ${PROVINCE_MERGERS[item.slug]}`,
     body,
     item.author?.bio && `## Về tác giả\n\n**${item.author.name}** — ${item.author.bio}`,
     item.path === '/lien-he' ? '' : `---\n\n${contactSection()}`,
@@ -185,6 +187,7 @@ function routeDigest(item: LegacyEntry) {
     `- Toàn văn: ${markdownUrl(item.path)}`,
     facts(item) && `- Dữ kiện: ${facts(item)}`,
     warehouses.length > 0 && `- Kho: ${warehouses.map((warehouse) => `${warehouse.label}: ${warehouse.address}`).join('; ')}`,
+    PROVINCE_MERGERS[item.slug] && `- Địa giới mới: ${PROVINCE_MERGERS[item.slug]}`,
     oneLine(HERO_LEADS[item.path] || item.seo.description || item.summary),
   ].filter(Boolean).join('\n');
 }
