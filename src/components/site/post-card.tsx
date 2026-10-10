@@ -33,7 +33,7 @@ export function PostCard({ post, priority = false }: { post: PostSummary; priori
           fill
           sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
-          preload={priority}
+          {...(priority ? { loading: 'eager' as const, fetchPriority: 'high' as const } : {})}
         />
       </Link>
       <div className="flex flex-1 flex-col p-5">

@@ -35,7 +35,7 @@ export default function HomePage() {
       {home && <JsonLd data={generateLegacyJsonLd(home, [])} />}
       {/* ---------- hero ---------- */}
       <section className="relative isolate overflow-hidden bg-brand-700 text-white">
-        <UploadImage src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill preload sizes="100vw" className="-z-20 object-cover object-center" />
+        <UploadImage src={HERO_IMAGE.src} alt={HERO_IMAGE.alt} fill loading="eager" fetchPriority="high" sizes="100vw" className="-z-20 object-cover object-center" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-700 via-brand-700/90 to-brand-600/40" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-brand-700/90 to-transparent" aria-hidden="true" />
         <div className="container-x grid gap-8 pb-24 pt-10 md:pt-14 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-12 lg:pb-28 lg:pt-14">

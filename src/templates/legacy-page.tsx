@@ -181,7 +181,7 @@ function PostTemplate({ item }: { item: LegacyEntry }) {
       {item.image && (
         <div className="container-x pt-10">
           <div className="relative mx-auto aspect-[16/8] max-w-5xl overflow-hidden rounded-2xl bg-surface shadow-[var(--shadow-card)]">
-            <UploadImage src={item.image} alt={item.imageAlt || item.title} fill preload sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
+            <UploadImage src={item.image} alt={item.imageAlt || item.title} fill loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 1024px, 100vw" className="object-cover" />
           </div>
         </div>
       )}
