@@ -10,6 +10,9 @@ export type SiteNavigation = {
   policies: NavLink[];
 };
 
+/** In-page anchor of a region group on the route hub, e.g. "/van-chuyen-hang-hoa/#khu-vuc-trung". */
+export const regionAnchor = (region: string) => `khu-vuc-${region}`;
+
 export const withSlash = (path: string) => (path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`);
 
 /** Small, serialisable navigation payload derived from the content corpus. */
@@ -42,6 +45,7 @@ export function getSiteNavigation(): SiteNavigation {
 export function getExplorerRegions() {
   return routesByRegion().map((group) => ({
     id: group.region,
+    anchor: regionAnchor(group.region),
     label: group.label,
     items: group.items.map((item) => ({ label: item.label, href: withSlash(item.path), transit: item.facts.transit, priceFrom: item.facts.priceFrom })),
   }));

@@ -1,4 +1,5 @@
 import corpus from '@/legacy-content/legacy-clean.json';
+import { ROUTE_COORDINATES } from '@/content/route-coordinates';
 import type { LegacyEntry, LegacyRegion } from './legacy-types';
 import { POPULAR_ROUTES } from './marketing';
 
@@ -82,19 +83,69 @@ function seedOf(path: string): number {
 }
 const rotate = <T,>(list: T[], seed: number) => (list.length ? [...list.slice(seed % list.length), ...list.slice(0, seed % list.length)] : list);
 
+/** The route page and the truck rental page for the same city link each other first. */
+export const CITY_TRUCK_PAGES: Record<string, string> = {
+  '/van-chuyen-hang-hoa/ha-noi': '/thue-xe-tai/ha-noi',
+  '/van-chuyen-hang-hoa/da-nang': '/thue-xe-tai/da-nang',
+  '/van-chuyen-hang-hoa/tphcm': '/thue-xe-tai/hcm',
+};
+
+const RELATED_LIMIT = 8;
+/** Nearest destinations listed on each route page; the remaining slots balance links and popular routes. */
+const NEAREST_ROUTES = 6;
+/** Every route with coordinates is listed on at least this many other route pages. */
+const MIN_ROUTE_INLINKS = 5;
+
+/** Great-circle distance in km between two [lat, lon] points. */
+function distanceKm([lat1, lon1]: readonly [number, number], [lat2, lon2]: readonly [number, number]) {
+  const rad = Math.PI / 180;
+  const h = Math.sin(((lat2 - lat1) * rad) / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(((lon2 - lon1) * rad) / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+}
+
 /**
- * Links to other routes for a route or cargo page. Routes link their alphabetical
- * neighbours on both sides (wrapping within the region), so every route is linked
- * from about `limit` siblings instead of only the first eight of each region;
- * cargo pages link the other cargo services. Popular routes fill the remainder.
+ * Geographic neighbours for every route that has coordinates: its six nearest destinations, then
+ * routes that would otherwise be listed on fewer than five pages are added to the lists of their
+ * own nearest pages, so remote provinces (Cà Mau, Cao Bằng) still receive links. Deterministic, so
+ * the static HTML does not change between builds.
  */
-export function relatedRoutes(item: LegacyEntry, limit = 8): LegacyEntry[] {
+const geoNeighbours: Map<string, LegacyEntry[]> = (() => {
+  // Laos and Cambodia stay in their small international group with the sea and air pages.
+  const located = routeItems.filter((item) => item.region !== 'quoc-te' && ROUTE_COORDINATES[item.slug]);
+  const nearest = new Map(located.map((item) => [item.path, located
+    .filter((other) => other !== item)
+    .map((other) => ({ other, km: distanceKm(ROUTE_COORDINATES[item.slug], ROUTE_COORDINATES[other.slug]) }))
+    .sort((a, b) => a.km - b.km || a.other.path.localeCompare(b.other.path))
+    .map(({ other }) => other)]));
+  const lists = new Map(located.map((item) => [item.path, nearest.get(item.path)!.slice(0, NEAREST_ROUTES)]));
+  const inlinks = (item: LegacyEntry) => located.filter((page) => lists.get(page.path)!.includes(item)).length;
+  for (const item of located) {
+    for (const page of nearest.get(item.path)!) {
+      if (inlinks(item) >= MIN_ROUTE_INLINKS) break;
+      const list = lists.get(page.path)!;
+      if (list.length < RELATED_LIMIT - 1 && !list.includes(item)) list.push(item);
+    }
+  }
+  return lists;
+})();
+
+/**
+ * Links to other routes for a route or cargo page. Routes list their nearest destinations
+ * (ROUTE_COORDINATES), with the same city's truck rental page first; routes without coordinates
+ * link their alphabetical neighbours within the region, and cargo pages link the other cargo
+ * services. Popular routes fill the remainder.
+ */
+export function relatedRoutes(item: LegacyEntry, limit = RELATED_LIMIT): LegacyEntry[] {
   const picked: LegacyEntry[] = [];
   const add = (candidate?: LegacyEntry) => {
     if (candidate && candidate.path !== item.path && !picked.includes(candidate) && picked.length < limit) picked.push(candidate);
   };
+  const neighbours = geoNeighbours.get(item.path);
+  if (CITY_TRUCK_PAGES[item.path]) add(byPath.get(CITY_TRUCK_PAGES[item.path]));
   if (item.region === 'loai-hang') {
     cargoItems.forEach((candidate) => add(candidate));
+  } else if (neighbours) {
+    neighbours.forEach((candidate) => add(candidate));
   } else {
     const peers = routeItems.filter((candidate) => candidate.region === item.region);
     const index = peers.indexOf(item);
@@ -107,18 +158,26 @@ export function relatedRoutes(item: LegacyEntry, limit = 8): LegacyEntry[] {
   return picked;
 }
 
+/** The truck page's own city route first, then that route's nearest destinations. */
+export function truckRelatedRoutes(item: LegacyEntry, limit = RELATED_LIMIT): LegacyEntry[] {
+  const routePath = Object.keys(CITY_TRUCK_PAGES).find((path) => CITY_TRUCK_PAGES[path] === item.path);
+  const route = routePath ? byPath.get(routePath) : undefined;
+  if (!route) return [];
+  return [route, ...relatedRoutes(route, limit).filter((entry) => entry.template === 'route')].slice(0, limit);
+}
+
 /** What each guide is about; pages and guides sharing a topic link to each other. */
 type Topic = 'truck' | 'cargo' | 'dangerous' | 'route' | 'business' | 'company';
 const POST_TOPICS: Record<string, Topic[]> = {
   '/blog/bien-bao-cam-xe-tai-va-muc-phat': ['truck', 'route'],
-  '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': ['business', 'route'],
-  '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': ['truck'],
+  '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': ['business'],
+  '/blog/dich-y-nghia-bien-so-xe-theo-phong-thuy-khoa-hoc': ['business'],
   '/blog/giay-to-van-chuyen-hang-hoa': ['business', 'cargo', 'route'],
   '/blog/hang-hoa-thuong-gap-trong-nganh-van-tai': ['cargo', 'route'],
   '/blog/kich-thuoc-thung-xe-tai-trong-van-tai-hang-hoa': ['truck', 'cargo'],
   '/blog/quy-dinh-van-chuyen-hang-hoa-nguy-hiem': ['dangerous', 'cargo'],
   '/blog/van-chuyen-hang-hoa-nguy-hiem': ['dangerous', 'cargo'],
-  '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh': ['company', 'route'],
+  '/blog/van-tai-phuong-vy-duoc-uu-tien-hoat-dong-tren-luong-xanh': ['company'],
 };
 
 function topicsOf(item: LegacyEntry): Topic[] {
@@ -156,7 +215,8 @@ const TOPIC_SERVICES: Record<Topic, string[]> = {
   company: ['/gioi-thieu', '/van-chuyen-hang-hoa'],
 };
 
+/** Topic services first; the main route pages fill guides whose topics name only one or two. */
 export function relatedServices(item: LegacyEntry, limit = 4): LegacyEntry[] {
-  const paths = [...new Set(topicsOf(item).flatMap((topic) => TOPIC_SERVICES[topic]))];
-  return byPaths(paths.length ? paths : TOPIC_SERVICES.route).slice(0, limit);
+  const paths = [...new Set([...topicsOf(item).flatMap((topic) => TOPIC_SERVICES[topic]), ...TOPIC_SERVICES.route])];
+  return byPaths(paths).slice(0, limit);
 }

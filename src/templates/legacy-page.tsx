@@ -12,7 +12,7 @@ import { StatsStrip } from '@/components/site/marketing';
 import { UploadImage } from '@/components/site/upload-image';
 import { RouteWarehouses } from '@/components/site/warehouse-list';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
-import { relatedPosts, relatedRoutes, relatedServices, truckItems } from '@/lib/legacy-content';
+import { relatedPosts, relatedRoutes, relatedServices, truckItems, truckRelatedRoutes } from '@/lib/legacy-content';
 import { displayTitle, heroContent } from '@/lib/legacy-render';
 import type { LegacyAuthor, LegacyEntry } from '@/lib/legacy-types';
 import { HERO_LEADS } from '@/lib/marketing';
@@ -71,10 +71,10 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
       <RouteWarehouses path={item.path} />
       <ArticleBody html={body} toc={item.toc} quoteHeading={isRoute ? `Báo giá tuyến ${item.label}` : `Báo giá ${serviceSubject(item)}`} quoteContext="Phản hồi nhanh trong giờ làm việc" />
       <LeadSection title={isRoute ? `Nhận báo giá vận chuyển đi ${item.label}` : `Nhận báo giá ${serviceSubject(item)}`} defaultTo={isRoute ? item.label : ''} page={withSlash(item.path)} />
-      {isTruck ? <TruckLinks current={item.path} /> : item.region === 'loai-hang'
+      {isTruck ? <><TruckLinks current={item.path} /><RelatedRoutes items={truckRelatedRoutes(item)} title="Chành xe gửi hàng đi tỉnh" /></> : item.region === 'loai-hang'
         ? <RelatedRoutes items={relatedRoutes(item)} eyebrow="Dịch vụ liên quan" title="Dịch vụ vận chuyển khác" />
         : <RelatedRoutes items={relatedRoutes(item)} />}
-      <RelatedPosts posts={relatedPosts(item)} />
+      <RelatedPosts posts={relatedPosts(item)} action={null} />
       <CtaBand />
     </>
   );
@@ -84,7 +84,8 @@ function TruckLinks({ current }: { current?: string }) {
   const items = truckItems.filter((truck) => truck.path !== current);
   return (
     <section aria-labelledby="truck-links" className="container-x py-10 md:py-14">
-      <SectionHeading id="truck-links" eyebrow="Cho thuê xe tải" title="Thuê xe tải theo khu vực" action={{ label: 'Bảng giá thuê xe', href: '/thue-xe-tai/' }} />
+      {/* The hub lists these cards itself, so it gets no link back to itself. */}
+      <SectionHeading id="truck-links" eyebrow="Cho thuê xe tải" title="Thuê xe tải theo khu vực" action={current ? { label: 'Bảng giá thuê xe', href: '/thue-xe-tai/' } : undefined} />
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((truck) => (
           <li key={truck.path}>
@@ -116,7 +117,7 @@ function RouteHubTemplate({ item }: { item: LegacyEntry }) {
       <div className="border-y border-line bg-surface"><div className="container-x py-10"><StatsStrip /></div></div>
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá vận chuyển Bắc Nam" />
       <LeadSection title="Nhận bảng giá vận chuyển mới nhất" page={withSlash(item.path)} />
-      <RelatedPosts posts={relatedPosts(item)} />
+      <RelatedPosts posts={relatedPosts(item)} action={null} />
       <CtaBand />
     </>
   );
@@ -130,7 +131,7 @@ function TruckHubTemplate({ item }: { item: LegacyEntry }) {
       <TruckLinks />
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá thuê xe tải" />
       <LeadSection title="Nhận báo giá thuê xe tải" page={withSlash(item.path)} />
-      <RelatedPosts posts={relatedPosts(item)} />
+      <RelatedPosts posts={relatedPosts(item)} action={null} />
       <CtaBand />
     </>
   );

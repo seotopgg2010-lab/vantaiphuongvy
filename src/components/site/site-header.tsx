@@ -86,7 +86,7 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
   const visibleRoutes = results ?? activeRegion?.items ?? [];
   const international = nav.regions.find((r) => r.id === 'quoc-te')?.items ?? [];
 
-  const navItem = 'nav-underline inline-flex h-full items-center gap-1 px-3 text-[0.9375rem] font-semibold transition-colors hover:text-brand-600 data-[active=true]:text-brand-600';
+  const navItem = 'nav-underline inline-flex h-full items-center gap-1 whitespace-nowrap px-3 text-[0.9375rem] font-semibold transition-colors hover:text-brand-600 data-[active=true]:text-brand-600';
 
   return (
     <header ref={headerRef} onMouseLeave={closeSoon} onMouseEnter={keepOpen} className={`sticky top-0 z-50 border-b bg-white/95 backdrop-blur-md transition-shadow duration-300 ${scrolled || openMenu ? 'border-line shadow-[0_8px_24px_-14px_rgb(10_61_107/0.35)]' : 'border-transparent'}`}>
@@ -96,9 +96,13 @@ export function SiteHeader({ nav }: { nav: SiteNavigation }) {
         </HomeLink>
 
         <nav aria-label="Điều hướng chính" className="ml-4 hidden h-full items-stretch lg:flex xl:ml-8">
-          <button type="button" data-active={routesActive || openMenu === 'routes'} className={navItem} aria-expanded={openMenu === 'routes'} aria-controls={`${menuId}-routes`} onClick={() => setOpenMenu(openMenu === 'routes' ? null : 'routes')} onMouseEnter={() => openNow('routes')}>
-            Tuyến vận chuyển <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${openMenu === 'routes' ? 'rotate-180' : ''}`} aria-hidden="true" />
-          </button>
+          {/* The label is a real link to the route hub (crawlable in the server HTML); the chevron opens the menu. */}
+          <div className="flex h-full items-stretch" onMouseEnter={() => openNow('routes')}>
+            <Link href="/van-chuyen-hang-hoa/" data-active={routesActive || openMenu === 'routes'} className={`${navItem} pr-1`}>Tuyến vận chuyển</Link>
+            <button type="button" data-active={routesActive || openMenu === 'routes'} className={`${navItem} pl-1 pr-2`} aria-label="Mở danh sách tuyến vận chuyển" aria-expanded={openMenu === 'routes'} aria-controls={`${menuId}-routes`} onClick={() => setOpenMenu(openMenu === 'routes' ? null : 'routes')}>
+              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${openMenu === 'routes' ? 'rotate-180' : ''}`} aria-hidden="true" />
+            </button>
+          </div>
           <button type="button" data-active={servicesActive || openMenu === 'services'} className={navItem} aria-expanded={openMenu === 'services'} aria-controls={`${menuId}-services`} onClick={() => setOpenMenu(openMenu === 'services' ? null : 'services')} onMouseEnter={() => openNow('services')}>
             Dịch vụ <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${openMenu === 'services' ? 'rotate-180' : ''}`} aria-hidden="true" />
           </button>

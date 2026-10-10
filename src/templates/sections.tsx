@@ -62,7 +62,8 @@ export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khá
               <Link href={withSlash(item.path)} className="group flex h-full items-center gap-3 rounded-xl border border-line bg-white p-4 transition hover:border-brand-500 hover:shadow-[var(--shadow-card)]">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white"><Icon className="h-5 w-5" aria-hidden="true" /></span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-xs text-muted">{isRoute ? 'Tuyến' : item.template === 'truck' ? 'Thuê xe tải' : 'Dịch vụ'}</span>
+                  {/* The space keeps the anchor text "Tuyến Hải Phòng" rather than "TuyếnHải Phòng". */}
+                  <span className="block text-xs text-muted">{isRoute ? 'Tuyến' : item.template === 'truck' ? 'Thuê xe tải' : 'Dịch vụ'}</span>{' '}
                   <span className="line-clamp-2 font-semibold text-ink">{item.label}</span>
                 </span>
                 <ArrowRight className="h-4 w-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-brand-600" aria-hidden="true" />
@@ -75,12 +76,18 @@ export function RelatedRoutes({ items, title = 'Các tuyến vận chuyển khá
   );
 }
 
-export function RelatedPosts({ posts, title = 'Cẩm nang vận tải' }: { posts: LegacyEntry[]; title?: string }) {
+const ALL_POSTS = { label: 'Xem tất cả bài viết', href: '/blog/' };
+
+/**
+ * Related guides. Service pages pass `action={null}`: the header and footer already link the blog,
+ * and a "see all" link on every service page would make /blog/ the strongest internal target.
+ */
+export function RelatedPosts({ posts, title = 'Cẩm nang vận tải', action = ALL_POSTS }: { posts: LegacyEntry[]; title?: string; action?: { label: string; href: string } | null }) {
   if (!posts.length) return null;
   return (
     <section aria-labelledby="related-posts" className="border-t border-line bg-white">
       <div className="container-x py-10 md:py-14">
-        <SectionHeading id="related-posts" eyebrow="Kiến thức" title={title} action={{ label: 'Xem tất cả bài viết', href: '/blog/' }} />
+        <SectionHeading id="related-posts" eyebrow="Kiến thức" title={title} action={action ?? undefined} />
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => <PostCard key={post.path} post={post} />)}
         </div>

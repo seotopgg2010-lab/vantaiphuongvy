@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { cargoItems, legacyItems, legacyPosts, relatedPosts, relatedRoutes, relatedServices, routeItems, RETIRED_PATHS, truckItems } from '../src/lib/legacy-content';
+import { CITY_TRUCK_PAGES, cargoItems, legacyItems, legacyPosts, relatedPosts, relatedRoutes, relatedServices, routeItems, RETIRED_PATHS, truckItems, truckRelatedRoutes } from '../src/lib/legacy-content';
+import { crumbsToJsonLd, legacyCrumbs } from '../src/lib/breadcrumbs';
 import { heroContent } from '../src/lib/legacy-render';
 import { HERO_LEADS } from '../src/lib/marketing';
 import { renderTwin } from '../src/lib/markdown-twins';
@@ -97,4 +98,34 @@ test('guides and service pages link to each other inside the article text', () =
   // The truck-size guide is the natural next read from pages that list truck types.
   const guide = '/blog/kich-thuoc-thung-xe-tai-trong-van-tai-hang-hoa/';
   assert.ok(publicItems.filter((item) => bodyLinks(item.html).includes(guide)).length >= 5, 'truck-size guide is linked from at least five articles');
+});
+
+const byPath = (path: string) => legacyItems.find((item) => item.path === path)!;
+const relatedPaths = (path: string) => relatedRoutes(byPath(path)).map((entry) => entry.path);
+
+test('related routes are the nearest destinations, so neighbouring provinces link each other', () => {
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/da-nang').includes('/van-chuyen-hang-hoa/quang-nam'));
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/quang-nam').includes('/van-chuyen-hang-hoa/da-nang'));
+  // Pages that serve the same place link each other.
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/binh-thuan').includes('/van-chuyen-hang-hoa/phan-thiet'));
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/phan-thiet').includes('/van-chuyen-hang-hoa/binh-thuan'));
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/dak-lak').includes('/van-chuyen-hang-hoa/chanh-xe-chuyen-hang-di-buon-me-thuot'));
+  assert.ok(relatedPaths('/van-chuyen-hang-hoa/ca-mau').includes('/van-chuyen-hang-hoa/bac-lieu'));
+});
+
+test('a city route and the truck rental page for the same city link each other first', () => {
+  for (const [route, truck] of Object.entries(CITY_TRUCK_PAGES)) {
+    assert.equal(relatedPaths(route)[0], truck, route);
+    assert.equal(truckRelatedRoutes(byPath(truck))[0]?.path, route, truck);
+  }
+});
+
+test('route trails name the region: Tây Nguyên as its page, other regions as a hub anchor kept out of JSON-LD', () => {
+  const gialai = legacyCrumbs(byPath('/van-chuyen-hang-hoa/gia-lai'));
+  assert.deepEqual(gialai.map((crumb) => crumb.href), ['/', '/van-chuyen-hang-hoa/', '/van-chuyen-hang-hoa/tay-nguyen/', undefined]);
+  const danang = legacyCrumbs(byPath('/van-chuyen-hang-hoa/da-nang'));
+  assert.equal(danang[2].href, '/van-chuyen-hang-hoa/#khu-vuc-trung');
+  assert.deepEqual(crumbsToJsonLd(danang, '/van-chuyen-hang-hoa/da-nang').map((crumb) => crumb.name), ['Trang chủ', 'Vận chuyển hàng hóa', 'Đà Nẵng']);
+  assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/tay-nguyen')).length, 3, 'the region page has no crumb to itself');
+  assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/xe-may')).length, 3, 'cargo pages have no region');
 });

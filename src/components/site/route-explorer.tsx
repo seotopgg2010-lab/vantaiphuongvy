@@ -5,7 +5,8 @@ import { useId, useMemo, useState } from 'react';
 import { ArrowRight, MapPin, Search, X } from 'lucide-react';
 
 export type ExplorerRoute = { label: string; href: string; transit?: string; priceFrom?: string };
-export type ExplorerRegion = { id: string; label: string; items: ExplorerRoute[] };
+/** `anchor` is the group's in-page id; route breadcrumbs link to it on the hub. */
+export type ExplorerRegion = { id: string; anchor?: string; label: string; items: ExplorerRoute[] };
 
 const fold = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase().trim();
 
@@ -79,7 +80,7 @@ export function RouteExplorer({ regions, compact = false, defaultRegion = 'all' 
       )}
       <div hidden={resultCount === 0} className="mt-8 flex flex-col gap-10">
         {groups.map((group) => (
-          <section key={group.id} aria-label={group.label} hidden={!group.shown}>
+          <section key={group.id} id={group.anchor} aria-label={group.label} hidden={!group.shown} className="scroll-mt-28">
             {/* The heading holds only the region name; the route count sits beside it, not inside it. */}
             <div className="flex items-center gap-3 text-sm text-subtle">
               <h3 className="font-semibold uppercase tracking-wider">{group.label}</h3>
