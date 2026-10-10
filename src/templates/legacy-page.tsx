@@ -13,7 +13,7 @@ import { UploadImage } from '@/components/site/upload-image';
 import { RouteWarehouses } from '@/components/site/warehouse-list';
 import { legacyCrumbs } from '@/lib/breadcrumbs';
 import { relatedPosts, relatedRoutes, relatedServices, truckItems, truckRelatedRoutes } from '@/lib/legacy-content';
-import { displayTitle, heroContent } from '@/lib/legacy-render';
+import { displayTitle, heroContent, heroSummary } from '@/lib/legacy-render';
 import type { LegacyAuthor, LegacyEntry } from '@/lib/legacy-types';
 import { HERO_LEADS } from '@/lib/marketing';
 import { markdownPathFor } from '@/lib/markdown-paths';
@@ -60,7 +60,7 @@ function ServiceTemplate({ item }: { item: LegacyEntry }) {
         crumbs={legacyCrumbs(item)}
         eyebrow={eyebrow}
         title={displayTitle(item.title)}
-        summary={lead || item.seo.description}
+        summary={heroSummary(item, lead)}
         facts={isRoute || item.template === 'cargo' ? routeFacts(item) : [{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Có tài xế, bốc xếp' }, { text: 'Có hóa đơn VAT' }]}
         rating={item.rating}
         updated={revisedOn(item)}
@@ -109,7 +109,7 @@ function RouteHubTemplate({ item }: { item: LegacyEntry }) {
   const { lead, body } = heroContent(item);
   return (
     <>
-      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={lead || item.seo.description} updated={revisedOn(item)} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} rating={item.rating} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
+      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Chành xe Bắc – Trung – Nam" title={displayTitle(item.title)} summary={heroSummary(item, lead)} updated={revisedOn(item)} facts={[{ text: 'Xe chạy hàng ngày' }, { text: 'Nhận hàng tận nơi' }, { text: 'Có hóa đơn & bảo hiểm' }]} rating={item.rating} image={item.image} imageAlt={item.imageAlt || item.title} formHref="#bao-gia" />
       <section aria-labelledby="route-directory" className="container-x py-12 md:py-16">
         <SectionHeading id="route-directory" eyebrow="Danh sách tuyến" title="Chọn tỉnh, thành phố cần gửi hàng" lead="Tra cứu nhanh tuyến vận chuyển từ TP.HCM đi các tỉnh và ngược lại. Mỗi tuyến có bảng giá, thời gian và lịch xe riêng." />
         <div className="mt-8"><RouteExplorer regions={getExplorerRegions()} /></div>
@@ -127,7 +127,7 @@ function TruckHubTemplate({ item }: { item: LegacyEntry }) {
   const { lead, body } = heroContent(item);
   return (
     <>
-      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Cho thuê xe tải chở hàng" title={displayTitle(item.title)} summary={lead || item.seo.description} updated={revisedOn(item)} facts={[{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Thùng kín, thùng bạt' }, { text: 'Nội thành & đi tỉnh' }]} rating={item.rating} image="/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg" imageAlt="Đội xe tải cho thuê của Vận tải Phương Vy" formHref="#bao-gia" />
+      <PageHero crumbs={legacyCrumbs(item)} eyebrow="Cho thuê xe tải chở hàng" title={displayTitle(item.title)} summary={heroSummary(item, lead)} updated={revisedOn(item)} facts={[{ text: 'Xe 0,5 – 30 tấn' }, { text: 'Thùng kín, thùng bạt' }, { text: 'Nội thành & đi tỉnh' }]} rating={item.rating} image="/wp-content/uploads/2018/08/thue-xe-tai-cong-ty-phuong-vy.jpg" imageAlt="Đội xe tải cho thuê của Vận tải Phương Vy" formHref="#bao-gia" />
       <TruckLinks />
       <ArticleBody html={body} toc={item.toc} quoteHeading="Báo giá thuê xe tải" />
       <LeadSection title="Nhận báo giá thuê xe tải" page={withSlash(item.path)} />

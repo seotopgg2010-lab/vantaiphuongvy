@@ -61,6 +61,27 @@ export function displayTitle(title: string): string {
   return result;
 }
 
+// Abbreviations and codes that stay in capitals when a shouted word is lowered.
+const KEEP_CAPS = new Set(['TP', 'HCM', 'TPHCM', 'TP.HCM', 'VAT', 'GTGT', 'GPS', 'TNHH', 'KCN', 'CBM', 'QL', 'COD', 'VN', 'SG', 'HN']);
+
+/**
+ * Lowers words a Rank Math description typed in capitals for emphasis ("GIÁ CƯỚC ưu đãi" → "giá cước
+ * ưu đãi"), keeping abbreviations; a lowered first word is capitalised again. Only the case changes.
+ */
+export function calmShouting(text: string): string {
+  const calm = text.replace(/[\p{L}.]+/gu, (word) => {
+    const letters = word.replace(/[^\p{L}]/gu, '');
+    if (letters.length < 2 || letters !== letters.toLocaleUpperCase('vi') || KEEP_CAPS.has(word.replace(/\.$/, ''))) return word;
+    return word.toLocaleLowerCase('vi');
+  });
+  return calm.charAt(0).toLocaleUpperCase('vi') + calm.slice(1);
+}
+
+/** Hero intro: the page's own or curated lead, else its approved description with shouted words lowered. */
+export function heroSummary(item: LegacyEntry, lead?: string): string | undefined {
+  return lead || (item.seo.description ? calmShouting(item.seo.description) : undefined);
+}
+
 /** "4,9/5": a visitor rating as the page hero and the markdown twin both print it. */
 export function ratingScore(rating: LegacyRating): string {
   return `${rating.score.toLocaleString('vi-VN', { maximumFractionDigits: 1 })}/${rating.best}`;

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { CITY_TRUCK_PAGES, cargoItems, legacyItems, legacyPosts, relatedPosts, relatedRoutes, relatedServices, routeItems, RETIRED_PATHS, truckItems, truckRelatedRoutes } from '../src/lib/legacy-content';
 import { crumbsToJsonLd, legacyCrumbs } from '../src/lib/breadcrumbs';
-import { heroContent } from '../src/lib/legacy-render';
+import { heroContent, heroSummary } from '../src/lib/legacy-render';
 import { HERO_LEADS } from '../src/lib/marketing';
 import { renderTwin } from '../src/lib/markdown-twins';
 
@@ -128,4 +128,17 @@ test('route trails name the region: Tây Nguyên as its page, other regions as a
   assert.deepEqual(crumbsToJsonLd(danang, '/van-chuyen-hang-hoa/da-nang').map((crumb) => crumb.name), ['Trang chủ', 'Vận chuyển hàng hóa', 'Đà Nẵng']);
   assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/tay-nguyen')).length, 3, 'the region page has no crumb to itself');
   assert.equal(legacyCrumbs(byPath('/van-chuyen-hang-hoa/xe-may')).length, 3, 'cargo pages have no region');
+});
+
+test('the Tây Nguyên region page lists every route of the region first', () => {
+  const members = routeItems.filter((item) => item.region === 'tay-nguyen' && item.path !== '/van-chuyen-hang-hoa/tay-nguyen').map((item) => item.path);
+  assert.deepEqual(relatedPaths('/van-chuyen-hang-hoa/tay-nguyen').slice(0, members.length).sort(), [...members].sort());
+});
+
+test('hero intros taken from a description carry no shouted words', () => {
+  for (const item of [...routeItems, ...cargoItems, ...truckItems].filter((entry) => !heroContent(entry).lead)) {
+    const summary = heroSummary(item) ?? '';
+    const shouted = summary.match(/\p{Lu}{4,}/gu)?.filter((word) => !['TPHCM'].includes(word)) ?? [];
+    assert.deepEqual(shouted, [], item.path);
+  }
 });

@@ -142,6 +142,8 @@ export function relatedRoutes(item: LegacyEntry, limit = RELATED_LIMIT): LegacyE
   };
   const neighbours = geoNeighbours.get(item.path);
   if (CITY_TRUCK_PAGES[item.path]) add(byPath.get(CITY_TRUCK_PAGES[item.path]));
+  // A region page (/tay-nguyen) lists every route of its region before any neighbour.
+  if (item.slug === item.region) routeItems.filter((candidate) => candidate.region === item.region).forEach((candidate) => add(candidate));
   if (item.region === 'loai-hang') {
     cargoItems.forEach((candidate) => add(candidate));
   } else if (neighbours) {
