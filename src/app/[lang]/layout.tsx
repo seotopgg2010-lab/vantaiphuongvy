@@ -10,7 +10,7 @@ import { RootDocument, siteViewport } from '@/components/site/root-document';
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = getSiteUrl();
   const title = 'Công Ty TNHH Dịch Vụ Vận Tải Phương Vy';
-  const description = 'Vận tải Phương Vy — vận chuyển hàng hóa Bắc Nam, chành xe đi 63 tỉnh thành và cho thuê xe tải tại TP.HCM, Hà Nội, Đà Nẵng. Hotline 0933 871 139.';
+  const description = 'Vận tải Phương Vy — vận chuyển hàng hóa Bắc Nam, chành xe đi 63 tỉnh thành và cho thuê xe tải tại TP.HCM, Hà Nội, Đà Nẵng. Hotline 0902 939 318.';
   return {
     metadataBase: new URL(baseUrl),
     title: { default: title, template: '%s' },

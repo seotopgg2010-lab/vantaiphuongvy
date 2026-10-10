@@ -50,7 +50,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/thue-xe-tai': {
     title: 'Thuê xe tải 0,5–30 tấn nội thành, đi tỉnh | Phương Vy',
-    description: 'Cho thuê xe tải thùng kín, mui bạt 0,5–30 tấn và container chở hàng nội thành, đi tỉnh; miễn phí lưu kho, bốc xếp tại kho. Gọi 0933 871 139.',
+    description: 'Cho thuê xe tải thùng kín, mui bạt 0,5–30 tấn và container chở hàng nội thành, đi tỉnh; miễn phí lưu kho, bốc xếp tại kho. Gọi 0902 939 318.',
     heading: 'Thuê xe tải chở hàng nội thành và đi tỉnh',
   },
   '/thue-xe-tai/da-nang': {
@@ -61,7 +61,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa': {
     title: 'Vận chuyển hàng hóa Bắc Nam khoảng 48 giờ | Phương Vy',
-    description: 'Chành xe Bắc Nam bằng xe tải 1–30 tấn và container, khoảng 48 giờ. Hàng nặng tính theo kg, hàng nhẹ theo khối; giảm 7% khách mới. Gọi 0933 871 139.',
+    description: 'Chành xe Bắc Nam bằng xe tải 1–30 tấn và container, khoảng 48 giờ. Hàng nặng tính theo kg, hàng nhẹ theo khối; giảm 7% khách mới. Gọi 0902 939 318.',
     heading: 'Vận chuyển hàng hóa Bắc Nam',
   },
   '/van-chuyen-hang-hoa/an-giang': {
@@ -129,7 +129,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa/hai-phong': {
     title: 'Chành xe gửi hàng đi Hải Phòng 2–3 ngày | Vận Tải Phương Vy',
-    description: 'Gửi hàng đi Hải Phòng: từ TP.HCM 2–3 ngày, 3 chuyến mỗi ngày; từ Hà Nội 2–3 giờ, 5 chuyến mỗi ngày. Giảm 7% cho khách mới. Gọi 0933 871 139.',
+    description: 'Gửi hàng đi Hải Phòng: từ TP.HCM 2–3 ngày, 3 chuyến mỗi ngày; từ Hà Nội 2–3 giờ, 5 chuyến mỗi ngày. Giảm 7% cho khách mới. Gọi 0902 939 318.',
   },
   '/van-chuyen-hang-hoa/hau-giang': {
     title: 'Chành xe gửi hàng đi Hậu Giang cước rẻ - Vận Tải Phương Vy',
@@ -146,7 +146,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa/may-moc-thiet-bi': {
     title: 'Vận chuyển máy móc thiết bị bằng xe 1–35 tấn | Phương Vy',
-    description: 'Vận chuyển máy móc, thiết bị từ TP.HCM, Hà Nội đi toàn quốc bằng xe tải 1–35 tấn, xe cẩu, rơ moóc lùn, rơ moóc sàn. Gọi 0933 871 139 báo giá.',
+    description: 'Vận chuyển máy móc, thiết bị từ TP.HCM, Hà Nội đi toàn quốc bằng xe tải 1–35 tấn, xe cẩu, rơ moóc lùn, rơ moóc sàn. Gọi 0902 939 318 báo giá.',
     heading: 'Dịch vụ vận chuyển máy móc thiết bị',
   },
   '/van-chuyen-hang-hoa/mong-cai': {
@@ -175,7 +175,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa/sieu-truong-sieu-trong': {
     title: 'Vận chuyển hàng siêu trường siêu trọng, có cẩu | Phương Vy',
-    description: 'Chở hàng siêu trường siêu trọng, máy công trình từ TP.HCM: Đồng Nai, Vũng Tàu từ 4 giờ, miền Tây từ 12 giờ, có cẩu xếp hàng. Gọi 0933 871 139.',
+    description: 'Chở hàng siêu trường siêu trọng, máy công trình từ TP.HCM: Đồng Nai, Vũng Tàu từ 4 giờ, miền Tây từ 12 giờ, có cẩu xếp hàng. Gọi 0902 939 318.',
   },
   '/van-chuyen-hang-hoa/soc-trang': {
     title: 'Chành xe gửi hàng đi Sóc Trăng nhanh chóng trong ngày',
@@ -219,7 +219,7 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   },
   '/van-chuyen-hang-hoa/xe-may': {
     title: 'Vận chuyển xe máy Bắc Nam từ 48h, giao tận nơi | Phương Vy',
-    description: 'Gửi xe máy Bắc – Nam bằng xe tải, xe khách: xuất bến 15h–20h mỗi ngày, nhận xe từ 48h, không tăng giá ngày lễ, Tết. Gọi 0933 871 139.',
+    description: 'Gửi xe máy Bắc – Nam bằng xe tải, xe khách: xuất bến 15h–20h mỗi ngày, nhận xe từ 48h, không tăng giá ngày lễ, Tết. Gọi 0902 939 318.',
     heading: 'Vận chuyển xe máy Bắc Nam',
   },
   '/van-chuyen-hang-hoa/yen-bai': {
@@ -228,22 +228,22 @@ export const SEO_OVERRIDES: Record<string, SeoOverride> = {
   // Money pages: the title and description lead with the service and a delivery-time or fleet fact from the page.
   '/van-chuyen-hang-hoa/ha-noi': {
     title: 'Gửi hàng TPHCM đi Hà Nội 36–48h, giao tận nơi | Phương Vy',
-    description: 'Chành xe TPHCM đi Hà Nội 1.700 km: hàng nguyên xe 36–48h, hàng ghép 2–4 ngày, 3 chuyến mỗi ngày từ kho Hóc Môn. Gọi 0933 871 139.',
+    description: 'Chành xe TPHCM đi Hà Nội 1.700 km: hàng nguyên xe 36–48h, hàng ghép 2–4 ngày, 3 chuyến mỗi ngày từ kho Hóc Môn. Gọi 0902 939 318.',
     heading: 'Vận chuyển hàng hóa TPHCM đi Hà Nội',
   },
   '/van-chuyen-hang-hoa/tphcm': {
     title: 'Vận chuyển hàng hóa TPHCM đi tỉnh, xe 1–30 tấn | Phương Vy',
-    description: 'Chành xe Sài Gòn đi các tỉnh bằng xe tải 1–30 tấn và container; hàng ghép 2–3 ngày, xe chạy 5h–22h cả thứ Bảy, Chủ nhật. Gọi 0933 871 139.',
+    description: 'Chành xe Sài Gòn đi các tỉnh bằng xe tải 1–30 tấn và container; hàng ghép 2–3 ngày, xe chạy 5h–22h cả thứ Bảy, Chủ nhật. Gọi 0902 939 318.',
     heading: 'Vận chuyển hàng hóa TPHCM đi tỉnh và nội thành',
   },
   '/van-chuyen-hang-hoa/da-nang': {
     title: 'Chành xe TPHCM đi Đà Nẵng 24–36h, giao tận nơi | Phương Vy',
-    description: 'Chành xe TPHCM đi Đà Nẵng khoảng 960 km: hàng nguyên xe 24–36h, 3 chuyến mỗi ngày, bảo hiểm cơ bản miễn phí, giao tận nơi. Gọi 0933 871 139.',
+    description: 'Chành xe TPHCM đi Đà Nẵng khoảng 960 km: hàng nguyên xe 24–36h, 3 chuyến mỗi ngày, bảo hiểm cơ bản miễn phí, giao tận nơi. Gọi 0902 939 318.',
     heading: 'Vận chuyển gửi hàng hóa TPHCM đi Đà Nẵng',
   },
   '/thue-xe-tai/hcm': {
     title: 'Thuê xe tải TPHCM 0,5–30 tấn, chạy cả ngày lễ | Phương Vy',
-    description: 'Thuê xe tải 0,5–30 tấn và container chở hàng nội thành TP.HCM, đi tỉnh, kể cả Chủ nhật, ngày lễ; có hợp đồng, hóa đơn GTGT. Gọi 0933 871 139.',
+    description: 'Thuê xe tải 0,5–30 tấn và container chở hàng nội thành TP.HCM, đi tỉnh, kể cả Chủ nhật, ngày lễ; có hợp đồng, hóa đơn GTGT. Gọi 0902 939 318.',
   },
   // Money pages: the title and description lead with the service and a delivery-time or fleet fact from the page.
   '/blog/can-tim-doi-tac-van-chuyen-hang-hoa': {

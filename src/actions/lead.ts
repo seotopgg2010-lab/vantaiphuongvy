@@ -42,7 +42,7 @@ export async function submitLead(_prev: LeadFormState, formData: FormData): Prom
 
   const delivered = await deliverLead(result.data);
   if (!delivered) {
-    return { status: 'error', message: 'Hệ thống nhận yêu cầu đang bận. Vui lòng gọi hotline 0933 871 139 hoặc nhắn Zalo để được báo giá ngay.', values };
+    return { status: 'error', message: 'Hệ thống nhận yêu cầu đang bận. Vui lòng gọi hotline 0902 939 318 hoặc nhắn Zalo để được báo giá ngay.', values };
   }
   return { status: 'success', message: `Cảm ơn ${result.data.name}! Nhân viên Phương Vy sẽ gọi lại số ${result.data.phone} trong giờ làm việc.` };
 }

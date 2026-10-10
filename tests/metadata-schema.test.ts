@@ -28,7 +28,7 @@ test('organization schema contains verified business identity and all hotlines',
   assert.ok(Array.isArray(schema['@type']));
   assert.equal(schema.name, 'Công ty TNHH Dịch vụ Vận tải Phương Vy');
   assert.equal(schema.url, canonicalFor('/'));
-  assert.equal(schema.telephone, '+84-933-871-139');
+  assert.equal(schema.telephone, '+84-902-939-318');
   assert.equal(schema.email, 'vanchuyenphuongvy@gmail.com');
 });
 

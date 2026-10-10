@@ -12,16 +12,16 @@ const supabase = createBrowserClient(
 const FALLBACK_SETTINGS = {
   company_name: 'Công ty TNHH Dịch vụ Vận tải Phương Vy',
   email: 'vanchuyenphuongvy@gmail.com',
-  phone: '0933 871 139',
+  phone: '0902 939 318',
   hotline_germany: '0702 00 6839',
   zalo_link: 'https://zalo.me/0902939318',
   whatsapp_link: '',
   address_germany: '',
-  address_hcm: '38H4, Đường DN9, KP4, P. Tân Hưng Thuận, Quận 12, TP.HCM',
+  address_hcm: '38H4 Đường DN9, Khu phố 4, Phường Đông Hưng Thuận, TP. Hồ Chí Minh',
   address_hanoi: '',
   facebook_url: 'https://www.facebook.com/vanchuyenphuongvy/',
   instagram_url: '',
-  working_hours: '8h00–21h00',
+  working_hours: '7h00–20h00',
   tagline: 'Chất lượng, nhanh chóng, uy tín là niềm tin!'
 };
 

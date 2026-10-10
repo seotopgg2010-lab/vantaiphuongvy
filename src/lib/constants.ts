@@ -1,24 +1,36 @@
 import { getSiteUrl } from './site';
 
-/** Verified business facts (sourced from the live site & legacy content). */
+/**
+ * Verified business facts (sourced from the live site & legacy content). Name, address, main phone,
+ * hours and coordinates follow the company's Google Business Profile (read 10/10/2026), so the
+ * site, its schema and the Maps listing agree.
+ */
 export const SITE_CONFIG = {
   name: 'Vận tải Phương Vy',
   description: 'Vận chuyển hàng hóa Bắc Nam, chành xe liên tỉnh và cho thuê xe tải toàn quốc.',
   slogan: 'Chất lượng, nhanh chóng, uy tín là niềm tin!',
   url: getSiteUrl(),
   companyName: 'Công ty TNHH Dịch vụ Vận tải Phương Vy',
-  address: '38H4, Đường DN9, KP4, P. Tân Hưng Thuận, Quận 12, TP.HCM',
+  address: '38H4 Đường DN9, Khu phố 4, Phường Đông Hưng Thuận, TP. Hồ Chí Minh',
+  /** The same address split for schema.org PostalAddress. */
+  postalAddress: { streetAddress: '38H4 Đường DN9, Khu phố 4', addressLocality: 'Phường Đông Hưng Thuận', addressRegion: 'Thành phố Hồ Chí Minh', postalCode: '700000', addressCountry: 'VN' },
+  geo: { latitude: 10.8438515, longitude: 106.6254635 },
+  /** The Google Maps listing (Công ty TNHH DV Vận Tải Phương Vy). */
+  mapsUrl: 'https://maps.google.com/?cid=5001195384627729197',
   yardAddress: '58 Quốc lộ 1A, Xã Bà Điểm, Huyện Hóc Môn, TP.HCM',
-  hotline: '0933 871 139',
-  hotlines: ['0933 871 139', '0702 00 6839', '0902 939 318'],
+  hotline: '0902 939 318',
+  hotlines: ['0902 939 318', '0933 871 139', '0702 00 6839'],
   landline: '(028) 6275 0737',
-  businessHours: '8h00–21h00',
+  businessHours: '7h00–20h00',
+  /** schema.org opening hours, the same every day. */
+  opens: '07:00',
+  closes: '20:00',
   zalo: '0902939318',
   email: 'vanchuyenphuongvy@gmail.com',
   facebook: 'https://www.facebook.com/vanchuyenphuongvy/',
   logo: '/wp-content/uploads/2018/07/logo-van-tai-phuong-vy-2.png',
   defaultImage: '/wp-content/uploads/2018/08/cong-ty-van-tai-phuong-vy.jpg',
-  mapEmbed: 'https://www.google.com/maps?q=38H4+%C4%90%C6%B0%E1%BB%9Dng+DN9+T%C3%A2n+H%C6%B0ng+Thu%E1%BA%ADn+Qu%E1%BA%ADn+12&output=embed',
+  mapEmbed: 'https://www.google.com/maps?q=C%C3%B4ng+ty+TNHH+DV+V%E1%BA%ADn+T%E1%BA%A3i+Ph%C6%B0%C6%A1ng+Vy&ll=10.8438515,106.6254635&z=17&output=embed',
   taxId: '0313404000',
   /** Ministry of Industry and Trade website notice, linked from every WordPress footer. */
   moitNotice: {

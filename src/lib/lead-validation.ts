@@ -39,7 +39,7 @@ export function validateLead(input: Record<string, unknown>): LeadValidation {
 
   if (data.name.length < 2) errors.name = 'Vui lòng nhập họ tên (ít nhất 2 ký tự).';
   const phone = normalizeVietnamesePhone(data.phone);
-  if (!phone) errors.phone = 'Số điện thoại chưa đúng (ví dụ 0933 871 139).';
+  if (!phone) errors.phone = 'Số điện thoại chưa đúng (ví dụ 0902 939 318).';
   else data.phone = phone;
   if (data.service && !(LEAD_SERVICES as readonly string[]).includes(data.service)) errors.service = 'Dịch vụ không hợp lệ.';
   if (data.page && !data.page.startsWith('/')) data.page = '';

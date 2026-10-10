@@ -125,27 +125,24 @@ export function generateOrganizationJsonLd() {
     knowsAbout: [...SERVICES.map((service) => service.title), 'Chành xe liên tỉnh', 'Vận chuyển hàng siêu trường siêu trọng', 'Vận chuyển máy móc thiết bị', 'Gửi xe máy Bắc Nam'],
     // The office and the "Danh sách kho hàng" every footer lists.
     location: [
-      { '@type': 'Place', name: 'Văn phòng', address: { '@type': 'PostalAddress', streetAddress: SITE_CONFIG.address, addressCountry: 'VN' } },
+      { '@type': 'Place', name: 'Văn phòng', address: { '@type': 'PostalAddress', ...SITE_CONFIG.postalAddress }, geo: { '@type': 'GeoCoordinates', ...SITE_CONFIG.geo } },
       ...WAREHOUSES.map((warehouse) => ({ '@type': 'Place', name: `Kho ${warehouse.label}`, address: { '@type': 'PostalAddress', streetAddress: warehouse.address, addressCountry: 'VN' } })),
     ],
     // "Báo chí nói về Vận tải Phương Vy" on the home page.
     subjectOf: PRESS.map((item) => ({ '@type': 'NewsArticle', url: item.href, publisher: { '@type': 'Organization', name: item.outlet } })),
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '38H4, Đường DN9, Khu phố 4, Phường Tân Hưng Thuận, Quận 12',
-      addressLocality: 'Thành phố Hồ Chí Minh',
-      addressCountry: 'VN',
-    },
+    address: { '@type': 'PostalAddress', ...SITE_CONFIG.postalAddress },
+    geo: { '@type': 'GeoCoordinates', ...SITE_CONFIG.geo },
+    hasMap: SITE_CONFIG.mapsUrl,
     openingHoursSpecification: [{
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      opens: '08:00', closes: '21:00',
+      opens: SITE_CONFIG.opens, closes: SITE_CONFIG.closes,
     }],
     areaServed: { '@type': 'Country', name: 'Việt Nam' },
     contactPoint: SITE_CONFIG.hotlines.map((telephone) => ({
       '@type': 'ContactPoint', telephone: telE164(telephone), contactType: 'customer service', availableLanguage: ['vi'],
     })),
-    sameAs: [SITE_CONFIG.facebook],
+    sameAs: [SITE_CONFIG.facebook, SITE_CONFIG.mapsUrl],
   };
 }
 
